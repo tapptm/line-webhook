@@ -19,11 +19,16 @@ app.post("/webhook", (req, res) => {
   let intentMap = new Map();
   // add intent map 2nd parameter pass function
   intentMap.set("webhook", handleWebHookIntent);
+  intentMap.set("ทำไร", handleWhatAruYouDoing);
   // now agent is handle request and pass intent map
   agent.handleRequest(intentMap);
 });
 function handleWebHookIntent(agent) {
   agent.add("Hello I am Webhook demo How are you...");
+}
+
+function handleWhatAruYouDoing(agent) {
+  agent.add("นอนอยู่");
 }
 
 app.listen(port, () => {
