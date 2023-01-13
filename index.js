@@ -31,10 +31,13 @@ function handleWebHookIntent(agent) {
 function handleWhatAruYouDoing(agent) {
   const payload = {
      
-      type:"postback",
-      label:"สั่งซื้อ",
-      data:"action=buy&itemid=123",
-      displayText:"สั่งซื้อ"
+    
+      line: {
+        type: "audio",
+        originalContentUrl: "https://s3-ap-southeast-1.amazonaws.com/dezpax/b_files/audio_example.m4a",
+        duration: 10000
+      
+    }
    
   };
   
