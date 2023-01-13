@@ -1,5 +1,6 @@
 const express = require("express");
-const { WebhookClient } = require("dialogflow-fulfillment");
+const { WebhookClient ,Payload } = require("dialogflow-fulfillment");
+
 const app = express();
 const port = process.env.PORT || 4050;
 
@@ -28,16 +29,18 @@ function handleWebHookIntent(agent) {
 }
 
 function handleWhatAruYouDoing(agent) {
+  const payload = {
+     
+      type:"postback",
+      label:"สั่งซื้อ",
+      data:"action=buy&itemid=123",
+      displayText:"สั่งซื้อ"
+   
+  };
+  
   agent.add(
-    {
-    
-      "label": "Google",
-    
-      "type": "uri",
-    
-      "uri": "https://www.google.com/"
-    
-    });
+    new Payload(agent.UNSPECIFIED, payload, {rawPayload: true, sendAsMessage: true})
+   );
 }
 
 app.listen(port, () => {
