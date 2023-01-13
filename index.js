@@ -28,7 +28,16 @@ function handleWebHookIntent(agent) {
 }
 
 function handleWhatAruYouDoing(agent) {
-  agent.add("นอนอยู่");
+  agent.add(
+    {
+    
+      "label": "Google",
+    
+      "type": "uri",
+    
+      "uri": "https://www.google.com/"
+    
+    });
 }
 
 app.listen(port, () => {
