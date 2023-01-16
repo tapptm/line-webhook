@@ -47,7 +47,7 @@ function getATMlocation(agent) {
                         data: "#",
                     },
                     {
-                        type: "postback",
+                        type: "uri",
                         label: "เปิดแผนที่",
                         uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
                     },
@@ -74,13 +74,27 @@ function getATMlocation(agent) {
                     type: "carousel",
                     imageAspectRatio: "rectangle",
                     imageSize: "cover",
-                    columns: columns,
+                    columns: [
+                        {
+                            thumbnailImageUrl: "https://admin.trinitytrip.com/uploads/community/1/poi/poi_081d05881d24d2c0e2e6e83b500d231f_20211012034959000000.jpg",
+                            imageBackgroundColor: "#FFFFFF",
+                            title: "ห้ะ",
+                            text: "ห้ะ",
+                            actions: [
+                                {
+                                    type: "uri",
+                                    label: "รายละเอียด",
+                                    uri: "https://www.google.com/",
+                                },
+                            ],
+                        },
+                    ],
                 },
             },
         };
         console.log(payload);
         console.log(columns);
-        return agent.add(new dialogflow_fulfillment_1.Payload("LINE", payloads, {
+        return agent.add(new dialogflow_fulfillment_1.Payload('LINE', payload, {
             rawPayload: true,
             sendAsMessage: true,
         }));
