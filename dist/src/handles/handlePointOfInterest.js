@@ -66,6 +66,7 @@ function getATMlocation(agent) {
                 },
             },
         };
+        console.log(payload);
         return agent.add(new dialogflow_fulfillment_1.Payload(agent.UNSPECIFIED, payload, {
             rawPayload: true,
             sendAsMessage: true,
