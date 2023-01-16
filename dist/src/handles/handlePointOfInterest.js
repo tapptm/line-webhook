@@ -38,8 +38,8 @@ function getATMlocation(agent) {
             return {
                 thumbnailImageUrl: distance.image,
                 imageBackgroundColor: "#FFFFFF",
-                title: distance.name,
-                text: distance.name,
+                title: "TEST",
+                text: "TEST",
                 actions: [
                     {
                         type: "uri",
@@ -61,88 +61,8 @@ function getATMlocation(agent) {
                 },
             },
         };
-        const payloads = {
-            line: {
-                type: "template",
-                altText: "this is a carousel template",
-                template: {
-                    type: "carousel",
-                    imageAspectRatio: "rectangle",
-                    imageSize: "cover",
-                    columns: [
-                        {
-                            thumbnailImageUrl: "https://admin.trinitytrip.com/uploads/community/1/poi/poi_081d05881d24d2c0e2e6e83b500d231f_20211012034959000000.jpg",
-                            imageBackgroundColor: "#FFFFFF",
-                            title: "ห้ะ",
-                            text: "ห้ะ",
-                            actions: [
-                                {
-                                    type: "uri",
-                                    label: "เปิดแผนที่",
-                                    uri: "http://maps.google.com/maps?z=12&t=m&q=loc:15.0771929+103.76335114",
-                                },
-                            ],
-                        },
-                        {
-                            thumbnailImageUrl: "https://admin.trinitytrip.com/uploads/community/10/poi/poi_e962f83a5cc3dedb252a249ae4795aaf_20211125043844000000.jpg",
-                            imageBackgroundColor: "#FFFFFF",
-                            title: "ATM ธนาคารกรุงไทย บจก.เอส วรรณ ซัพพลายส์ ศูนย์กระจายสินค้า จ.สุรินทร์",
-                            text: "ATM ธนาคารกรุงไทย บจก.เอส วรรณ ซัพพลายส์ ศูนย์กระจายสินค้า จ.สุรินทร์",
-                            actions: [
-                                {
-                                    type: "uri",
-                                    label: "เปิดแผนที่",
-                                    uri: "http://maps.google.com/maps?z=12&t=m&q=loc:14.92958496+103.77651798",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        };
         console.log(JSON.stringify(payload, null, 4));
-        console.log(columns);
-        console.log(payloads);
-        const a = {
-            line: {
-                type: "template",
-                altText: "this is a carousel template",
-                template: {
-                    type: "carousel",
-                    imageAspectRatio: "rectangle",
-                    imageSize: "cover",
-                    columns: [
-                        {
-                            thumbnailImageUrl: "https://admin.trinitytrip.com/uploads/community/6/poi/poi_cd8b791439946d1d49d83082c513eb19_20211123072827000000.jpg",
-                            imageBackgroundColor: "#FFFFFF",
-                            title: "บ้านหนองพุก ต.หนองบัว อ.ศีขรภูมิ จ.สุรินทร์",
-                            text: "บ้านหนองพุก ต.หนองบัว อ.ศีขรภูมิ จ.สุรินทร์",
-                            actions: [
-                                {
-                                    type: "uri",
-                                    label: "เปิดแผนที่",
-                                    uri: "http://maps.google.com/maps?z=12&t=m&q=loc:15.0771929+103.76335114",
-                                },
-                            ],
-                        },
-                        {
-                            thumbnailImageUrl: "https://admin.trinitytrip.com/uploads/community/10/poi/poi_e962f83a5cc3dedb252a249ae4795aaf_20211125043844000000.jpg",
-                            imageBackgroundColor: "#FFFFFF",
-                            title: "ATM ธนาคารกรุงไทย บจก.เอส วรรณ ซัพพลายส์ ศูนย์กระจายสินค้า จ.สุรินทร์",
-                            text: "ATM ธนาคารกรุงไทย บจก.เอส วรรณ ซัพพลายส์ ศูนย์กระจายสินค้า จ.สุรินทร์",
-                            actions: [
-                                {
-                                    type: "uri",
-                                    label: "เปิดแผนที่",
-                                    uri: "http://maps.google.com/maps?z=12&t=m&q=loc:14.92958496+103.77651798",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        };
-        return agent.add(new dialogflow_fulfillment_1.Payload("LINE", payloads, {
+        return agent.add(new dialogflow_fulfillment_1.Payload("LINE", JSON.stringify(payload, null, 4), {
             rawPayload: true,
             sendAsMessage: true,
         }));
