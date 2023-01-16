@@ -129,7 +129,7 @@ function getATMlocation(agent) {
                 },
             },
         };
-        return agent.add(new dialogflow_fulfillment_1.Payload("LINE", JSON.stringify(payload, null, 4), {
+        return agent.add(new dialogflow_fulfillment_1.Payload("LINE", payloads, {
             rawPayload: true,
             sendAsMessage: true,
         }));
