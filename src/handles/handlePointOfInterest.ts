@@ -85,14 +85,16 @@ async function getATMlocation(agent: {
   };
 
   console.log(payload);
-  
+  console.log(columns);
 
-  return agent.add(
+  agent.add(
     new Payload(agent.UNSPECIFIED, payload, {
       rawPayload: true,
       sendAsMessage: true,
     })
   );
+
+  return;
 }
 
 export { getATMlocation };
