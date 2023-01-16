@@ -1,21 +1,27 @@
-import { Payload, Text, Suggestion, Image, Card } from "dialogflow-fulfillment";
-import pool from "../configs/connectiondb";
+import { Payload, Platforms } from "dialogflow-fulfillment";
+import { getPoiByGroup } from "../services/PointOfInterest";
 
 async function getATMlocation(agent: {
+  UNSPECIFIED: Platforms;
+  rawPayload: boolean;
+  sendAsMessage: boolean;
   intent: string;
-  add: (arg0: string) => void;
+  add: (add: Object) => void;
 }) {
-  console.log(agent.intent);
+  const poi = await getPoiByGroup(agent.intent);
+  console.log(poi);
 
-  const client = await pool.connect();
-  const sql = "SELECT * FROM poi_group;";
-  const { rows } = await client.query(sql);
-  const todos = rows;
-  client.release();
-
-  //   console.log(todos);
-
-  agent.add("HERE! THIS IS YOUR PRODUCT.");
+  const payload: Object = {
+    key: "value",
+    key2: 2,
+  };
+  
+  agent.add(
+    new Payload(agent.UNSPECIFIED, payload, {
+      rawPayload: true,
+      sendAsMessage: true,
+    })
+  );
 }
 
 export { getATMlocation };
