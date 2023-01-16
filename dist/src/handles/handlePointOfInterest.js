@@ -36,58 +36,42 @@ function getATMlocation(agent) {
         const distanceData = yield calculateDistance(agent.intent, 14.9881753, 102.1198264);
         const columns = distanceData.map((distance) => {
             return {
-                text: distance.name,
-                title: distance.name,
-                imageBackgroundColor: "#FFFFFF",
-                thumbnailImageUrl: distance.image,
-                actions: [
+                "thumbnailImageUrl": distance.image,
+                "imageBackgroundColor": "#FFFFFF",
+                "title": distance.name,
+                "text": distance.name,
+                "actions": [
                     {
-                        type: "postback",
-                        uri: `#`,
-                        label: "รายละเอียด",
+                        "type": "postback",
+                        "label": "รายละเอียด",
+                        "data": "#",
                     },
                     {
-                        label: "เปิดแผนที่",
-                        uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
-                        type: "postback",
+                        "type": "postback",
+                        "label": "เปิดแผนที่",
+                        "uri": `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
                     },
                 ],
             };
         });
         const payload = {
-            line: {
-                type: "template",
-                altText: "สถานที่และรายละเอียด",
-                template: {
-                    imageSize: "cover",
-                    columns: [
-                        {
-                            text: "ATM Krungthai Bank",
-                            title: "ATM Krungthai Bank",
-                            imageBackgroundColor: "#FFFFFF",
-                            thumbnailImageUrl: "https://admin.trinitytrip.com/uploads/community/1/poi/poi_f1aa1edabea867100c6f930ef7fc063d_20211007163337000000.jpg",
-                            // actions: [[Object], [Object]],
-                        },
-                        {
-                            text: "ATM Krungthai Bank",
-                            title: "ATM Krungthai Bank",
-                            imageBackgroundColor: "#FFFFFF",
-                            thumbnailImageUrl: "https://admin.trinitytrip.com/uploads/community/1/poi/poi_081d05881d24d2c0e2e6e83b500d231f_20211012034959000000.jpg",
-                            // actions: [[Object], [Object]],
-                        },
-                    ],
-                    imageAspectRatio: "rectangle",
-                    type: "carousel",
-                },
-            },
+            "line": {
+                "type": "template",
+                "altText": "this is a carousel template",
+                "template": {
+                    "type": "carousel",
+                    "imageAspectRatio": "rectangle",
+                    "imageSize": "cover",
+                    "columns": columns
+                }
+            }
         };
         console.log(payload);
         console.log(columns);
-        agent.add(new dialogflow_fulfillment_1.Payload(agent.UNSPECIFIED, payload, {
+        return agent.add(new dialogflow_fulfillment_1.Payload(agent.UNSPECIFIED, payload, {
             rawPayload: true,
             sendAsMessage: true,
         }));
-        return;
     });
 }
 exports.getATMlocation = getATMlocation;
