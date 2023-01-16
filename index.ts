@@ -1,8 +1,17 @@
-const express = require("express");
-const { WebhookClient ,Payload ,Text,Suggestion,Image,Card} = require("dialogflow-fulfillment");
+import express, { Express, Request, Response } from "express";
+import {
+  WebhookClient,
+  Payload,
+  Text,
+  Suggestion,
+  Image,
+  Card,
+} from "dialogflow-fulfillment";
+import dotenv from "dotenv";
 
-const app = express();
-const port = process.env.PORT || 4050;
+dotenv.config();
+const app: Express = express();
+const port = process.env.NODE_PORT || 4050;
 
 app.use(express.json());
 
@@ -13,7 +22,7 @@ app.get("/", (req, res) => {
  * on this route dialogflow send the webhook request
  * For the dialogflow we need POST Route.
  * */
-app.post("/webhook", (req, res) => {
+app.post("/webhook", (req: Request, res: Response) => {
   // get agent from request
   let agent = new WebhookClient({ request: req, response: res });
   // create intentMap for handle intent
@@ -24,27 +33,13 @@ app.post("/webhook", (req, res) => {
   // now agent is handle request and pass intent map
   agent.handleRequest(intentMap);
 });
-function handleWebHookIntent(agent) {
+
+function handleWebHookIntent(agent: { add: (arg0: string) => void }) {
   agent.add("Hello I am Webhook demo How are you...");
 }
 
-function handleWhatAruYouDoing(agent) {
-  const Suggestion = {
-     
-    type: 'template',
-    altText: 'Please share your location',
-    template: {
-      type: 'buttons',
-      text: 'Please share your location',
-      actions: [locationButton]
-    }
-   
-  };
-  
-  agent.add(
-    // new Suggestion(agent.UNSPECIFIED, payload, {rawPayload: true, sendAsMessage: true})
-    new Suggestion()
-   );
+function handleWhatAruYouDoing(agent: { add: (arg0: string) => void }) {
+  agent.add("นอนอยู่");
 }
 
 app.listen(port, () => {
