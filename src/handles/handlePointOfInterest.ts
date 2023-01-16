@@ -50,7 +50,7 @@ async function getATMlocation(agent: {
     102.1198264
   );
 
-  const columns: LineColumns[] = distanceData.map((distance: any) => {
+  const columns = distanceData.map((distance: any) => {
     return {
       thumbnailImageUrl: distance.image,
       imageBackgroundColor: "#FFFFFF",
@@ -71,7 +71,7 @@ async function getATMlocation(agent: {
     };
   });
 
-  const payload: Line = {
+  const payload = {
     line: {
       type: "template",
       altText: "this is a carousel template",
@@ -92,22 +92,7 @@ async function getATMlocation(agent: {
         type: "carousel",
         imageAspectRatio: "rectangle",
         imageSize: "cover",
-        columns: [
-          {
-            thumbnailImageUrl:
-              "https://admin.trinitytrip.com/uploads/community/1/poi/poi_081d05881d24d2c0e2e6e83b500d231f_20211012034959000000.jpg",
-            imageBackgroundColor: "#FFFFFF",
-            title: "ห้ะ",
-            text: "ห้ะ",
-            actions: [
-              {
-                type: "uri",
-                label: "รายละเอียด",
-                uri: "https://www.google.com/",
-              },
-            ],
-          },
-        ],
+        columns: columns,
       },
     },
   };
@@ -116,7 +101,7 @@ async function getATMlocation(agent: {
   console.log(columns);
 
   return agent.add(
-    new Payload('LINE' as Platforms, payload, {
+    new Payload("LINE" as Platforms, payloads, {
       rawPayload: true,
       sendAsMessage: true,
     })

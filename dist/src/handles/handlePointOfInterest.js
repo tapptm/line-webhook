@@ -74,27 +74,13 @@ function getATMlocation(agent) {
                     type: "carousel",
                     imageAspectRatio: "rectangle",
                     imageSize: "cover",
-                    columns: [
-                        {
-                            thumbnailImageUrl: "https://admin.trinitytrip.com/uploads/community/1/poi/poi_081d05881d24d2c0e2e6e83b500d231f_20211012034959000000.jpg",
-                            imageBackgroundColor: "#FFFFFF",
-                            title: "ห้ะ",
-                            text: "ห้ะ",
-                            actions: [
-                                {
-                                    type: "uri",
-                                    label: "รายละเอียด",
-                                    uri: "https://www.google.com/",
-                                },
-                            ],
-                        },
-                    ],
+                    columns: columns,
                 },
             },
         };
         console.log(payload);
         console.log(columns);
-        return agent.add(new dialogflow_fulfillment_1.Payload('LINE', payload, {
+        return agent.add(new dialogflow_fulfillment_1.Payload("LINE", payloads, {
             rawPayload: true,
             sendAsMessage: true,
         }));
