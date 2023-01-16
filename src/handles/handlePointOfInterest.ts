@@ -97,8 +97,8 @@ async function getATMlocation(agent: {
             actions: [
               {
                 type: "uri",
-                label: "รายละเอียด",
-                uri: "https://www.google.com/",
+                label: "เปิดแผนที่",
+                uri: "http://maps.google.com/maps?z=12&t=m&q=loc:15.0771929+103.76335114",
               },
             ],
           },
@@ -148,14 +148,14 @@ async function getATMlocation(agent: {
                 uri: "http://maps.google.com/maps?z=12&t=m&q=loc:14.92958496+103.77651798",
               },
             ],
-          }
+          },
         ],
       },
     },
   };
 
   return agent.add(
-    new Payload("LINE" as Platforms, payloads , {
+    new Payload("LINE" as Platforms, payloads, {
       rawPayload: true,
       sendAsMessage: true,
     })
