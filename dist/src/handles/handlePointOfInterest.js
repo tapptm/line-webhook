@@ -38,8 +38,8 @@ function getATMlocation(agent) {
             return {
                 thumbnailImageUrl: distance.image,
                 imageBackgroundColor: "#FFFFFF",
-                title: "TEST",
-                text: "TEST",
+                title: distance.name,
+                text: distance.name,
                 actions: [
                     {
                         type: "uri",
@@ -62,7 +62,7 @@ function getATMlocation(agent) {
             },
         };
         console.log(JSON.stringify(payload, null, 4));
-        return agent.add(new dialogflow_fulfillment_1.Payload("LINE", JSON.stringify(payload, null, 4), {
+        return agent.add(new dialogflow_fulfillment_1.Payload("LINE", JSON.stringify(payload), {
             rawPayload: true,
             sendAsMessage: true,
         }));
