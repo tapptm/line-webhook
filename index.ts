@@ -1,8 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import { WebhookClient } from "dialogflow-fulfillment";
-import dotenv from "dotenv";
 import { getGreeting } from "./src/handles/handleGreeting";
 import { getLocations } from "./src/handles/handleLocations";
+import dotenv from "dotenv";
 
 dotenv.config();
 const app: Express = express();
@@ -10,7 +10,7 @@ const port = process.env.NODE_PORT || 4050;
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.send("Server Is Working......");
 });
 /**
