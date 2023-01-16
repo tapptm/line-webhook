@@ -1,9 +1,12 @@
-import { Pool } from 'pg';
+import { Pool } from "pg";
 import dotenv from "dotenv";
 dotenv.config();
 
-export default new Pool ({
-    max: 20,
-    connectionString: process.env.PGURL,
-    idleTimeoutMillis: 30000
+export default new Pool({
+  host: process.env.PG_HOST,
+  user: process.env.PG_USER,
+  password: process.env.PG_PASSWORD + "",
+  database: process.env.PG_DATABASE,
+  max: 20,
+  idleTimeoutMillis: 30000,
 });
