@@ -50,7 +50,7 @@ async function getATMlocation(agent: {
     102.1198264
   );
 
-  const columns: LineColumns[] = distanceData.map((distance: any) => {
+  const columns = distanceData.map((distance: any) => {
     return {
       thumbnailImageUrl: distance.image,
       imageBackgroundColor: "#FFFFFF",
@@ -82,7 +82,7 @@ async function getATMlocation(agent: {
   console.log(JSON.stringify(payload));
 
   return agent.add(
-    new Payload("LINE" as Platforms, JSON.stringify(payload), {
+    new Payload("LINE" as Platforms, JSON.parse(JSON.stringify(payload)), {
       rawPayload: true,
       sendAsMessage: true,
     })
