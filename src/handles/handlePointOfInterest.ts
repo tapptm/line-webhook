@@ -111,7 +111,7 @@ async function getATMlocation(agent: {
   console.log(columns);
 
   return agent.add(
-    new Payload('LINE' as Platforms, payloads, {
+    new Payload('LINE' as Platforms, payload, {
       rawPayload: true,
       sendAsMessage: true,
     })

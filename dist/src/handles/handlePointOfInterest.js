@@ -89,7 +89,7 @@ function getATMlocation(agent) {
         };
         console.log(payload);
         console.log(columns);
-        return agent.add(new dialogflow_fulfillment_1.Payload('LINE', payloads, {
+        return agent.add(new dialogflow_fulfillment_1.Payload('LINE', payload, {
             rawPayload: true,
             sendAsMessage: true,
         }));
