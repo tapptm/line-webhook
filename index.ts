@@ -1,13 +1,8 @@
 import express, { Express, Request, Response } from "express";
-import {
-  WebhookClient,
-  Payload,
-  Text,
-  Suggestion,
-  Image,
-  Card,
-} from "dialogflow-fulfillment";
+import { WebhookClient } from "dialogflow-fulfillment";
 import dotenv from "dotenv";
+import { getGreeting } from "./src/handles/handleGreeting";
+import { getLocations } from "./src/handles/handleLocations";
 
 dotenv.config();
 const app: Express = express();
@@ -21,26 +16,18 @@ app.get("/", (req, res) => {
 /**
  * on this route dialogflow send the webhook request
  * For the dialogflow we need POST Route.
- * */
+ **/
 app.post("/webhook", (req: Request, res: Response) => {
   // get agent from request
   let agent = new WebhookClient({ request: req, response: res });
   // create intentMap for handle intent
   let intentMap = new Map();
   // add intent map 2nd parameter pass function
-  intentMap.set("webhook", handleWebHookIntent);
-  intentMap.set("ทำไร", handleWhatAruYouDoing);
+  intentMap.set("webhook", getGreeting);
+  intentMap.set("ทำไร", getLocations);
   // now agent is handle request and pass intent map
   agent.handleRequest(intentMap);
 });
-
-function handleWebHookIntent(agent: { add: (arg0: string) => void }) {
-  agent.add("Hello I am Webhook demo How are you...");
-}
-
-function handleWhatAruYouDoing(agent: { add: (arg0: string) => void }) {
-  agent.add("นอนอยู่");
-}
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);
