@@ -1,6 +1,6 @@
 import { Payload, Platforms } from "dialogflow-fulfillment";
 import { getPoiByGroup } from "../services/PointOfInterest";
-import { orderByDistance } from "geolib";
+import { orderByDistance, findNearest } from "geolib";
 
 async function getATMlocation(agent: {
   UNSPECIFIED: Platforms;
@@ -10,7 +10,7 @@ async function getATMlocation(agent: {
   add: (add: Object) => void;
 }) {
   const poi = await getPoiByGroup(agent.intent);
-  const volunteers = orderByDistance(
+  const volunteers = findNearest(
     { latitude: 14.9881753, longitude: 102.1198264 },
     poi
   );
