@@ -8,20 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getGreeting = void 0;
-const connectiondb_1 = __importDefault(require("../configs/connectiondb"));
 function getGreeting(agent) {
     return __awaiter(this, void 0, void 0, function* () {
-        const client = yield connectiondb_1.default.connect();
-        const sql = "SELECT * FROM travel";
-        const { rows } = yield client.query(sql);
-        const todos = rows;
-        client.release();
-        console.log(todos);
         agent.add("Hello I am Webhook demo How are you...");
     });
 }
