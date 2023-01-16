@@ -1,6 +1,41 @@
 import { Payload, Platforms } from "dialogflow-fulfillment";
 import { getPoiByGroup } from "../services/PointOfInterest";
-import { orderByDistance } from "geolib";
+import { orderByDistance, getDistance } from "geolib";
+import { imageUrl } from "../configs/urlpath";
+import { Line, LineColumns, PointOfInterest } from "../dto/pointOfInterest.dto";
+
+async function calculateDistance(
+  intent: string,
+  latitude: number,
+  longitude: number
+) {
+  const poidata: PointOfInterest[] = await getPoiByGroup(intent);
+  const distancePointofinterest = poidata.map((item) => {
+    item.latitude = parseFloat(item.latitude);
+    item.longitude = parseFloat(item.longitude);
+    item.image = item.image
+      ? `${imageUrl}/community/${parseInt(item.community_id)}/poi/${item.image}`
+      : null;
+
+    return {
+      ...item,
+      distance:
+        getDistance(
+          { latitude: latitude, longitude: longitude },
+          { latitude: item.latitude, longitude: item.longitude }
+        ) /
+          1000 +
+        " Km",
+    };
+  });
+
+  const volunteers = orderByDistance(
+    { latitude: latitude, longitude: longitude },
+    distancePointofinterest
+  );
+
+  return volunteers;
+}
 
 async function getATMlocation(agent: {
   UNSPECIFIED: Platforms;
@@ -9,86 +44,47 @@ async function getATMlocation(agent: {
   intent: string;
   add: (add: Object) => void;
 }) {
-  const poi = await getPoiByGroup(agent.intent);
-  const volunteers = orderByDistance(
-    { latitude: 14.9881753, longitude: 102.1198264 },
-    poi
+  const distanceData = await calculateDistance(
+    agent.intent,
+    14.9881753,
+    102.1198264
   );
-  console.log(volunteers);
 
-  const payload: Object = {
+  const columns: LineColumns[] = distanceData.map((distance: any) => {
+    return {
+      text: distance.name,
+      title: distance.name,
+      imageBackgroundColor: "#FFFFFF",
+      thumbnailImageUrl: distance.image,
+      actions: [
+        {
+          type: "postback",
+          uri: `#`,
+          label: "รายละเอียด",
+        },
+        {
+          label: "เปิดแผนที่",
+          uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
+          type: "postback",
+        },
+      ],
+    };
+  });
+
+  const payload: Line = {
     line: {
       type: "template",
-      altText: "this is a carousel template",
+      altText: "สถานที่และรายละเอียด",
       template: {
         imageSize: "cover",
-        columns: [
-          {
-            actions: [
-              {
-                label: "สั่งซื้อ",
-                data: "action=buy&itemid=111",
-                type: "postback",
-              },
-              {
-                label: "เพิ่มลงรถเข็น",
-                type: "postback",
-                data: "action=add&itemid=111",
-              },
-              {
-                type: "uri",
-                label: "รายละเอียด",
-                uri: "https://www.google.com/",
-              },
-            ],
-            title: "แผ่นเกม Sword Art Online",
-            thumbnailImageUrl:
-              "https://1.bp.blogspot.com/-U90M8DyKu7Q/W9EtONMCf6I/AAAAAAAAW_4/7L_jB_Rg9oweu2HKhULNdu9WNefw9zf9wCLcBGAs/s1600/sao-full.jpg",
-            text: "แผ่นเกม Sword Art Online",
-            imageBackgroundColor: "#FFFFFF",
-            defaultAction: {
-              label: "รายละเอียด",
-              type: "uri",
-              uri: "https://www.google.com/",
-            },
-          },
-          {
-            thumbnailImageUrl:
-              "https://2.bp.blogspot.com/-xAUbzdD07Z8/W9F4070M0JI/AAAAAAAAXAE/67QhUZB4TI4Xyu3GT2-DO0yA5XJtlij-ACLcBGAs/s1600/sao-os.jpg",
-            text: "Sword Art Online Ordinal Scale",
-            imageBackgroundColor: "#FFFFFF",
-            defaultAction: {
-              uri: "https://www.google.com/",
-              label: "รายละเอียด",
-              type: "uri",
-            },
-            title: "Sword Art Online Ordinal Scale",
-            actions: [
-              {
-                type: "postback",
-                data: "action=buy&itemid=111",
-                label: "สั่งซื้อ",
-              },
-              {
-                label: "เพิ่มลงรถเข็น",
-                data: "action=add&itemid=111",
-                type: "postback",
-              },
-              {
-                type: "uri",
-                label: "รายละเอียด",
-                uri: "https://www.google.com/",
-              },
-            ],
-          },
-        ],
+        columns: columns,
         imageAspectRatio: "rectangle",
         type: "carousel",
       },
     },
   };
 
-  agent.add(
+  return agent.add(
     new Payload(agent.UNSPECIFIED, payload, {
       rawPayload: true,
       sendAsMessage: true,

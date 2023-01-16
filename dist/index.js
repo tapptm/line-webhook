@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dialogflow_fulfillment_1 = require("dialogflow-fulfillment");
 const handleGreeting_1 = require("./src/handles/handleGreeting");
-const handleLocations_1 = require("./src/handles/handleLocations");
 const handlePointOfInterest_1 = require("./src/handles/handlePointOfInterest");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -27,7 +26,6 @@ app.post("/webhook", (req, res) => {
     let intentMap = new Map();
     // add intent map 2nd parameter pass function
     intentMap.set("webhook", handleGreeting_1.getGreeting);
-    intentMap.set("ทำไร", handleLocations_1.getLocations);
     intentMap.set("ตู้กดเงินสด", handlePointOfInterest_1.getATMlocation);
     // now agent is handle request and pass intent map
     agent.handleRequest(intentMap);

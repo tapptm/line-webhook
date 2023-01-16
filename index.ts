@@ -1,7 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import { WebhookClient } from "dialogflow-fulfillment";
 import { getGreeting } from "./src/handles/handleGreeting";
-import { getLocations } from "./src/handles/handleLocations";
 import { getATMlocation } from "./src/handles/handlePointOfInterest";
 import dotenv from "dotenv";
 
@@ -25,9 +24,7 @@ app.post("/webhook", (req: Request, res: Response) => {
   let intentMap = new Map();
   // add intent map 2nd parameter pass function
   intentMap.set("webhook", getGreeting);
-  intentMap.set("ทำไร", getLocations);
   intentMap.set("ตู้กดเงินสด", getATMlocation);
-
   // now agent is handle request and pass intent map
   agent.handleRequest(intentMap);
 });
