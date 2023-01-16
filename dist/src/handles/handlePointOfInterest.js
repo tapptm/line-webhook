@@ -87,10 +87,10 @@ function getATMlocation(agent) {
                 },
             },
         };
-        console.log(JSON.stringify(payload));
+        console.log(JSON.stringify(payload, null, 4));
         console.log(columns);
         console.log(payloads);
-        let a = {
+        const a = {
             line: {
                 type: "template",
                 altText: "this is a carousel template",
