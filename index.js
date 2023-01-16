@@ -1,5 +1,5 @@
 const express = require("express");
-const { WebhookClient ,Payload } = require("dialogflow-fulfillment");
+const { WebhookClient ,Payload ,Text,Suggestion,Image,Card} = require("dialogflow-fulfillment");
 
 const app = express();
 const port = process.env.PORT || 4050;
@@ -29,20 +29,21 @@ function handleWebHookIntent(agent) {
 }
 
 function handleWhatAruYouDoing(agent) {
-  const payload = {
+  const Suggestion = {
      
-    
-      line: {
-        type: "audio",
-        originalContentUrl: "https://s3-ap-southeast-1.amazonaws.com/dezpax/b_files/audio_example.m4a",
-        duration: 10000
-      
+    type: 'template',
+    altText: 'Please share your location',
+    template: {
+      type: 'buttons',
+      text: 'Please share your location',
+      actions: [locationButton]
     }
    
   };
   
   agent.add(
-    new Payload(agent.UNSPECIFIED, payload, {rawPayload: true, sendAsMessage: true})
+    // new Suggestion(agent.UNSPECIFIED, payload, {rawPayload: true, sendAsMessage: true})
+    new Suggestion()
    );
 }
 
