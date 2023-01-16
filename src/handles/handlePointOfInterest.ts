@@ -71,13 +71,30 @@ async function getATMlocation(agent: {
     };
   });
 
-  const payload: Line = {
+  const payload = {
     line: {
       type: "template",
       altText: "สถานที่และรายละเอียด",
       template: {
         imageSize: "cover",
-        columns: columns,
+        columns: [
+          {
+            text: "ATM Krungthai Bank",
+            title: "ATM Krungthai Bank",
+            imageBackgroundColor: "#FFFFFF",
+            thumbnailImageUrl:
+              "https://admin.trinitytrip.com/uploads/community/1/poi/poi_f1aa1edabea867100c6f930ef7fc063d_20211007163337000000.jpg",
+            // actions: [[Object], [Object]],
+          },
+          {
+            text: "ATM Krungthai Bank",
+            title: "ATM Krungthai Bank",
+            imageBackgroundColor: "#FFFFFF",
+            thumbnailImageUrl:
+              "https://admin.trinitytrip.com/uploads/community/1/poi/poi_081d05881d24d2c0e2e6e83b500d231f_20211012034959000000.jpg",
+            // actions: [[Object], [Object]],
+          },
+        ],
         imageAspectRatio: "rectangle",
         type: "carousel",
       },
