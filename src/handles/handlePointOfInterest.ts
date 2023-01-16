@@ -52,15 +52,15 @@ async function getATMlocation(agent: {
 
   const columns: LineColumns[] = distanceData.map((distance: any) => {
     return {
-      thumbnailImageUrl: distance.image ,
+      thumbnailImageUrl: distance.image,
       imageBackgroundColor: "#FFFFFF",
-      title: distance.name ,
-      text: distance.name ,
+      title: distance.name,
+      text: distance.name,
       actions: [
         {
           type: "uri",
           label: "เปิดแผนที่",
-          uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude }+${distance.longitude}`,
+          uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
         },
       ],
     };
@@ -110,10 +110,108 @@ async function getATMlocation(agent: {
   console.log(JSON.stringify(payload));
   console.log(columns);
   console.log(payloads);
-  
+
+  let a = {
+    line: {
+      type: "template",
+      altText: "this is a carousel template",
+      template: {
+        type: "carousel",
+        imageAspectRatio: "rectangle",
+        imageSize: "cover",
+        columns: [
+          {
+            thumbnailImageUrl:
+              "https://admin.trinitytrip.com/uploads/community/6/poi/poi_cd8b791439946d1d49d83082c513eb19_20211123072827000000.jpg",
+            imageBackgroundColor: "#FFFFFF",
+            title: "บ้านหนองพุก ต.หนองบัว อ.ศีขรภูมิ จ.สุรินทร์",
+            text: "บ้านหนองพุก ต.หนองบัว อ.ศีขรภูมิ จ.สุรินทร์",
+            actions: [
+              {
+                type: "uri",
+                label: "เปิดแผนที่",
+                uri: "http://maps.google.com/maps?z=12&t=m&q=loc:15.0771929+103.76335114",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://admin.trinitytrip.com/uploads/community/10/poi/poi_e962f83a5cc3dedb252a249ae4795aaf_20211125043844000000.jpg",
+            imageBackgroundColor: "#FFFFFF",
+            title:
+              "ATM ธนาคารกรุงไทย บจก.เอส วรรณ ซัพพลายส์ ศูนย์กระจายสินค้า จ.สุรินทร์",
+            text: "ATM ธนาคารกรุงไทย บจก.เอส วรรณ ซัพพลายส์ ศูนย์กระจายสินค้า จ.สุรินทร์",
+            actions: [
+              {
+                type: "uri",
+                label: "เปิดแผนที่",
+                uri: "http://maps.google.com/maps?z=12&t=m&q=loc:14.92958496+103.77651798",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://admin.trinitytrip.com/uploads/community/6/poi/poi_cd8b791439946d1d49d83082c513eb19_20211123072951000000.jpg",
+            imageBackgroundColor: "#FFFFFF",
+            title: "ATM ธนาคารออมสิน หน้า 7-11",
+            text: "ATM ธนาคารออมสิน หน้า 7-11",
+            actions: [
+              {
+                type: "uri",
+                label: "เปิดแผนที่",
+                uri: "http://maps.google.com/maps?z=12&t=m&q=loc:14.94458201+103.78640238",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://admin.trinitytrip.com/uploads/community/10/poi/poi_cd8b791439946d1d49d83082c513eb19_20211125043958000000.jpg",
+            imageBackgroundColor: "#FFFFFF",
+            title: "ATM ธนาคารกรุงไทย ปั๊ม ปตท.บจก.สินชัยกาญจน์ปิโตรเลียม",
+            text: "ATM ธนาคารกรุงไทย ปั๊ม ปตท.บจก.สินชัยกาญจน์ปิโตรเลียม",
+            actions: [
+              {
+                type: "uri",
+                label: "เปิดแผนที่",
+                uri: "http://maps.google.com/maps?z=12&t=m&q=loc:14.93870261+103.78914122",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://admin.trinitytrip.com/uploads/community/1/poi/poi_f1aa1edabea867100c6f930ef7fc063d_20211007163337000000.jpg",
+            imageBackgroundColor: "#FFFFFF",
+            title: "ATM Krungthai Bank",
+            text: "ATM Krungthai Bank",
+            actions: [
+              {
+                type: "uri",
+                label: "เปิดแผนที่",
+                uri: "http://maps.google.com/maps?z=12&t=m&q=loc:14.94111+103.805011",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://admin.trinitytrip.com/uploads/community/1/poi/poi_081d05881d24d2c0e2e6e83b500d231f_20211012034959000000.jpg",
+            imageBackgroundColor: "#FFFFFF",
+            title: "ATM Krungthai Bank",
+            text: "ATM Krungthai Bank",
+            actions: [
+              {
+                type: "uri",
+                label: "เปิดแผนที่",
+                uri: "http://maps.google.com/maps?z=12&t=m&q=loc:14.94111+103.805011",
+              },
+            ],
+          },
+        ],
+      },
+    },
+  };
 
   return agent.add(
-    new Payload('LINE' as Platforms, JSON.stringify(payload), {
+    new Payload("LINE" as Platforms,  a, {
       rawPayload: true,
       sendAsMessage: true,
     })
