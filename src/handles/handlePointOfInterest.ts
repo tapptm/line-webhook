@@ -54,8 +54,8 @@ async function getATMlocation(agent: {
     return {
       thumbnailImageUrl: distance.image,
       imageBackgroundColor: "#FFFFFF",
-      title: "TEST",
-      text: "TEST",
+      title: distance.name,
+      text: distance.name,
       actions: [
         {
           type: "uri",
@@ -82,7 +82,7 @@ async function getATMlocation(agent: {
   console.log(JSON.stringify(payload, null, 4));
 
   return agent.add(
-    new Payload("LINE" as Platforms, JSON.stringify(payload, null, 4), {
+    new Payload("LINE" as Platforms, JSON.stringify(payload), {
       rawPayload: true,
       sendAsMessage: true,
     })
