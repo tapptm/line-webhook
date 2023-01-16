@@ -42,14 +42,9 @@ function getATMlocation(agent) {
                 text: distance.name,
                 actions: [
                     {
-                        type: "postback",
-                        label: "รายละเอียด",
-                        data: "#",
-                    },
-                    {
                         type: "uri",
                         label: "เปิดแผนที่",
-                        uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
+                        uri: "http://maps.google.com/maps?z=12&t=m&q=loc:" + distance.latitude + "+" + distance.longitude,
                     },
                 ],
             };
@@ -94,7 +89,7 @@ function getATMlocation(agent) {
         };
         console.log(payload);
         console.log(columns);
-        return agent.add(new dialogflow_fulfillment_1.Payload('LINE', payload, {
+        return agent.add(new dialogflow_fulfillment_1.Payload('LINE', payloads, {
             rawPayload: true,
             sendAsMessage: true,
         }));

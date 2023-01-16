@@ -58,14 +58,9 @@ async function getATMlocation(agent: {
       text: distance.name,
       actions: [
         {
-          type: "postback",
-          label: "รายละเอียด",
-          data: "#",
-        },
-        {
           type: "uri",
           label: "เปิดแผนที่",
-          uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
+          uri: "http://maps.google.com/maps?z=12&t=m&q=loc:" + distance.latitude + "+" + distance.longitude,
         },
       ],
     };
@@ -116,7 +111,7 @@ async function getATMlocation(agent: {
   console.log(columns);
 
   return agent.add(
-    new Payload('LINE' as Platforms, payload, {
+    new Payload('LINE' as Platforms, payloads, {
       rawPayload: true,
       sendAsMessage: true,
     })
