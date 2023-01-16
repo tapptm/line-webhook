@@ -155,7 +155,7 @@ async function getATMlocation(agent: {
   };
 
   return agent.add(
-    new Payload("LINE" as Platforms,  a, {
+    new Payload("LINE" as Platforms, JSON.stringify(payload, null, 4) , {
       rawPayload: true,
       sendAsMessage: true,
     })
