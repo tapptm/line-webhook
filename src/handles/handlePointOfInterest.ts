@@ -52,15 +52,15 @@ async function getATMlocation(agent: {
 
   const columns: LineColumns[] = distanceData.map((distance: any) => {
     return {
-      thumbnailImageUrl: distance.image + "",
+      thumbnailImageUrl: distance.image ,
       imageBackgroundColor: "#FFFFFF",
-      title: distance.name + "",
-      text: distance.name + "",
+      title: distance.name ,
+      text: distance.name ,
       actions: [
         {
           type: "uri",
           label: "เปิดแผนที่",
-          uri: "http://maps.google.com/maps?z=12&t=m&q=loc:" + distance.latitude + "+" + distance.longitude,
+          uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude }+${distance.longitude}`,
         },
       ],
     };
@@ -107,11 +107,13 @@ async function getATMlocation(agent: {
     },
   };
 
-  console.log(payload);
+  console.log(JSON.stringify(payload));
   console.log(columns);
+  console.log(payloads);
+  
 
   return agent.add(
-    new Payload('LINE' as Platforms, payload, {
+    new Payload('LINE' as Platforms, JSON.stringify(payload), {
       rawPayload: true,
       sendAsMessage: true,
     })

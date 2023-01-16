@@ -36,15 +36,15 @@ function getATMlocation(agent) {
         const distanceData = yield calculateDistance(agent.intent, 14.9881753, 102.1198264);
         const columns = distanceData.map((distance) => {
             return {
-                thumbnailImageUrl: distance.image + "",
+                thumbnailImageUrl: distance.image,
                 imageBackgroundColor: "#FFFFFF",
-                title: distance.name + "",
-                text: distance.name + "",
+                title: distance.name,
+                text: distance.name,
                 actions: [
                     {
                         type: "uri",
                         label: "เปิดแผนที่",
-                        uri: "http://maps.google.com/maps?z=12&t=m&q=loc:" + distance.latitude + "+" + distance.longitude,
+                        uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
                     },
                 ],
             };
@@ -87,9 +87,10 @@ function getATMlocation(agent) {
                 },
             },
         };
-        console.log(payload);
+        console.log(JSON.stringify(payload));
         console.log(columns);
-        return agent.add(new dialogflow_fulfillment_1.Payload('LINE', payload, {
+        console.log(payloads);
+        return agent.add(new dialogflow_fulfillment_1.Payload('LINE', JSON.stringify(payload), {
             rawPayload: true,
             sendAsMessage: true,
         }));
