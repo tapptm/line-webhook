@@ -83,6 +83,19 @@ function getATMlocation(agent) {
                                 },
                             ],
                         },
+                        {
+                            thumbnailImageUrl: "https://admin.trinitytrip.com/uploads/community/10/poi/poi_e962f83a5cc3dedb252a249ae4795aaf_20211125043844000000.jpg",
+                            imageBackgroundColor: "#FFFFFF",
+                            title: "ATM ธนาคารกรุงไทย บจก.เอส วรรณ ซัพพลายส์ ศูนย์กระจายสินค้า จ.สุรินทร์",
+                            text: "ATM ธนาคารกรุงไทย บจก.เอส วรรณ ซัพพลายส์ ศูนย์กระจายสินค้า จ.สุรินทร์",
+                            actions: [
+                                {
+                                    type: "uri",
+                                    label: "เปิดแผนที่",
+                                    uri: "http://maps.google.com/maps?z=12&t=m&q=loc:14.92958496+103.77651798",
+                                },
+                            ],
+                        },
                     ],
                 },
             },
