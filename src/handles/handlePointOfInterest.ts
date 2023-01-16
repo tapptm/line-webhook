@@ -52,43 +52,71 @@ async function getATMlocation(agent: {
 
   const columns: LineColumns[] = distanceData.map((distance: any) => {
     return {
-      "thumbnailImageUrl": distance.image,
-      "imageBackgroundColor": "#FFFFFF",
-      "title": distance.name,
-      "text": distance.name,
-      "actions": [
+      thumbnailImageUrl: distance.image,
+      imageBackgroundColor: "#FFFFFF",
+      title: distance.name,
+      text: distance.name,
+      actions: [
         {
-          "type": "postback",
-          "label": "รายละเอียด",
-          "data": "#",
+          type: "postback",
+          label: "รายละเอียด",
+          data: "#",
         },
         {
-          "type": "postback",
-          "label": "เปิดแผนที่",
-          "uri": `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
+          type: "postback",
+          label: "เปิดแผนที่",
+          uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
         },
       ],
     };
   });
 
   const payload: Line = {
-    "line": {
-        "type": "template",
-        "altText": "this is a carousel template",
-        "template": {
-            "type": "carousel",
-            "imageAspectRatio": "rectangle",
-            "imageSize": "cover",
-            "columns": columns
-        }
-    }
-  }
+    line: {
+      type: "template",
+      altText: "this is a carousel template",
+      template: {
+        type: "carousel",
+        imageAspectRatio: "rectangle",
+        imageSize: "cover",
+        columns: columns,
+      },
+    },
+  };
+
+  const payloads = {
+    line: {
+      type: "template",
+      altText: "this is a carousel template",
+      template: {
+        type: "carousel",
+        imageAspectRatio: "rectangle",
+        imageSize: "cover",
+        columns: [
+          {
+            thumbnailImageUrl:
+              "https://admin.trinitytrip.com/uploads/community/1/poi/poi_081d05881d24d2c0e2e6e83b500d231f_20211012034959000000.jpg",
+            imageBackgroundColor: "#FFFFFF",
+            title: "ห้ะ",
+            text: "ห้ะ",
+            actions: [
+              {
+                type: "uri",
+                label: "รายละเอียด",
+                uri: "https://www.google.com/",
+              },
+            ],
+          },
+        ],
+      },
+    },
+  };
 
   console.log(payload);
   console.log(columns);
 
   return agent.add(
-    new Payload(agent.UNSPECIFIED, payload, {
+    new Payload('LINE' as Platforms, payloads, {
       rawPayload: true,
       sendAsMessage: true,
     })
