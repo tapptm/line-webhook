@@ -79,7 +79,7 @@ async function getATMlocation(agent: {
     },
   };
 
-  console.log(JSON.stringify(payload, null, 4));
+  console.log(JSON.stringify(payload));
 
   return agent.add(
     new Payload("LINE" as Platforms, JSON.stringify(payload), {
