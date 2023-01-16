@@ -50,12 +50,12 @@ async function getATMlocation(agent: {
     102.1198264
   );
 
-  const columns = distanceData.map((distance: any) => {
+  const columns: LineColumns[] = distanceData.map((distance: any) => {
     return {
-      thumbnailImageUrl: distance.image,
+      thumbnailImageUrl: distance.image + "",
       imageBackgroundColor: "#FFFFFF",
-      title: distance.name,
-      text: distance.name,
+      title: distance.name + "",
+      text: distance.name + "",
       actions: [
         {
           type: "uri",

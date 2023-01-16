@@ -36,10 +36,10 @@ function getATMlocation(agent) {
         const distanceData = yield calculateDistance(agent.intent, 14.9881753, 102.1198264);
         const columns = distanceData.map((distance) => {
             return {
-                thumbnailImageUrl: distance.image,
+                thumbnailImageUrl: distance.image + "",
                 imageBackgroundColor: "#FFFFFF",
-                title: distance.name,
-                text: distance.name,
+                title: distance.name + "",
+                text: distance.name + "",
                 actions: [
                     {
                         type: "uri",

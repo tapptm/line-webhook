@@ -12,10 +12,10 @@ interface Line {
 }
 
 interface LineColumns {
-  text: String;
-  title: String;
-  imageBackgroundColor: String;
-  thumbnailImageUrl: String;
+  text: string;
+  title: string;
+  imageBackgroundColor: string;
+  thumbnailImageUrl: string;
   actions: Object[];
 }
 
