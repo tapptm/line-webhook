@@ -38,8 +38,8 @@ function getATMlocation(agent) {
             return {
                 thumbnailImageUrl: distance.image,
                 imageBackgroundColor: "#FFFFFF",
-                title: distance.image.replace(/(.{7})..+/, "$1…"),
-                text: distance.image.replace(/(.{7})..+/, "$1…"),
+                title: distance.name.replace(/(.{40})..+/, "$1…"),
+                text: distance.name,
                 actions: [
                     {
                         type: "uri",
