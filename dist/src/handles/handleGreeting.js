@@ -10,9 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getGreeting = void 0;
+const actions_on_google_1 = require("actions-on-google");
 function getGreeting(agent) {
     return __awaiter(this, void 0, void 0, function* () {
-        agent.add("Hello I am Webhook demo How are you...");
+        const conv = agent.conv();
+        conv.ask(new actions_on_google_1.Permission({
+            context: "To locate you",
+            permissions: "DEVICE_PRECISE_LOCATION",
+        }));
+        // agent.add("Hello I am Webhook demo How are you...");
     });
 }
 exports.getGreeting = getGreeting;
