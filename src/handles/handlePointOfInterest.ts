@@ -89,7 +89,7 @@ async function getATMlocation(agent: {
   console.log(JSON.stringify(payload));
 
   if (filterInRadius.length === 0) {
-    return agent.add("ไม่พบข้อมูล" + agent.intent + "ที่ต้องการ");
+    return agent.add("ไม่พบข้อมูล" + agent.intent + "ในระยะ(50km) ที่ต้องการ");
   } else {
     return agent.add(
       new Payload("LINE" as Platforms, JSON.parse(JSON.stringify(payload)), {
