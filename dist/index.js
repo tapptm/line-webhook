@@ -50,7 +50,7 @@ app.post("/webhook", (req, res) => {
     intentMap.set("ธนาคาร", handlePointOfInterest_1.getlocation);
     intentMap.set("ร้านอาหาร", handleGreeting_1.getGreeting);
     // now agent is handle request and pass intent map
-    agent.handleRequest(intentMap);
+    // agent.handleRequest(intentMap);
 });
 app.listen(port, () => {
     console.log(`Server is running at port: ${port}`);
