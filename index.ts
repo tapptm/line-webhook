@@ -27,10 +27,12 @@ app.post("/webhook", (req: Request, res: Response) => {
   // add intent map 2nd parameter pass function
   intentMap.set("webhook", ()=>{
     const conv = agent.conv();
+    conv.data.requestedPermission = "DEVICE_PRECISE_LOCATION";
+    conv.ask(new SimpleResponse('Welcome to location tracker'))
     conv.ask(
       new Permission({
         context: "To locate you",
-        permissions: "DEVICE_PRECISE_LOCATION",
+        permissions: conv.data.requestedPermission,
       })
     );
   });
