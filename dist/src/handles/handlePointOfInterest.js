@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getlocation = void 0;
 const dialogflow_fulfillment_1 = require("dialogflow-fulfillment");
 const poiCalculateDistance_1 = require("../utils/poiCalculateDistance");
+const carouselPayload_1 = require("../payloads/carouselPayload");
 function getlocation(agent) {
     return __awaiter(this, void 0, void 0, function* () {
         /** calculate distance from your current location **/
@@ -23,127 +24,15 @@ function getlocation(agent) {
          * it will return text. if not it will
          * return custom payload. **/
         if (distanceData.length > 0) {
-            /** format custom payload for line **/
-            const contents = distanceData.map((distance) => {
-                return {
-                    type: "bubble",
-                    size: "micro",
-                    hero: {
-                        type: "image",
-                        url: distance.image,
-                        size: "full",
-                        aspectMode: "cover",
-                        aspectRatio: "320:213",
-                    },
-                    body: {
-                        type: "box",
-                        layout: "vertical",
-                        contents: [
-                            {
-                                type: "text",
-                                text: distance.name.replace(/(.{40})..+/, "$1…"),
-                                weight: "bold",
-                                size: "sm",
-                                wrap: true,
-                            },
-                            {
-                                type: "box",
-                                layout: "baseline",
-                                contents: [
-                                    {
-                                        type: "icon",
-                                        size: "xs",
-                                        url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                                    },
-                                    {
-                                        type: "icon",
-                                        size: "xs",
-                                        url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                                    },
-                                    {
-                                        type: "icon",
-                                        size: "xs",
-                                        url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                                    },
-                                    {
-                                        type: "icon",
-                                        size: "xs",
-                                        url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
-                                    },
-                                    {
-                                        type: "icon",
-                                        size: "xs",
-                                        url: "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
-                                    },
-                                    {
-                                        type: "text",
-                                        text: "4.0",
-                                        size: "xs",
-                                        color: "#8c8c8c",
-                                        margin: "md",
-                                    },
-                                ],
-                            },
-                            {
-                                type: "box",
-                                layout: "vertical",
-                                contents: [
-                                    {
-                                        type: "box",
-                                        layout: "baseline",
-                                        spacing: "sm",
-                                        contents: [
-                                            {
-                                                type: "text",
-                                                text: distance.distance,
-                                                wrap: true,
-                                                color: "#8c8c8c",
-                                                size: "xs",
-                                            },
-                                        ],
-                                    },
-                                ],
-                            },
-                        ],
-                        spacing: "sm",
-                        paddingAll: "13px",
-                    },
-                    footer: {
-                        type: "box",
-                        layout: "vertical",
-                        contents: [
-                            {
-                                type: "separator",
-                            },
-                            {
-                                type: "button",
-                                action: {
-                                    type: "uri",
-                                    label: "เปิดแผนที่",
-                                    uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
-                                },
-                            },
-                        ],
-                    },
-                };
-            });
-            const payload = {
-                line: {
-                    type: "flex",
-                    altText: "Flex Message",
-                    contents: {
-                        type: "carousel",
-                        contents: contents,
-                    },
-                },
-            };
+            /** format custom payload for line bot **/
+            const payload = (0, carouselPayload_1.carouselPayloads)(distanceData);
             console.log(JSON.stringify(payload));
-            return agent.add(new dialogflow_fulfillment_1.Payload("LINE", JSON.parse(JSON.stringify(payload)), {
+            return agent.add(new dialogflow_fulfillment_1.Payload("LINE", payload, {
                 rawPayload: true,
                 sendAsMessage: true,
             }));
         }
-        return agent.add("ไม่พบข้อมูล" + agent.intent + "ในระยะ (50km)");
+        return agent.add("ไม่พบข้อมูล" + agent.intent + "ในระยะ (100km)");
     });
 }
 exports.getlocation = getlocation;

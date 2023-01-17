@@ -31,7 +31,7 @@ async function calculateDistance(
     };
   });
 
-  /** order by and filter radius in 50 km **/
+  /** order by and filter radius in 100 km **/
   const volunteers = orderByDistance(
     { latitude: latitude, longitude: longitude },
     distancePointofinterest
