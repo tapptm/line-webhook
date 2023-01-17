@@ -5,6 +5,7 @@ import { Agent } from "../dto/pointOfInterest.dto";
 import { carouselPayloads } from "../payloads/carouselPayload";
 
 async function getlocation(agent: Agent) {
+  console.log(agent);
   /** calculate distance from your current location **/
   const distanceData = await calculateDistance(
     agent.intent, // set your intent name here.

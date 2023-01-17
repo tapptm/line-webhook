@@ -15,6 +15,7 @@ const poiCalculateDistance_1 = require("../utils/poiCalculateDistance");
 const carouselPayload_1 = require("../payloads/carouselPayload");
 function getlocation(agent) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(agent);
         /** calculate distance from your current location **/
         const distanceData = yield (0, poiCalculateDistance_1.calculateDistance)(agent.intent, // set your intent name here.
         14.9881753, // set your locations here.
