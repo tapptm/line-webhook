@@ -32,10 +32,13 @@ interface PointOfInterest {
 }
 
 interface Agent {
+  parameters: {
+    location: string;
+  };
   rawPayload: boolean;
   sendAsMessage: boolean;
   intent: string;
-  add: (add: Object) => void
+  add: (add: Object) => void;
 }
 
 export { Line, LineColumns, PointOfInterest, Agent };
