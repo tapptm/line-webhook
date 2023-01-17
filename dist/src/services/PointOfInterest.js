@@ -28,7 +28,8 @@ function getPoiByGroup(intent) {
                         poi_longitude as longitude  
                 FROM poi 
                 LEFT JOIN poi_group ON poi_group.poi_group_id = poi.poi_group_id
-                WHERE poi_group.poi_group_name ='${intent}';`;
+                WHERE poi_group.poi_group_name ='${intent}'
+                LIMIT 3;`;
         const { rows } = yield client.query(sql);
         client.release();
         return rows;
