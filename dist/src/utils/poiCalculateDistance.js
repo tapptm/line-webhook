@@ -28,8 +28,10 @@ function calculateDistance(intent, latitude, longitude) {
                     : `(${distance.toFixed(0)} เมตร)`, distance_meters: distance });
         });
         /** order by and filter radius in 50 km **/
-        const volunteers = (0, geolib_1.orderByDistance)({ latitude: latitude, longitude: longitude }, distancePointofinterest).filter((item) => item.distance_meters <= 200000 // meters
-        );
+        const volunteers = (0, geolib_1.orderByDistance)({ latitude: latitude, longitude: longitude }, distancePointofinterest)
+            .filter((item) => item.distance_meters <= 100000 // meters
+        )
+            .slice(0, 3);
         return volunteers;
     });
 }

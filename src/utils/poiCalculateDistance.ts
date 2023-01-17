@@ -35,9 +35,11 @@ async function calculateDistance(
   const volunteers = orderByDistance(
     { latitude: latitude, longitude: longitude },
     distancePointofinterest
-  ).filter(
-    (item: any) => item.distance_meters <= 200000 // meters
-  );
+  )
+    .filter(
+      (item: any) => item.distance_meters <= 100000 // meters
+    )
+    .slice(0, 3);
 
   return volunteers;
 }
