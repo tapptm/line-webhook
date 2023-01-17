@@ -21,6 +21,7 @@ app.post("/webhook", (req: Request, res: Response) => {
   // get agent from request
   let agent = new WebhookClient({ request: req, response: res });
   // create intentMap for handle intent
+  console.log(agent);
   let intentMap = new Map();
   // add intent map 2nd parameter pass function
   intentMap.set("webhook", getGreeting);

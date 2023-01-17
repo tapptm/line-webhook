@@ -23,6 +23,7 @@ app.post("/webhook", (req, res) => {
     // get agent from request
     let agent = new dialogflow_fulfillment_1.WebhookClient({ request: req, response: res });
     // create intentMap for handle intent
+    console.log(agent);
     let intentMap = new Map();
     // add intent map 2nd parameter pass function
     intentMap.set("webhook", handleGreeting_1.getGreeting);
