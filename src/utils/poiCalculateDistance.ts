@@ -69,7 +69,7 @@ async function calculateDistance(
     distancePointofinterest
   )
     .filter(
-      (item: any) => item.distance_meters <= 100000 // meters
+      (item: any) => item.distance_meters <= 200000 // meters
     )
     .slice(0, 3);
 

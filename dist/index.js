@@ -26,6 +26,7 @@ app.post("/webhook", (req, res) => {
     let intentMap = new Map();
     // add intent map 2nd parameter pass function
     intentMap.set("webhook", handleGreeting_1.getGreeting);
+    // intent poi
     intentMap.set("ธนาคาร", handlePointOfInterest_1.getlocation);
     intentMap.set("โรงพยาบาล", handlePointOfInterest_1.getlocation);
     intentMap.set("ร้านค้า", handlePointOfInterest_1.getlocation);
