@@ -25,8 +25,8 @@ function calculateDistance(intent, latitude, longitude) {
                 : null;
             const distance = (0, geolib_1.getDistance)({ latitude: latitude, longitude: longitude }, { latitude: item.latitude, longitude: item.longitude });
             return Object.assign(Object.assign({}, item), { distance: distance >= 1000
-                    ? `${(distance / 1000).toFixed(2)} กิโลเมตร`
-                    : `${distance.toFixed(0)} เมตร`, distance_meters: distance });
+                    ? `(${(distance / 1000).toFixed(2)} กิโลเมตร)`
+                    : `(${distance.toFixed(0)} เมตร)`, distance_meters: distance });
         });
         const volunteers = (0, geolib_1.orderByDistance)({ latitude: latitude, longitude: longitude }, distancePointofinterest);
         return volunteers;
@@ -34,8 +34,11 @@ function calculateDistance(intent, latitude, longitude) {
 }
 function getATMlocation(agent) {
     return __awaiter(this, void 0, void 0, function* () {
+        /** calculate distance from current location **/
         const distanceData = yield calculateDistance(agent.intent, 14.9881753, 102.1198264);
+        /** filter distance 50 km **/
         const filterInRadius = distanceData.filter((item) => item.distance_meters <= 50000);
+        /** format custom payload for line **/
         const columns = filterInRadius.map((distance) => {
             return {
                 thumbnailImageUrl: distance.image,
@@ -64,6 +67,7 @@ function getATMlocation(agent) {
             },
         };
         console.log(JSON.stringify(payload));
+        /** condition to check in radius 50 km and return it. **/
         if (filterInRadius.length === 0) {
             return agent.add("ไม่พบข้อมูล" + agent.intent + "ในระยะ(50km) ที่ต้องการ");
         }

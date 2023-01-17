@@ -26,8 +26,8 @@ async function calculateDistance(
       ...item,
       distance:
         distance >= 1000
-          ? `${(distance / 1000).toFixed(2)} กิโลเมตร`
-          : `${distance.toFixed(0)} เมตร`,
+          ? `(${(distance / 1000).toFixed(2)} กิโลเมตร)`
+          : `(${distance.toFixed(0)} เมตร)`,
       distance_meters: distance,
     };
   });
@@ -47,17 +47,20 @@ async function getATMlocation(agent: {
   intent: string;
   add: (add: Object) => void;
 }) {
+  /** calculate distance from current location **/
   const distanceData = await calculateDistance(
     agent.intent,
     14.9881753,
     102.1198264
   );
 
+  /** filter distance 50 km **/
   const filterInRadius = distanceData.filter(
     (item: any) => item.distance_meters <= 50000
   );
 
-  const columns = filterInRadius.map((distance: any) => {
+  /** format custom payload for line **/
+  const columns: LineColumns[] = filterInRadius.map((distance: any) => {
     return {
       thumbnailImageUrl: distance.image,
       imageBackgroundColor: "#FFFFFF",
@@ -73,7 +76,7 @@ async function getATMlocation(agent: {
     };
   });
 
-  const payload = {
+  const payload: Line = {
     line: {
       type: "template",
       altText: "this is a carousel template",
@@ -88,6 +91,7 @@ async function getATMlocation(agent: {
 
   console.log(JSON.stringify(payload));
 
+  /** condition to check in radius 50 km and return it. **/
   if (filterInRadius.length === 0) {
     return agent.add("ไม่พบข้อมูล" + agent.intent + "ในระยะ(50km) ที่ต้องการ");
   } else {
