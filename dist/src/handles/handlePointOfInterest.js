@@ -23,9 +23,10 @@ function calculateDistance(intent, latitude, longitude) {
             item.image = item.image
                 ? `${urlpath_1.imageUrl}/community/${parseInt(item.community_id)}/poi/${item.image}`
                 : null;
-            return Object.assign(Object.assign({}, item), { distance: (0, geolib_1.getDistance)({ latitude: latitude, longitude: longitude }, { latitude: item.latitude, longitude: item.longitude }) /
-                    1000 +
-                    " Km" });
+            const distance = (0, geolib_1.getDistance)({ latitude: latitude, longitude: longitude }, { latitude: item.latitude, longitude: item.longitude });
+            return Object.assign(Object.assign({}, item), { distance: distance >= 1000
+                    ? `${(distance / 1000).toFixed(2)} กิโลเมตร`
+                    : `${distance.toFixed(0)} เมตร` });
         });
         const volunteers = (0, geolib_1.orderByDistance)({ latitude: latitude, longitude: longitude }, distancePointofinterest);
         return volunteers;
@@ -39,7 +40,7 @@ function getATMlocation(agent) {
                 thumbnailImageUrl: distance.image,
                 imageBackgroundColor: "#FFFFFF",
                 title: distance.name.replace(/(.{40})..+/, "$1…"),
-                text: distance.name,
+                text: distance.distance,
                 actions: [
                     {
                         type: "uri",

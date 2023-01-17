@@ -17,15 +17,17 @@ async function calculateDistance(
       ? `${imageUrl}/community/${parseInt(item.community_id)}/poi/${item.image}`
       : null;
 
+    const distance = getDistance(
+      { latitude: latitude, longitude: longitude },
+      { latitude: item.latitude, longitude: item.longitude }
+    );
+
     return {
       ...item,
       distance:
-        getDistance(
-          { latitude: latitude, longitude: longitude },
-          { latitude: item.latitude, longitude: item.longitude }
-        ) /
-          1000 +
-        " Km",
+        distance >= 1000
+          ? `${(distance / 1000).toFixed(2)} กิโลเมตร`
+          : `${distance.toFixed(0)} เมตร`,
     };
   });
 
@@ -55,7 +57,7 @@ async function getATMlocation(agent: {
       thumbnailImageUrl: distance.image,
       imageBackgroundColor: "#FFFFFF",
       title: distance.name.replace(/(.{40})..+/, "$1…"),
-      text: distance.name,
+      text: distance.distance,
       actions: [
         {
           type: "uri",
