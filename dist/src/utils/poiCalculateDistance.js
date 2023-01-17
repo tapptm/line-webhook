@@ -15,8 +15,16 @@ const geolib_1 = require("geolib");
 const urlpath_1 = require("../configs/urlpath");
 function calculateDistance(intent, latitude, longitude) {
     return __awaiter(this, void 0, void 0, function* () {
-        const poidata = yield (0, PointOfInterest_1.getPoiByGroup)(intent);
-        const distancePointofinterest = poidata.map((item) => {
+        let pointOfInterest = [];
+        if (intent === "โรงพยาบาล") {
+            const hospital = yield (0, PointOfInterest_1.getPoiByGroup)("โรงพยาบาล");
+            const medicshop = yield (0, PointOfInterest_1.getPoiByGroup)("ร้านขายยา");
+            pointOfInterest = [...hospital, ...medicshop];
+        }
+        else {
+            pointOfInterest = [...(yield (0, PointOfInterest_1.getPoiByGroup)(intent))];
+        }
+        const distancePointofinterest = pointOfInterest.map((item) => {
             item.latitude = parseFloat(item.latitude);
             item.longitude = parseFloat(item.longitude);
             item.image = item.image

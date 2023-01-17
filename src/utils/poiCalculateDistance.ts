@@ -8,8 +8,16 @@ async function calculateDistance(
   latitude: number,
   longitude: number
 ) {
-  const poidata: PointOfInterest[] = await getPoiByGroup(intent);
-  const distancePointofinterest = poidata.map((item) => {
+  let pointOfInterest: PointOfInterest[] = [];
+  if (intent === "โรงพยาบาล") {
+    const hospital: PointOfInterest[] = await getPoiByGroup("โรงพยาบาล");
+    const medicshop: PointOfInterest[] = await getPoiByGroup("ร้านขายยา");
+    pointOfInterest = [...hospital, ...medicshop];
+  } else {
+    pointOfInterest = [...(await getPoiByGroup(intent))];
+  }
+
+  const distancePointofinterest = pointOfInterest.map((item) => {
     item.latitude = parseFloat(item.latitude);
     item.longitude = parseFloat(item.longitude);
     item.image = item.image
