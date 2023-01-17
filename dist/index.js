@@ -8,6 +8,7 @@ const dialogflow_fulfillment_1 = require("dialogflow-fulfillment");
 const handleGreeting_1 = require("./src/handles/handleGreeting");
 const handlePointOfInterest_1 = require("./src/handles/handlePointOfInterest");
 const dotenv_1 = __importDefault(require("dotenv"));
+const actions_on_google_1 = require("actions-on-google");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.NODE_PORT || 4050;
@@ -25,7 +26,13 @@ app.post("/webhook", (req, res) => {
     // create intentMap for handle intent
     let intentMap = new Map();
     // add intent map 2nd parameter pass function
-    intentMap.set("webhook", handleGreeting_1.getGreeting);
+    intentMap.set("webhook", () => {
+        const conv = agent.conv();
+        conv.ask(new actions_on_google_1.Permission({
+            context: "To locate you",
+            permissions: "DEVICE_PRECISE_LOCATION",
+        }));
+    });
     // intent poi
     intentMap.set("ธนาคาร", handlePointOfInterest_1.getlocation);
     intentMap.set("โรงพยาบาล", handlePointOfInterest_1.getlocation);

@@ -3,6 +3,7 @@ import { WebhookClient } from "dialogflow-fulfillment";
 import { getGreeting } from "./src/handles/handleGreeting";
 import { getlocation } from "./src/handles/handlePointOfInterest";
 import dotenv from "dotenv";
+import { dialogflow, Permission, SimpleResponse } from "actions-on-google";
 
 dotenv.config();
 const app: Express = express();
@@ -24,8 +25,17 @@ app.post("/webhook", (req: Request, res: Response) => {
   
   let intentMap = new Map();
   // add intent map 2nd parameter pass function
-  intentMap.set("webhook", getGreeting);
+  intentMap.set("webhook", ()=>{
+    const conv = agent.conv();
+    conv.ask(
+      new Permission({
+        context: "To locate you",
+        permissions: "DEVICE_PRECISE_LOCATION",
+      })
+    );
+  });
 
+  
   // intent poi
   intentMap.set("ธนาคาร", getlocation);
   intentMap.set("โรงพยาบาล", getlocation);
