@@ -36,7 +36,7 @@ async function calculateDistance(
     { latitude: latitude, longitude: longitude },
     distancePointofinterest
   ).filter(
-    (item: any) => item.distance_meters <= 50000 // meters
+    (item: any) => item.distance_meters <= 200000 // meters
   );
 
   return volunteers;
