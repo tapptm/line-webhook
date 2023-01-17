@@ -10,11 +10,35 @@ async function calculateDistance(
 ) {
   let pointOfInterest: PointOfInterest[] = [];
   if (intent === "โรงพยาบาล") {
-    const hospital: PointOfInterest[] = await getPoiByGroup("โรงพยาบาล");
-    const medicshop: PointOfInterest[] = await getPoiByGroup("ร้านขายยา");
-    pointOfInterest = [...hospital, ...medicshop];
+    const health: PointOfInterest[] = await getPoiByGroup(
+      "โรงพยาบาล",
+      "ร้านขายยา",
+      "โรงพยาบาลส่งเสริมสุขภาพตำบล"
+    );
+    pointOfInterest = [...health];
+  } else if (intent === "ร้านค้า") {
+    const stores: PointOfInterest[] = await getPoiByGroup(
+      "ร้านขายของชำ",
+      "ร้านขายของฝาก",
+      "ร้านค้าวิสาหกิจชุมชน"
+    );
+    pointOfInterest = [...stores];
+  } else if (intent === "ปั้มน้ำมัน") {
+    const fuelstation: PointOfInterest[] = await getPoiByGroup(
+      "ปตท",
+      "ปั้มน้ำมัน",
+      ""
+    );
+    pointOfInterest = [...fuelstation];
+  } else if (intent === "ธนาคาร") {
+    const banks: PointOfInterest[] = await getPoiByGroup(
+      "ตู้กดเงินสด",
+      "ธนาคาร",
+      ""
+    );
+    pointOfInterest = [...banks];
   } else {
-    pointOfInterest = [...(await getPoiByGroup(intent))];
+    pointOfInterest = [...(await getPoiByGroup(intent, "", ""))];
   }
 
   const distancePointofinterest = pointOfInterest.map((item) => {

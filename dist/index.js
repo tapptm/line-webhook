@@ -26,8 +26,12 @@ app.post("/webhook", (req, res) => {
     let intentMap = new Map();
     // add intent map 2nd parameter pass function
     intentMap.set("webhook", handleGreeting_1.getGreeting);
-    intentMap.set("ตู้กดเงินสด", handlePointOfInterest_1.getlocation);
+    intentMap.set("ธนาคาร", handlePointOfInterest_1.getlocation);
     intentMap.set("โรงพยาบาล", handlePointOfInterest_1.getlocation);
+    intentMap.set("ร้านค้า", handlePointOfInterest_1.getlocation);
+    intentMap.set("ปั้มน้ำมัน", handlePointOfInterest_1.getlocation);
+    intentMap.set("ธนาคาร", handlePointOfInterest_1.getlocation);
+    intentMap.set("ร้านอาหาร", handleGreeting_1.getGreeting);
     // now agent is handle request and pass intent map
     agent.handleRequest(intentMap);
 });

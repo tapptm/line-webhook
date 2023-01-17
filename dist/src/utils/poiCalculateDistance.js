@@ -17,12 +17,23 @@ function calculateDistance(intent, latitude, longitude) {
     return __awaiter(this, void 0, void 0, function* () {
         let pointOfInterest = [];
         if (intent === "โรงพยาบาล") {
-            const hospital = yield (0, PointOfInterest_1.getPoiByGroup)("โรงพยาบาล");
-            const medicshop = yield (0, PointOfInterest_1.getPoiByGroup)("ร้านขายยา");
-            pointOfInterest = [...hospital, ...medicshop];
+            const health = yield (0, PointOfInterest_1.getPoiByGroup)("โรงพยาบาล", "ร้านขายยา", "โรงพยาบาลส่งเสริมสุขภาพตำบล");
+            pointOfInterest = [...health];
+        }
+        else if (intent === "ร้านค้า") {
+            const stores = yield (0, PointOfInterest_1.getPoiByGroup)("ร้านขายของชำ", "ร้านขายของฝาก", "ร้านค้าวิสาหกิจชุมชน");
+            pointOfInterest = [...stores];
+        }
+        else if (intent === "ปั้มน้ำมัน") {
+            const fuelstation = yield (0, PointOfInterest_1.getPoiByGroup)("ปตท", "ปั้มน้ำมัน", "");
+            pointOfInterest = [...fuelstation];
+        }
+        else if (intent === "ธนาคาร") {
+            const banks = yield (0, PointOfInterest_1.getPoiByGroup)("ตู้กดเงินสด", "ธนาคาร", "");
+            pointOfInterest = [...banks];
         }
         else {
-            pointOfInterest = [...(yield (0, PointOfInterest_1.getPoiByGroup)(intent))];
+            pointOfInterest = [...(yield (0, PointOfInterest_1.getPoiByGroup)(intent, "", ""))];
         }
         const distancePointofinterest = pointOfInterest.map((item) => {
             item.latitude = parseFloat(item.latitude);
