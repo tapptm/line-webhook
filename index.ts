@@ -33,7 +33,7 @@ app.post("/webhook", (req: Request, res: Response) => {
   })
   let intentMap = new Map();
   // add intent map 2nd parameter pass function
-  // intentMap.set("webhook", ()=>{
+  // intentMap.set("webhook", () => {
   //   const conv = agent.conv();
   //   conv.ask(
   //     new Permission({
@@ -52,7 +52,7 @@ app.post("/webhook", (req: Request, res: Response) => {
   intentMap.set("ธนาคาร", getlocation);
   intentMap.set("ร้านอาหาร", getGreeting);
   // now agent is handle request and pass intent map
-  // agent.handleRequest(intentMap);
+  agent.handleRequest(intentMap);
 });
 
 app.listen(port, () => {
