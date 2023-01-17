@@ -28,6 +28,7 @@ async function calculateDistance(
         distance >= 1000
           ? `${(distance / 1000).toFixed(2)} กิโลเมตร`
           : `${distance.toFixed(0)} เมตร`,
+      distance_meters: distance,
     };
   });
 
@@ -52,7 +53,11 @@ async function getATMlocation(agent: {
     102.1198264
   );
 
-  const columns = distanceData.map((distance: any) => {
+  const filterInRadius = distanceData.filter(
+    (item: any) => item.distance_meters <= 50000
+  );
+
+  const columns = filterInRadius.map((distance: any) => {
     return {
       thumbnailImageUrl: distance.image,
       imageBackgroundColor: "#FFFFFF",
@@ -83,12 +88,16 @@ async function getATMlocation(agent: {
 
   console.log(JSON.stringify(payload));
 
-  return agent.add(
-    new Payload("LINE" as Platforms, JSON.parse(JSON.stringify(payload)), {
-      rawPayload: true,
-      sendAsMessage: true,
-    })
-  );
+  if (filterInRadius.length === 0) {
+    return agent.add("ไม่พบข้อมูล" + agent.intent + "ที่ต้องการ");
+  } else {
+    return agent.add(
+      new Payload("LINE" as Platforms, JSON.parse(JSON.stringify(payload)), {
+        rawPayload: true,
+        sendAsMessage: true,
+      })
+    );
+  }
 }
 
 export { getATMlocation };

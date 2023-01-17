@@ -26,7 +26,7 @@ function calculateDistance(intent, latitude, longitude) {
             const distance = (0, geolib_1.getDistance)({ latitude: latitude, longitude: longitude }, { latitude: item.latitude, longitude: item.longitude });
             return Object.assign(Object.assign({}, item), { distance: distance >= 1000
                     ? `${(distance / 1000).toFixed(2)} กิโลเมตร`
-                    : `${distance.toFixed(0)} เมตร` });
+                    : `${distance.toFixed(0)} เมตร`, distance_meters: distance });
         });
         const volunteers = (0, geolib_1.orderByDistance)({ latitude: latitude, longitude: longitude }, distancePointofinterest);
         return volunteers;
@@ -35,7 +35,8 @@ function calculateDistance(intent, latitude, longitude) {
 function getATMlocation(agent) {
     return __awaiter(this, void 0, void 0, function* () {
         const distanceData = yield calculateDistance(agent.intent, 14.9881753, 102.1198264);
-        const columns = distanceData.map((distance) => {
+        const filterInRadius = distanceData.filter((item) => item.distance_meters <= 50000);
+        const columns = filterInRadius.map((distance) => {
             return {
                 thumbnailImageUrl: distance.image,
                 imageBackgroundColor: "#FFFFFF",
@@ -63,10 +64,15 @@ function getATMlocation(agent) {
             },
         };
         console.log(JSON.stringify(payload));
-        return agent.add(new dialogflow_fulfillment_1.Payload("LINE", JSON.parse(JSON.stringify(payload)), {
-            rawPayload: true,
-            sendAsMessage: true,
-        }));
+        if (filterInRadius.length === 0) {
+            return agent.add("ไม่พบข้อมูล" + agent.intent + "ที่ต้องการ");
+        }
+        else {
+            return agent.add(new dialogflow_fulfillment_1.Payload("LINE", JSON.parse(JSON.stringify(payload)), {
+                rawPayload: true,
+                sendAsMessage: true,
+            }));
+        }
     });
 }
 exports.getATMlocation = getATMlocation;
