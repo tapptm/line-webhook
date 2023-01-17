@@ -23,25 +23,25 @@ app.post("/webhook", (req: Request, res: Response) => {
   // get agent from request
   let agent = new WebhookClient({ request: req, response: res });
   // create intentMap for handle intent
-  dfl.intent("webhook", conv => {
-    conv.ask(
-      new Permission({
-        context: "To locate you",
-        permissions: "DEVICE_PRECISE_LOCATION",
-      })
-    );
-  })
-  let intentMap = new Map();
-  // add intent map 2nd parameter pass function
-  // intentMap.set("webhook", () => {
-  //   const conv = agent.conv();
+  // dfl.intent("webhook", conv => {
   //   conv.ask(
   //     new Permission({
   //       context: "To locate you",
   //       permissions: "DEVICE_PRECISE_LOCATION",
   //     })
   //   );
-  // });
+  // })
+  let intentMap = new Map();
+  // add intent map 2nd parameter pass function
+  intentMap.set("webhook", () => {
+    const conv = agent.conv();
+    conv.ask(
+      new Permission({
+        context: "To locate you",
+        permissions: "DEVICE_PRECISE_LOCATION",
+      })
+    );
+  });
 
   
   // intent poi
