@@ -31,4 +31,11 @@ interface PointOfInterest {
   longitude: any;
 }
 
-export { Line, LineColumns, PointOfInterest };
+interface Agent {
+  rawPayload: boolean;
+  sendAsMessage: boolean;
+  intent: string;
+  add: (add: Object) => void
+}
+
+export { Line, LineColumns, PointOfInterest, Agent };

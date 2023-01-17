@@ -9,54 +9,55 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getATMlocation = void 0;
+exports.getlocation = void 0;
 const dialogflow_fulfillment_1 = require("dialogflow-fulfillment");
-const calculateDistance_1 = require("../\u0E35utils/calculateDistance");
-function getATMlocation(agent) {
+const poiCalculateDistance_1 = require("../utils/poiCalculateDistance");
+function getlocation(agent) {
     return __awaiter(this, void 0, void 0, function* () {
-        /** calculate distance from current location **/
-        const distanceData = yield (0, calculateDistance_1.calculateDistance)(agent.intent, 14.9881753, 102.1198264);
-        /** filter distance 50 km **/
-        const filterInRadius = distanceData.filter((item) => item.distance_meters <= 50000);
-        /** format custom payload for line **/
-        const columns = filterInRadius.map((distance) => {
-            return {
-                thumbnailImageUrl: distance.image,
-                imageBackgroundColor: "#FFFFFF",
-                title: distance.name.replace(/(.{40})..+/, "$1…"),
-                text: distance.distance,
-                actions: [
-                    {
-                        type: "uri",
-                        label: "เปิดแผนที่",
-                        uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
+        /** calculate distance from your current location **/
+        const distanceData = yield (0, poiCalculateDistance_1.calculateDistance)(agent.intent, // set your intent name here.
+        14.9881753, // set your locations here.
+        102.1198264 // set your locations here.
+        );
+        /** condition to check if radius in 50 km
+         * it will return text. if not it will
+         * return custom payload. **/
+        if (distanceData.length > 0) {
+            /** format custom payload for line **/
+            const columns = distanceData.map((distance) => {
+                return {
+                    thumbnailImageUrl: distance.image,
+                    imageBackgroundColor: "#FFFFFF",
+                    title: distance.name.replace(/(.{40})..+/, "$1…"),
+                    text: distance.distance,
+                    actions: [
+                        {
+                            type: "uri",
+                            label: "เปิดแผนที่",
+                            uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
+                        },
+                    ],
+                };
+            });
+            const payload = {
+                line: {
+                    type: "template",
+                    altText: "this is a carousel template",
+                    template: {
+                        type: "carousel",
+                        imageAspectRatio: "rectangle",
+                        imageSize: "cover",
+                        columns: columns,
                     },
-                ],
-            };
-        });
-        const payload = {
-            line: {
-                type: "template",
-                altText: "this is a carousel template",
-                template: {
-                    type: "carousel",
-                    imageAspectRatio: "rectangle",
-                    imageSize: "cover",
-                    columns: columns,
                 },
-            },
-        };
-        console.log(JSON.stringify(payload));
-        /** condition to check in radius 50 km and return it. **/
-        if (filterInRadius.length === 0) {
-            return agent.add("ไม่พบข้อมูล" + agent.intent + "ในระยะ(50km) ที่ต้องการ");
-        }
-        else {
+            };
+            console.log(JSON.stringify(payload));
             return agent.add(new dialogflow_fulfillment_1.Payload("LINE", JSON.parse(JSON.stringify(payload)), {
                 rawPayload: true,
                 sendAsMessage: true,
             }));
         }
+        return agent.add("ไม่พบข้อมูล" + agent.intent + "ในระยะ (50km)");
     });
 }
-exports.getATMlocation = getATMlocation;
+exports.getlocation = getlocation;

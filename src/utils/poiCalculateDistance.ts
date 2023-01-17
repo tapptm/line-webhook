@@ -31,9 +31,12 @@ async function calculateDistance(
     };
   });
 
+  /** order by and filter radius in 50 km **/
   const volunteers = orderByDistance(
     { latitude: latitude, longitude: longitude },
     distancePointofinterest
+  ).filter(
+    (item: any) => item.distance_meters <= 50000 // meters
   );
 
   return volunteers;
