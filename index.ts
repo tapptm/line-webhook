@@ -7,7 +7,6 @@ import { dialogflow, Permission, SimpleResponse } from "actions-on-google";
 import request from "request-promise";
 import https from "https";
 
-const dfl = dialogflow();
 dotenv.config();
 const app: Express = express();
 const port = process.env.NODE_PORT || 4050;
@@ -23,19 +22,9 @@ app.get("/", (req: Request, res: Response) => {
  * For the dialogflow we need POST Route.
  **/
 app.post("/webhook", (req: Request, res: Response) => {
-  console.log(req.body);
-
   // get agent from request
   let agent = new WebhookClient({ request: req, response: res });
   // create intentMap for handle intent
-  // dfl.intent("webhook", conv => {
-  //   conv.ask(
-  //     new Permission({
-  //       context: "To locate you",
-  //       permissions: "DEVICE_PRECISE_LOCATION",
-  //     })
-  //   );
-  // })
   let intentMap = new Map();
   // add intent map 2nd parameter pass function
   intentMap.set("webhook", () => {
@@ -91,6 +80,10 @@ const reply = (req: any) => {
   });
 };
 
+function randomItem(items: Array<any>) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
 app.post("/webhooks", function (req: Request, res: Response) {
   console.log(req.body.events);
 
@@ -98,51 +91,33 @@ app.post("/webhooks", function (req: Request, res: Response) {
   let event = req.body.events[0];
   // If the user sends a message to your bot, send a reply message
   if (event.type === "message" && event.message.type === "sticker") {
-    // Message data, must be stringified
-    const dataString = JSON.stringify({
-      replyToken: req.body.events[0].replyToken,
-      messages: [
+    let keywords = event.message.keywords;
+    let stickerIntent = "";
+    for (let i = 0; i <= 2; i++) {
+      stickerIntent += randomItem(keywords) + " ";
+    }
+
+    const newBody = {
+      destination: req.body.destination,
+      events: [
         {
-          type: "text",
-          text: "Hello, user",
-        },
-        {
-          type: "text",
-          text: "May I help you?",
+          timestamp: req.body.events[0].timestamp,
+          mode: req.body.events[0].mode,
+          source: req.body.events[0].source,
+          replyToken: req.body.events[0].replyToken,
+          type: "message",
+          message: {
+            type: "text",
+            id: req.body.events[0].message.id,
+            text: stickerIntent,
+          },
         },
       ],
-    });
-
-    // Request header
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + TOKEN,
     };
 
-    // Options to pass into the request
-    const webhookOptions = {
-      hostname: "api.line.me",
-      path: "/v2/bot/message/reply",
-      method: "POST",
-      headers: headers,
-      body: dataString,
-    };
-
-    // Define request
-    const request = https.request(webhookOptions, (res) => {
-      res.on("data", (d) => {
-        process.stdout.write(d);
-      });
-    });
-
-    // Handle error
-    request.on("error", (err) => {
-      console.error(err);
-    });
-
-    // Send data
-    request.write(dataString);
-    request.end();
+    req.body = newBody;
+    postToDialogflow(req);
+    
   } else if (event.type === "message" && event.message.type === "text") {
     console.log("text");
     postToDialogflow(req);
