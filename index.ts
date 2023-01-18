@@ -22,6 +22,8 @@ app.get("/", (req: Request, res: Response) => {
 app.post("/webhook", (req: Request, res: Response) => {
   // get agent from request
   let agent = new WebhookClient({ request: req, response: res });
+  console.log(agent);
+  
   // create intentMap for handle intent
   // dfl.intent("webhook", conv => {
   //   conv.ask(
@@ -51,6 +53,7 @@ app.post("/webhook", (req: Request, res: Response) => {
   intentMap.set("ปั้มน้ำมัน", getlocation);
   intentMap.set("ธนาคาร", getlocation);
   intentMap.set("ร้านอาหาร", getGreeting);
+  
   // now agent is handle request and pass intent map
   agent.handleRequest(intentMap);
 });

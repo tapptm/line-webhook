@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
 app.post("/webhook", (req, res) => {
     // get agent from request
     let agent = new dialogflow_fulfillment_1.WebhookClient({ request: req, response: res });
+    console.log(agent);
     // create intentMap for handle intent
     // dfl.intent("webhook", conv => {
     //   conv.ask(
