@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -59,15 +68,17 @@ app.post("/webhooks", function (req, res) {
         reply(req);
     }
 });
-const postToDialogflow = (req) => {
+const postToDialogflow = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const body = JSON.stringify(req.body);
     req.headers.host = "dialogflow.cloud.google.com";
-    return request_promise_1.default.post({
+    const res = yield request_promise_1.default.post({
         uri: "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/ec92fe83-908d-4727-9759-287df892b637",
         headers: req.headers,
         body: body,
     });
-};
+    console.log('res', res);
+    return res;
+});
 const reply = (req) => {
     return request_promise_1.default.post({
         uri: `api.line.me/v2/bot/message/reply`,
