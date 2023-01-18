@@ -65,6 +65,25 @@ const postToDialogflow = (req) => {
         body: body,
     });
 };
+const reply = (req) => {
+    return request_promise_1.default.post({
+        uri: `api.line.me/v2/bot/message/reply`,
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${TOKEN}`,
+        },
+        body: JSON.stringify({
+            replyToken: req.body.events[0].replyToken,
+            messages: [
+                {
+                    type: "text",
+                    text: "Sorry, this chatbot did not support message type " +
+                        req.body.events[0].message.type,
+                },
+            ],
+        }),
+    });
+};
 app.post("/webhooks", function (req, res) {
     console.log(req.body.events);
     res.send("HTTP POST request sent to the webhook URL!");
@@ -113,7 +132,11 @@ app.post("/webhooks", function (req, res) {
         request.end();
     }
     else if (event.type === "message" && event.message.type === "text") {
+        console.log("text");
         postToDialogflow(req);
+    }
+    else {
+        reply(req);
     }
 });
 app.listen(port, () => {
