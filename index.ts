@@ -61,6 +61,8 @@ app.post("/webhook", (req: Request, res: Response) => {
 });
 
 app.post("/webhooks", function(req: Request, res: Response) {
+  console.log(req.body.events);
+  
   res.send("HTTP POST request sent to the webhook URL!")
   // If the user sends a message to your bot, send a reply message
   if (req.body.events[0].type === "message") {
