@@ -120,7 +120,7 @@ app.post("/webhooks", function (req: Request, res: Response) {
       ],
     };
 
-    console.log('body', newBody.events[0].message.text);
+    console.log('body', newBody.events);
 
     req.body = newBody;
     postToDialogflow(req);
