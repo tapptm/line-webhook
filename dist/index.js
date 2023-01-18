@@ -22,6 +22,7 @@ app.get("/", (req, res) => {
  * For the dialogflow we need POST Route.
  **/
 app.post("/webhook", (req, res) => {
+    console.log(req);
     // get agent from request
     let agent = new dialogflow_fulfillment_1.WebhookClient({ request: req, response: res });
     console.log(agent);
