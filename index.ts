@@ -92,10 +92,15 @@ app.post("/webhooks", function (req: Request, res: Response) {
   // If the user sends a message to your bot, send a reply message
   if (event.type === "message" && event.message.type === "sticker") {
     let keywords = event.message.keywords;
+    console.log("key", keywords);
+    
     let stickerIntent = "";
     for (let i = 0; i <= 2; i++) {
       stickerIntent += randomItem(keywords) + " ";
     }
+
+    console.log("st",stickerIntent);
+    
 
     const newBody = {
       destination: req.body.destination,
@@ -115,9 +120,11 @@ app.post("/webhooks", function (req: Request, res: Response) {
       ],
     };
 
+    console.log('body', newBody);
+
     req.body = newBody;
     postToDialogflow(req);
-    
+
   } else if (event.type === "message" && event.message.type === "text") {
     console.log("text");
     postToDialogflow(req);
