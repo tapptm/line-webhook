@@ -45,6 +45,22 @@ app.post("/webhook", (req, res) => {
     // now agent is handle request and pass intent map
     agent.handleRequest(intentMap);
 });
+app.post("/webhooks", function (req, res) {
+    console.log(req.body.events);
+    let agent = new dialogflow_fulfillment_1.WebhookClient({ request: req, response: res });
+    console.log(agent);
+    res.send("HTTP POST request sent to the webhook URL!");
+    let event = req.body.events[0];
+    if (event.type === "message" && event.message.type === "location") {
+        postToDialogflow(req);
+    }
+    else if (event.type === "message" && event.message.type === "text") {
+        postToDialogflow(req);
+    }
+    else {
+        reply(req);
+    }
+});
 const postToDialogflow = (req) => {
     const body = JSON.stringify(req.body);
     req.headers.host = "dialogflow.cloud.google.com";
@@ -73,51 +89,6 @@ const reply = (req) => {
         }),
     });
 };
-function randomItem(items) {
-    return items[Math.floor(Math.random() * items.length)];
-}
-app.post("/webhooks", function (req, res) {
-    console.log(req.body.events);
-    res.send("HTTP POST request sent to the webhook URL!");
-    let event = req.body.events[0];
-    // If the user sends a message to your bot, send a reply message
-    if (event.type === "message" && event.message.type === "sticker") {
-        let keywords = event.message.keywords;
-        console.log("key", keywords);
-        let stickerIntent = "";
-        for (let i = 0; i <= 2; i++) {
-            stickerIntent += randomItem(keywords) + " ";
-        }
-        console.log("st", stickerIntent);
-        const newBody = {
-            destination: req.body.destination,
-            events: [
-                {
-                    timestamp: req.body.events[0].timestamp,
-                    mode: req.body.events[0].mode,
-                    source: req.body.events[0].source,
-                    replyToken: req.body.events[0].replyToken,
-                    type: "message",
-                    message: {
-                        type: "text",
-                        id: req.body.events[0].message.id,
-                        text: stickerIntent,
-                    },
-                },
-            ],
-        };
-        console.log('body', newBody.events);
-        req.body = newBody;
-        postToDialogflow(req);
-    }
-    else if (event.type === "message" && event.message.type === "text") {
-        console.log("text");
-        postToDialogflow(req);
-    }
-    else {
-        reply(req);
-    }
-});
 app.listen(port, () => {
     console.log(`Server is running at port: ${port}`);
 });
