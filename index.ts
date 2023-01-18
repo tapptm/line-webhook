@@ -50,8 +50,6 @@ app.post("/webhook", (req: Request, res: Response) => {
 
 app.post("/webhooks", function (req: Request, res: Response) {
   console.log(req.body.events);
-  let agent = new WebhookClient({ request: req, response: res });
-  console.log(agent);
 
   res.send("HTTP POST request sent to the webhook URL!");
   let event = req.body.events[0];

@@ -47,8 +47,6 @@ app.post("/webhook", (req, res) => {
 });
 app.post("/webhooks", function (req, res) {
     console.log(req.body.events);
-    let agent = new dialogflow_fulfillment_1.WebhookClient({ request: req, response: res });
-    console.log(agent);
     res.send("HTTP POST request sent to the webhook URL!");
     let event = req.body.events[0];
     if (event.type === "message" && event.message.type === "location") {
