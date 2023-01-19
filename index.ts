@@ -112,7 +112,7 @@ app.post(
         sessionData.bot_session = result.intent.displayName;
         console.log(sessionData.bot_session);
         fs.writeFileSync(
-          path.join(__dirname, 'src/assets/previous_intent.json'), 
+          "./src/assets/previous_intent.json", 
           JSON.stringify({intent: result.intent.displayName})
         );
       }
