@@ -67,7 +67,7 @@ app.post("/webhook", (req, res) => {
     // now agent is handle request and pass intent map
     agent.handleRequest(intentMap);
 });
-app.post("/webhooks", (0, bot_sdk_1.middleware)(config), function (req, res) {
+app.post("/webhooks", function (req, res) {
     console.log(req.body.events);
     res.send("HTTP POST request sent to the webhook URL!");
     let event = req.body.events[0];
@@ -137,17 +137,6 @@ const reply = (req) => {
     // request.write(dataString);
     // request.end();
 };
-app.use((err, req, res, next) => {
-    if (err instanceof bot_sdk_1.SignatureValidationFailed) {
-        res.status(401).send(err.signature);
-        return;
-    }
-    else if (err instanceof bot_sdk_1.JSONParseError) {
-        res.status(400).send(err.raw);
-        return;
-    }
-    next(err); // will throw default 500
-});
 app.listen(port, () => {
     console.log(`Server is running at port: ${port}`);
 });

@@ -7,12 +7,7 @@ import { dialogflow, Permission, SimpleResponse } from "actions-on-google";
 import https from "https";
 import request from "request-promise";
 
-import {
-  Client,
-  JSONParseError,
-  middleware,
-  SignatureValidationFailed,
-} from "@line/bot-sdk";
+import { Client } from "@line/bot-sdk";
 
 const config = {
   channelAccessToken:
@@ -73,24 +68,20 @@ app.post("/webhook", (req: Request, res: Response) => {
   agent.handleRequest(intentMap);
 });
 
-app.post(
-  "/webhooks",
-  middleware(config),
-  function (req: Request, res: Response) {
-    console.log(req.body.events);
+app.post("/webhooks", function (req: Request, res: Response) {
+  console.log(req.body.events);
 
-    res.send("HTTP POST request sent to the webhook URL!");
-    let event = req.body.events[0];
+  res.send("HTTP POST request sent to the webhook URL!");
+  let event = req.body.events[0];
 
-    if (event.type === "message" && event.message.type === "location") {
-      postToDialogflow(req);
-    } else if (event.type === "message" && event.message.type === "text") {
-      postToDialogflow(req);
-    } else {
-      reply(req);
-    }
+  if (event.type === "message" && event.message.type === "location") {
+    postToDialogflow(req);
+  } else if (event.type === "message" && event.message.type === "text") {
+    postToDialogflow(req);
+  } else {
+    reply(req);
   }
-);
+});
 
 const postToDialogflow = async (req: any) => {
   const body = JSON.stringify(req.body);
@@ -158,17 +149,6 @@ const reply = (req: any) => {
   // request.write(dataString);
   // request.end();
 };
-
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  if (err instanceof SignatureValidationFailed) {
-    res.status(401).send(err.signature);
-    return;
-  } else if (err instanceof JSONParseError) {
-    res.status(400).send(err.raw);
-    return;
-  }
-  next(err); // will throw default 500
-});
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);
