@@ -25,21 +25,26 @@ const dialogflow_service_1 = require("./src/services/dialogflows/dialogflow.serv
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.NODE_PORT || 4050;
-app.use(express_1.default.json());
 app.use((0, express_session_1.default)({
-    secret: "newkey333",
+    secret: "sample-secret",
     resave: false,
     saveUninitialized: true,
 }));
+app.use(express_1.default.json());
 app.get("/", (req, res) => {
     console.log(req.session);
     res.send("Server Is Working......");
 });
-app.get("/test", (req, res) => {
-    console.log(req.session);
-    req.session.bot_session = "haha";
-    console.log(req.session.bot_session);
-    res.send("Server Is Working......");
+app.post("/test", (req, res) => {
+    if (req.body.key === "aa") {
+        req.session.bot_session = "haha11";
+        console.log(req.session);
+        res.send(req.session.bot_session);
+    }
+    else if (req.body.key === "bb") {
+        console.log(req.session);
+        res.send(req.session.bot_session);
+    }
 });
 /**
  * on this route dialogflow send the webhook request

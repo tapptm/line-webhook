@@ -16,14 +16,15 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.NODE_PORT || 4050;
 
-app.use(express.json());
 app.use(
   expressSession({
-    secret: "newkey333",
+    secret: "sample-secret",
     resave: false,
     saveUninitialized: true,
   })
 );
+app.use(express.json());
+
 
 app.get("/", (req: Request, res: Response) => {
   console.log(req.session);
@@ -31,12 +32,15 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Server Is Working......");
 });
 
-app.get("/test", (req: Request, res: Response) => {
-  console.log(req.session);
-  req.session.bot_session = "haha";
-  console.log(req.session.bot_session);
-
-  res.send("Server Is Working......");
+app.post("/test", (req: Request, res: Response) => {
+  if (req.body.key === "aa") {
+    req.session.bot_session = "haha11";
+    console.log(req.session);
+    res.send(req.session.bot_session);
+  } else if (req.body.key === "bb") {
+    console.log(req.session);
+    res.send(req.session.bot_session);
+  }
 });
 /**
  * on this route dialogflow send the webhook request
