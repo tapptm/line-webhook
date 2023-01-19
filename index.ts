@@ -99,7 +99,7 @@ const postToDialogflow = async (req: any) => {
 
 const reply = (req: any) => {
   const event = req.body.events[0];
-  client.pushMessage(event.sourse.userId, {
+  client.pushMessage(event.source.userId, {
     type: "text",
     text:
       "Sorry, this chatbot did not support message type " +

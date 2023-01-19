@@ -94,7 +94,7 @@ const postToDialogflow = (req) => __awaiter(void 0, void 0, void 0, function* ()
 });
 const reply = (req) => {
     const event = req.body.events[0];
-    client.pushMessage(event.sourse.userId, {
+    client.pushMessage(event.source.userId, {
         type: "text",
         text: "Sorry, this chatbot did not support message type " +
             req.body.events[0].message.type,
