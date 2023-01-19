@@ -100,7 +100,7 @@ app.post(
 
       console.log(result.intent.displayName);
 
-      if (result.intent.displayName === "food") {
+      if (result.intent.displayName === "food", result.intent.displayName === "ธนาคาร") {
         console.log("food");
         // sessionData.bot_session = { intent: result.intent.displayName };
         sessionData.bot_session = result.intent.displayName;
