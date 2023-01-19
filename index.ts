@@ -5,8 +5,8 @@ import { getlocation } from "./src/handles/handlePointOfInterest";
 import dotenv from "dotenv";
 import request from "request-promise";
 import { Client } from "@line/bot-sdk";
-import uuid from "uuid";
 
+const uuid = require ("uuid");
 const dialogflow = require("dialogflow");
 
 const config = {
