@@ -24,6 +24,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
   if (event.type === "message" && event.message.type === "text") {
     try {
       const dialogRes = await postToDialogflow(req);
+      console.log(dialogRes);
 
       if ((dialogRes.statusCode = 200)) {
         const requestIntent = {
