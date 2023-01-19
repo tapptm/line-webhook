@@ -24,6 +24,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
   if (event.type === "message" && event.message.type === "text") {
     try {
       const dialogRes = await postToDialogflow(req);
+
       if ((dialogRes.statusCode = 200)) {
         const requestIntent = {
           session: sessionPath,
@@ -38,6 +39,8 @@ app.post("/webhooks", async function (req: Request, res: Response) {
         const responses = await sessionClient.detectIntent(requestIntent);
         const result: any = responses[0].queryResult;
         const intent = result.intent.displayName;
+
+        console.log(result);
 
         if (
           intent === "โรงพยาบาล" ||
