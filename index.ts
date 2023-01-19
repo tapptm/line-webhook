@@ -5,7 +5,6 @@ import { getlocation } from "./src/handles/handlePointOfInterest";
 import dotenv from "dotenv";
 import { dialogflow, Permission, SimpleResponse } from "actions-on-google";
 import https from "https";
-// import axios from "axios";
 import request from "request-promise"
 
 dotenv.config();
@@ -52,20 +51,22 @@ app.post("/webhook", (req: Request, res: Response) => {
 
 app.post("/webhooks", function (req: Request, res: Response) {
   console.log(req.body.events);
-
+  let agent = new WebhookClient({ request: req, response: res });
+  let intentMap = new Map();
+  
   res.send("HTTP POST request sent to the webhook URL!");
   let event = req.body.events[0];
   
   if (event.type === "message" && event.message.type === "location") {
     postToDialogflow(req);
   } else if (event.type === "message" && event.message.type === "text") {
+    intentMap.set("ธนาคาร", getlocation);
+    agent.handleRequest(intentMap);
     postToDialogflow(req);
   } else {
     reply(req);
   }
 });
-
-
 
 const postToDialogflow = async (req: any) => {
   const body = JSON.stringify(req.body);
@@ -124,25 +125,6 @@ const reply = (req: any) => {
   // Send data
   request.write(dataString)
   request.end()
-
-  // return request.post({
-  //   uri: `api.line.me/v2/bot/message/reply`,
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: `Bearer ${TOKEN}`,
-  //   },
-  //   body: JSON.stringify({
-  //     replyToken: req.body.events[0].replyToken,
-  //     messages: [
-  //       {
-  //         type: "text",
-  //         text:
-  //           "Sorry, this chatbot did not support message type " +
-  //           req.body.events[0].message.type,
-  //       },
-  //     ],
-  //   }),
-  // });
 };
 
 app.listen(port, () => {
