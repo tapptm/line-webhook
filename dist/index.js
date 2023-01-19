@@ -27,7 +27,7 @@ const app = (0, express_1.default)();
 const port = process.env.NODE_PORT || 4050;
 app.use(express_1.default.json());
 app.use((0, express_session_1.default)({
-    secret: "key",
+    secret: "newkey333",
     resave: false,
     saveUninitialized: true,
 }));
@@ -86,12 +86,6 @@ app.post("/webhooks", function (req, res, next) {
                 // sessionData.bot_session = { intent: result.intent.displayName };
                 sessionData.bot_session = result.intent.displayName;
                 console.log(sessionData.bot_session);
-                req.session.save((err) => {
-                    if (err) {
-                        return next(err);
-                    }
-                    console.log("OK");
-                });
             }
             console.log(`Query: ${result.queryText}`);
             console.log(`Response: ${result.fulfillmentText}`);

@@ -19,7 +19,7 @@ const port = process.env.NODE_PORT || 4050;
 app.use(express.json());
 app.use(
   expressSession({
-    secret: "key",
+    secret: "newkey333",
     resave: false,
     saveUninitialized: true,
   })
@@ -61,7 +61,7 @@ app.post("/webhook", (req: Request, res: Response) => {
 
 declare module "express-session" {
   interface SessionData {
-    bot_session: string
+    bot_session: string;
   }
 }
 
@@ -96,15 +96,7 @@ app.post(
         console.log("food");
         // sessionData.bot_session = { intent: result.intent.displayName };
         sessionData.bot_session = result.intent.displayName;
-
         console.log(sessionData.bot_session);
-        req.session.save((err) => {
-          if (err) {
-            return next(err);
-          }
-
-          console.log("OK");
-        });
       }
       console.log(`Query: ${result.queryText}`);
       console.log(`Response: ${result.fulfillmentText}`);
