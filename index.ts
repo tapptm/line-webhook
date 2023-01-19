@@ -6,42 +6,10 @@ import {
   getlocationByWebhook,
 } from "./src/handles/handlePointOfInterest";
 import { sessionClient, sessionPath } from "./src/configs/dialogflow";
-import { client as clientsdk } from "./src/configs/linesdk";
 import dotenv from "dotenv";
-import request from "request-promise";
 import expressSession from "express-session";
 import { reply } from "./src/services/linesdk/linesdk.service";
 import { postToDialogflow } from "./src/services/dialogflows/dialogflow.service";
-import connectRedis from 'connect-redis';
-import * as redis from 'redis';
-
-const redisClient = redis.createClient({
-  url: 'redis://172.16.128.16:6379',
-  legacyMode: true
-});
-
-redisClient.on("error", function (err) {
-  console.log("Error " + err);
-});
-
-redisClient.on("ready", () => {
-  console.log('✅ 💃 redis have ready !')
- })
- 
-redisClient.on("connect", () => {
-  console.log('✅ 💃 connect redis success !')
- })
-
-const RedisStore = connectRedis(expressSession);
-const sessionOptions: expressSession.SessionOptions = {
-  store: new RedisStore({
-    client: redisClient
-  }),
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: true }
-};
 
 // Create an app instance
 dotenv.config();
@@ -49,8 +17,13 @@ const app: Express = express();
 const port = process.env.NODE_PORT || 4050;
 
 app.use(express.json());
-app.use(expressSession(sessionOptions));
-
+app.use(
+  expressSession({
+    secret: "key",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 app.get("/", (req: Request, res: Response) => {
   console.log(req.session);
@@ -60,9 +33,9 @@ app.get("/", (req: Request, res: Response) => {
 
 app.get("/test", (req: Request, res: Response) => {
   console.log(req.session);
-  req.session.bot_session = "haha"
-  console.log(req.session.bot_session );
-  
+  req.session.bot_session = "haha";
+  console.log(req.session.bot_session);
+
   res.send("Server Is Working......");
 });
 /**
@@ -88,7 +61,7 @@ app.post("/webhook", (req: Request, res: Response) => {
 
 declare module "express-session" {
   interface SessionData {
-    bot_session: string;
+    bot_session: string
   }
 }
 
