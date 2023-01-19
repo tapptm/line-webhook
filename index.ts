@@ -61,7 +61,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
   const sessionData = req.session as unknown as SessionData;
 
   res.send("HTTP POST request sent to the webhook URL!");
-  let event = req.body.evients[0];
+  let event = req.body.events[0];
 
   const request111 = {
     session: sessionPath,

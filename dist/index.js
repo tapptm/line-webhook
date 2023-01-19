@@ -58,7 +58,7 @@ app.post("/webhooks", function (req, res) {
         console.log(req.body.events);
         const sessionData = req.session;
         res.send("HTTP POST request sent to the webhook URL!");
-        let event = req.body.evients[0];
+        let event = req.body.events[0];
         const request111 = {
             session: dialogflow_1.sessionPath,
             queryInput: {
