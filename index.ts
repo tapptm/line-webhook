@@ -41,6 +41,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       const intent = result.intent.displayName;
 
       console.log(result);
+      console.log(intent);
 
       if (
         intent === "โรงพยาบาล" ||
