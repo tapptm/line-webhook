@@ -77,6 +77,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
 
   if (event.type === "message" && event.message.type === "location") {
     console.log(sessionData.bot_session);
+    console.log(req.session);
 
     getlocationByWebhook({
       intent: sessionData.bot_session.intent,

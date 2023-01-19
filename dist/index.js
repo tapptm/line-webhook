@@ -72,6 +72,7 @@ app.post("/webhooks", function (req, res) {
         };
         if (event.type === "message" && event.message.type === "location") {
             console.log(sessionData.bot_session);
+            console.log(req.session);
             (0, handlePointOfInterest_1.getlocationByWebhook)({
                 intent: sessionData.bot_session.intent,
                 latitude: event.message.latitude,
