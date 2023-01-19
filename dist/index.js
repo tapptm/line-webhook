@@ -18,8 +18,20 @@ const handleGreeting_1 = require("./src/handles/handleGreeting");
 const handlePointOfInterest_1 = require("./src/handles/handlePointOfInterest");
 const dotenv_1 = __importDefault(require("dotenv"));
 const actions_on_google_1 = require("actions-on-google");
-const https_1 = __importDefault(require("https"));
 const request_promise_1 = __importDefault(require("request-promise"));
+const bot_sdk_1 = require("@line/bot-sdk");
+const config = {
+    channelAccessToken: "F1HHZ+Abw8hkb/WKRBUOsMfpV1A8euZV22XldoIFwCfcPbgSy9gmmqm9IgeNrfveI3YYXEJ6di1CPaZy1CC3+R9Xbek78YqjB0l5P2QWta+iN6lY3dqNRFf+OR6ORPWU3MYmq6S5KxZ16+gH2QstRQdB04t89/1O/w1cDnyilFU=",
+    channelSecret: "36069836ad565377eaf962b38fa856d7",
+};
+const client = new bot_sdk_1.Client(config);
+// const middleware = require("@line/bot-sdk").middleware;
+// const JSONParseError = require("@line/bot-sdk").JSONParseError;
+// const SignatureValidationFailed =
+//   require("@line/bot-sdk").SignatureValidationFailed;
+// const Client = require("@line/bot-sdk").Client;
+// Create an app instance
+const dfl = (0, actions_on_google_1.dialogflow)();
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.NODE_PORT || 4050;
@@ -55,18 +67,14 @@ app.post("/webhook", (req, res) => {
     // now agent is handle request and pass intent map
     agent.handleRequest(intentMap);
 });
-app.post("/webhooks", function (req, res) {
+app.post("/webhooks", (0, bot_sdk_1.middleware)(config), function (req, res) {
     console.log(req.body.events);
-    let agent = new dialogflow_fulfillment_1.WebhookClient({ request: req, response: res });
-    let intentMap = new Map();
     res.send("HTTP POST request sent to the webhook URL!");
     let event = req.body.events[0];
     if (event.type === "message" && event.message.type === "location") {
         postToDialogflow(req);
     }
     else if (event.type === "message" && event.message.type === "text") {
-        intentMap.set("ธนาคาร", handlePointOfInterest_1.getlocation);
-        agent.handleRequest(intentMap);
         postToDialogflow(req);
     }
     else {
@@ -81,47 +89,65 @@ const postToDialogflow = (req) => __awaiter(void 0, void 0, void 0, function* ()
         headers: req.headers,
         body: body,
     });
-    console.log('res', res);
+    console.log("res", res);
     return res;
 });
 const reply = (req) => {
-    const dataString = JSON.stringify({
-        replyToken: req.body.events[0].replyToken,
-        messages: [
-            {
-                type: "text",
-                text: "Sorry, this chatbot did not support message type " +
-                    req.body.events[0].message.type,
-            },
-        ]
+    const event = req.body.events[0];
+    client.pushMessage(event.sourse.userId, {
+        type: "text",
+        text: "Sorry, this chatbot did not support message type " +
+            req.body.events[0].message.type,
     });
-    // Request header
-    const headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + TOKEN
-    };
-    // Options to pass into the request
-    const webhookOptions = {
-        "hostname": "api.line.me",
-        "path": "/v2/bot/message/reply",
-        "method": "POST",
-        "headers": headers,
-        "body": dataString
-    };
-    // Define request
-    const request = https_1.default.request(webhookOptions, (res) => {
-        res.on("data", (d) => {
-            process.stdout.write(d);
-        });
-    });
-    // Handle error
-    request.on("error", (err) => {
-        console.error(err);
-    });
-    // Send data
-    request.write(dataString);
-    request.end();
+    // const dataString = JSON.stringify({
+    //   replyToken: req.body.events[0].replyToken,
+    //   messages: [
+    //     {
+    //       type: "text",
+    //       text:
+    //         "Sorry, this chatbot did not support message type " +
+    //         req.body.events[0].message.type,
+    //     },
+    //   ],
+    // });
+    // // Request header
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Authorization: "Bearer " + TOKEN,
+    // };
+    // // Options to pass into the request
+    // const webhookOptions = {
+    //   hostname: "api.line.me",
+    //   path: "/v2/bot/message/reply",
+    //   method: "POST",
+    //   headers: headers,
+    //   body: dataString,
+    // };
+    // // Define request
+    // const request = https.request(webhookOptions, (res) => {
+    //   res.on("data", (d) => {
+    //     process.stdout.write(d);
+    //   });
+    // });
+    // // Handle error
+    // request.on("error", (err) => {
+    //   console.error(err);
+    // });
+    // // Send data
+    // request.write(dataString);
+    // request.end();
 };
+app.use((err, req, res, next) => {
+    if (err instanceof bot_sdk_1.SignatureValidationFailed) {
+        res.status(401).send(err.signature);
+        return;
+    }
+    else if (err instanceof bot_sdk_1.JSONParseError) {
+        res.status(400).send(err.raw);
+        return;
+    }
+    next(err); // will throw default 500
+});
 app.listen(port, () => {
     console.log(`Server is running at port: ${port}`);
 });
