@@ -60,6 +60,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       res.send({ message: error.message });
     }
   } else if (event.type === "message" && event.message.type === "location") {
+    console.log(pvi);
     try {
       await getlocation({
         intent: pvi.intent,
