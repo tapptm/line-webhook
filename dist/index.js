@@ -65,6 +65,7 @@ app.post("/test", (req, res) => {
     if (req.body.key === "aa") {
         req.session.bot_session = "haha11";
         console.log(req.session);
+        fs_1.default.writeFileSync("./src/assets/previous_intent.json", JSON.stringify({ intent: "te" }));
         res.send(req.session.bot_session);
     }
     else if (req.body.key === "bb") {
