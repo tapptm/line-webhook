@@ -87,14 +87,8 @@ const postToDialogflow = async (req: any) => {
   });
   console.log("res", response);
 
-  if (response.statusCode === 200) {
-    console.log("Successful response");
-    const intent = JSON.parse(response.body).queryResult.intent.displayName;
-    console.log("Intent : ", intent);
-    return intent;
-  } else {
-    console.log("Error : ", response.statusCode);
-  }
+  const intent = JSON.parse(response.body).queryResult.intent.displayName;
+  console.log("Intent : ", intent);
 
   return response;
 };
