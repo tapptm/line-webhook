@@ -66,13 +66,11 @@ function carouselPayloads(distanceDataArray: any) {
   });
 
   const payload = {
-    line: {
-      type: "flex",
-      altText: "Flex Message",
-      contents: {
-        type: "carousel",
-        contents: contents,
-      },
+    type: "flex",
+    altText: "Flex Message",
+    contents: {
+      type: "carousel",
+      contents: contents,
     },
   };
 

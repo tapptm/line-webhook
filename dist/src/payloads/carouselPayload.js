@@ -68,13 +68,11 @@ function carouselPayloads(distanceDataArray) {
         };
     });
     const payload = {
-        line: {
-            type: "flex",
-            altText: "Flex Message",
-            contents: {
-                type: "carousel",
-                contents: contents,
-            },
+        type: "flex",
+        altText: "Flex Message",
+        contents: {
+            type: "carousel",
+            contents: contents,
         },
     };
     return JSON.parse(JSON.stringify(payload));
