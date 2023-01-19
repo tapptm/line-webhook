@@ -19,7 +19,6 @@ const handlePointOfInterest_1 = require("./src/handles/handlePointOfInterest");
 const dotenv_1 = __importDefault(require("dotenv"));
 const request_promise_1 = __importDefault(require("request-promise"));
 const bot_sdk_1 = require("@line/bot-sdk");
-const uuid_1 = __importDefault(require("uuid"));
 const dialogflow_1 = __importDefault(require("@google-cloud/dialogflow"));
 const googlekey_1 = require("./src/configs/googlekey");
 const projectId = googlekey_1.ggconv.project_id;
@@ -63,7 +62,7 @@ app.post("/webhook", (req, res) => {
 app.post("/webhooks", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(req.body.events);
-        const sessionId = uuid_1.default.v4();
+        const sessionId = googlekey_1.ggconv.session_id;
         const sessionClient = new dialogflow_1.default.SessionsClient({ projectId, credts });
         const sessionPath = sessionClient.projectAgentSessionPath("dev-xgjv", sessionId);
         res.send("HTTP POST request sent to the webhook URL!");

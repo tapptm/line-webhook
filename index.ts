@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import request from "request-promise";
 import { Client } from "@line/bot-sdk";
 
-import uuid from "uuid";
 import dialogflow from '@google-cloud/dialogflow';
 import {ggconv} from "./src/configs/googlekey"
 
@@ -58,7 +57,7 @@ app.post("/webhook", (req: Request, res: Response) => {
 app.post("/webhooks", async function (req: Request, res: Response) {
   console.log(req.body.events);
   
-  const sessionId = uuid.v4();
+  const sessionId = ggconv.session_id
   const sessionClient = new dialogflow.SessionsClient({projectId, credts});
   const sessionPath = sessionClient.projectAgentSessionPath("dev-xgjv", sessionId);
 
