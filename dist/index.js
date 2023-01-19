@@ -18,6 +18,8 @@ const handleGreeting_1 = require("./src/handles/handleGreeting");
 const handlePointOfInterest_1 = require("./src/handles/handlePointOfInterest");
 const dotenv_1 = __importDefault(require("dotenv"));
 const actions_on_google_1 = require("actions-on-google");
+const https_1 = __importDefault(require("https"));
+// import axios from "axios";
 const request_promise_1 = __importDefault(require("request-promise"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -80,23 +82,60 @@ const postToDialogflow = (req) => __awaiter(void 0, void 0, void 0, function* ()
     return res;
 });
 const reply = (req) => {
-    return request_promise_1.default.post({
-        uri: `api.line.me/v2/bot/message/reply`,
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${TOKEN}`,
-        },
-        body: JSON.stringify({
-            replyToken: req.body.events[0].replyToken,
-            messages: [
-                {
-                    type: "text",
-                    text: "Sorry, this chatbot did not support message type " +
-                        req.body.events[0].message.type,
-                },
-            ],
-        }),
+    const dataString = JSON.stringify({
+        replyToken: req.body.events[0].replyToken,
+        messages: [
+            {
+                type: "text",
+                text: "Sorry, this chatbot did not support message type " +
+                    req.body.events[0].message.type,
+            },
+        ]
     });
+    // Request header
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + TOKEN
+    };
+    // Options to pass into the request
+    const webhookOptions = {
+        "hostname": "api.line.me",
+        "path": "/v2/bot/message/reply",
+        "method": "POST",
+        "headers": headers,
+        "body": dataString
+    };
+    // Define request
+    const request = https_1.default.request(webhookOptions, (res) => {
+        res.on("data", (d) => {
+            process.stdout.write(d);
+        });
+    });
+    // Handle error
+    request.on("error", (err) => {
+        console.error(err);
+    });
+    // Send data
+    request.write(dataString);
+    request.end();
+    // return request.post({
+    //   uri: `api.line.me/v2/bot/message/reply`,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${TOKEN}`,
+    //   },
+    //   body: JSON.stringify({
+    //     replyToken: req.body.events[0].replyToken,
+    //     messages: [
+    //       {
+    //         type: "text",
+    //         text:
+    //           "Sorry, this chatbot did not support message type " +
+    //           req.body.events[0].message.type,
+    //       },
+    //     ],
+    //   }),
+    // });
 };
 app.listen(port, () => {
     console.log(`Server is running at port: ${port}`);

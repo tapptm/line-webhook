@@ -4,7 +4,9 @@ import { getGreeting } from "./src/handles/handleGreeting";
 import { getlocation } from "./src/handles/handlePointOfInterest";
 import dotenv from "dotenv";
 import { dialogflow, Permission, SimpleResponse } from "actions-on-google";
-import request from "request-promise";
+import https from "https";
+// import axios from "axios";
+import request from "request-promise"
 
 dotenv.config();
 const app: Express = express();
@@ -57,11 +59,13 @@ app.post("/webhooks", function (req: Request, res: Response) {
   if (event.type === "message" && event.message.type === "location") {
     postToDialogflow(req);
   } else if (event.type === "message" && event.message.type === "text") {
-   postToDialogflow(req);
+    postToDialogflow(req);
   } else {
     reply(req);
   }
 });
+
+
 
 const postToDialogflow = async (req: any) => {
   const body = JSON.stringify(req.body);
@@ -78,24 +82,67 @@ const postToDialogflow = async (req: any) => {
 };
 
 const reply = (req: any) => {
-  return request.post({
-    uri: `api.line.me/v2/bot/message/reply`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${TOKEN}`,
-    },
-    body: JSON.stringify({
-      replyToken: req.body.events[0].replyToken,
-      messages: [
-        {
-          type: "text",
-          text:
-            "Sorry, this chatbot did not support message type " +
-            req.body.events[0].message.type,
-        },
-      ],
-    }),
-  });
+  const dataString = JSON.stringify({
+    replyToken: req.body.events[0].replyToken,
+    messages: [
+      {
+        type: "text",
+        text:
+          "Sorry, this chatbot did not support message type " +
+          req.body.events[0].message.type,
+      },
+    ]
+  })
+
+  // Request header
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + TOKEN
+  }
+
+  // Options to pass into the request
+  const webhookOptions = {
+    "hostname": "api.line.me",
+    "path": "/v2/bot/message/reply",
+    "method": "POST",
+    "headers": headers,
+    "body": dataString
+  }
+
+  // Define request
+  const request = https.request(webhookOptions, (res) => {
+    res.on("data", (d) => {
+      process.stdout.write(d)
+    })
+  })
+
+  // Handle error
+  request.on("error", (err) => {
+    console.error(err)
+  })
+
+  // Send data
+  request.write(dataString)
+  request.end()
+
+  // return request.post({
+  //   uri: `api.line.me/v2/bot/message/reply`,
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${TOKEN}`,
+  //   },
+  //   body: JSON.stringify({
+  //     replyToken: req.body.events[0].replyToken,
+  //     messages: [
+  //       {
+  //         type: "text",
+  //         text:
+  //           "Sorry, this chatbot did not support message type " +
+  //           req.body.events[0].message.type,
+  //       },
+  //     ],
+  //   }),
+  // });
 };
 
 app.listen(port, () => {
