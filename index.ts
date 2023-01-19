@@ -1,10 +1,5 @@
 import express, { Express, Request, Response } from "express";
-import { WebhookClient } from "dialogflow-fulfillment";
-import { getGreeting } from "./src/handles/handleGreeting";
-import {
-  getlocation,
-  getlocationByWebhook,
-} from "./src/handles/handlePointOfInterest";
+import { getlocation } from "./src/handles/handlePointOfInterest";
 import { sessionClient, sessionPath } from "./src/configs/dialogflow";
 import dotenv from "dotenv";
 import { reply } from "./src/services/linesdk/linesdk.service";
@@ -21,27 +16,6 @@ app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Server Is Working......");
-});
-
-/**
- * on this route dialogflow send the webhook request
- * For the dialogflow we need POST Route.
- **/
-app.post("/webhook", (req: Request, res: Response) => {
-  // get agent from request
-  let agent = new WebhookClient({ request: req, response: res });
-  // create intentMap for handle intent
-  let intentMap = new Map();
-  // add intent map 2nd parameter pass function
-  intentMap.set("ธนาคาร", getlocation);
-  intentMap.set("โรงพยาบาล", getlocation);
-  intentMap.set("ร้านค้า", getlocation);
-  intentMap.set("ปั้มน้ำมัน", getlocation);
-  intentMap.set("ธนาคาร", getlocation);
-  intentMap.set("ร้านอาหาร", getGreeting);
-
-  // now agent is handle request and pass intent map
-  agent.handleRequest(intentMap);
 });
 
 app.post("/webhooks", async function (req: Request, res: Response) {
@@ -73,7 +47,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       );
     }
   } else if (event.type === "message" && event.message.type === "location") {
-    getlocationByWebhook({
+    getlocation({
       intent: pvi.intent,
       latitude: event.message.latitude,
       longitude: event.message.longitude,
