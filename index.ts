@@ -54,9 +54,7 @@ app.post("/webhook", (req: Request, res: Response) => {
 
 declare module "express-session" {
   interface SessionData {
-    bot_session: {
-      intent: string;
-    };
+    bot_session: string
   }
 }
 
@@ -80,7 +78,7 @@ app.post("/webhooks", async function (req: Request , res: Response) {
     console.log(req.session);
 
     getlocationByWebhook({
-      intent: sessionData.bot_session?.intent,
+      intent: sessionData.bot_session,
       latitude: event.message.latitude,
       longitude: event.message.longitude,
       userId: event.source.userId,
@@ -99,7 +97,11 @@ app.post("/webhooks", async function (req: Request , res: Response) {
 
     if (result.intent.displayName === "food") {
       console.log("food");
-      sessionData.bot_session = { intent: result.intent.displayName };
+      // sessionData.bot_session = { intent: result.intent.displayName };
+      sessionData.bot_session = result.intent.displayName
+
+      console.log(sessionData.bot_session);
+      
     }
     console.log(`Query: ${result.queryText}`);
     console.log(`Response: ${result.fulfillmentText}`);
