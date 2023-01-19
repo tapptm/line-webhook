@@ -17,13 +17,6 @@ const config = {
 
 const client = new Client(config);
 
-// const middleware = require("@line/bot-sdk").middleware;
-// const JSONParseError = require("@line/bot-sdk").JSONParseError;
-// const SignatureValidationFailed =
-//   require("@line/bot-sdk").SignatureValidationFailed;
-
-// const Client = require("@line/bot-sdk").Client;
-
 // Create an app instance
 const dfl = dialogflow();
 dotenv.config();
@@ -87,14 +80,23 @@ const postToDialogflow = async (req: any) => {
   const body = JSON.stringify(req.body);
   req.headers.host = "dialogflow.cloud.google.com";
 
-  const res = await request.post({
+  const response = await request.post({
     uri: "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/ec92fe83-908d-4727-9759-287df892b637",
     headers: req.headers,
     body: body,
   });
-  console.log("res", res);
+  console.log("res", response);
 
-  return res;
+  if (response.statusCode === 200) {
+    console.log("Successful response");
+    const intent = JSON.parse(response.body).queryResult.intent.displayName;
+    console.log("Intent : ", intent);
+    return intent;
+  } else {
+    console.log("Error : ", response.statusCode);
+  }
+
+  return response;
 };
 
 const reply = (req: any) => {
@@ -105,49 +107,6 @@ const reply = (req: any) => {
       "Sorry, this chatbot did not support message type " +
       req.body.events[0].message.type,
   });
-
-  // const dataString = JSON.stringify({
-  //   replyToken: req.body.events[0].replyToken,
-  //   messages: [
-  //     {
-  //       type: "text",
-  //       text:
-  //         "Sorry, this chatbot did not support message type " +
-  //         req.body.events[0].message.type,
-  //     },
-  //   ],
-  // });
-
-  // // Request header
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   Authorization: "Bearer " + TOKEN,
-  // };
-
-  // // Options to pass into the request
-  // const webhookOptions = {
-  //   hostname: "api.line.me",
-  //   path: "/v2/bot/message/reply",
-  //   method: "POST",
-  //   headers: headers,
-  //   body: dataString,
-  // };
-
-  // // Define request
-  // const request = https.request(webhookOptions, (res) => {
-  //   res.on("data", (d) => {
-  //     process.stdout.write(d);
-  //   });
-  // });
-
-  // // Handle error
-  // request.on("error", (err) => {
-  //   console.error(err);
-  // });
-
-  // // Send data
-  // request.write(dataString);
-  // request.end();
 };
 
 app.listen(port, () => {
