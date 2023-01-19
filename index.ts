@@ -48,6 +48,8 @@ app.post("/webhooks", async function (req: Request, res: Response) {
         intent === "ปั้มน้ำมัน" ||
         intent === "ธนาคาร"
       ) {
+        console.log("TEST OK NA I SAS");
+        
         fs.writeFileSync(
           "./src/assets/previous_intent.json",
           JSON.stringify({ intent: result.intent.displayName })
