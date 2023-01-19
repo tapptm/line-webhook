@@ -87,6 +87,7 @@ app.post("/webhooks", function (req, res) {
             const responses = yield sessionClient.detectIntent(request111);
             console.log("Detected intent");
             const result = responses[0].queryResult;
+            console.log(result);
             console.log(`  Query: ${result.queryText}`);
             console.log(`  Response: ${result.fulfillmentText}`);
             // postToDialogflow(req);
