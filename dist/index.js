@@ -21,16 +21,24 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const express_session_1 = __importDefault(require("express-session"));
 const linesdk_service_1 = require("./src/services/linesdk/linesdk.service");
 const dialogflow_service_1 = require("./src/services/dialogflows/dialogflow.service");
+const connect_redis_1 = __importDefault(require("connect-redis"));
+const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
+const sessionOptions = {
+    store: new RedisStore({
+        host: '172.16.128.16',
+        port: 6379
+    }),
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: true }
+};
 // Create an app instance
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.NODE_PORT || 4050;
 app.use(express_1.default.json());
-app.use((0, express_session_1.default)({
-    secret: "mysecret",
-    resave: false,
-    saveUninitialized: true,
-}));
+app.use((0, express_session_1.default)(sessionOptions));
 app.get("/", (req, res) => {
     console.log(req.session);
     res.send("Server Is Working......");
@@ -68,19 +76,7 @@ app.post("/webhooks", function (req, res, next) {
                 },
             },
         };
-        if (event.type === "message" && event.message.type === "location") {
-            console.log(sessionData.bot_session);
-            console.log(req.session);
-            (0, handlePointOfInterest_1.getlocationByWebhook)({
-                intent: sessionData.bot_session,
-                latitude: event.message.latitude,
-                longitude: event.message.longitude,
-                userId: event.source.userId,
-            });
-            return;
-            // postToDialogflow(req);
-        }
-        else if (event.type === "message" && event.message.type === "text") {
+        if (event.type === "message" && event.message.type === "text") {
             (0, dialogflow_service_1.postToDialogflow)(req);
             const responses = yield dialogflow_1.sessionClient.detectIntent(request111);
             console.log("Detected intent");
@@ -101,11 +97,23 @@ app.post("/webhooks", function (req, res, next) {
             }
             console.log(`Query: ${result.queryText}`);
             console.log(`Response: ${result.fulfillmentText}`);
-            return;
+            // return;
+        }
+        else if (event.type === "message" && event.message.type === "location") {
+            console.log(sessionData.bot_session);
+            console.log(req.session);
+            (0, handlePointOfInterest_1.getlocationByWebhook)({
+                intent: sessionData.bot_session,
+                latitude: event.message.latitude,
+                longitude: event.message.longitude,
+                userId: event.source.userId,
+            });
+            // return;
+            // postToDialogflow(req);
         }
         else {
             (0, linesdk_service_1.reply)(event.source.userId, `Sorry, this chatbot did not support message type ${event.message.type}`);
-            return;
+            // return;
         }
     });
 });

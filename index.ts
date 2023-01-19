@@ -12,19 +12,28 @@ import request from "request-promise";
 import expressSession from "express-session";
 import { reply } from "./src/services/linesdk/linesdk.service";
 import { postToDialogflow } from "./src/services/dialogflows/dialogflow.service";
+import connectRedis from 'connect-redis';
+
+const RedisStore = connectRedis(expressSession);
+const sessionOptions: expressSession.SessionOptions = {
+  store: new RedisStore({
+    host: '172.16.128.16',
+    port: 6379
+  }),
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: true }
+};
+
 // Create an app instance
 dotenv.config();
 const app: Express = express();
 const port = process.env.NODE_PORT || 4050;
 
 app.use(express.json());
-app.use(
-  expressSession({
-    secret: "mysecret", // used to sign the session ID cookie
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+app.use(expressSession(sessionOptions));
+
 
 app.get("/", (req: Request, res: Response) => {
   console.log(req.session);
@@ -75,19 +84,7 @@ app.post(
       },
     };
 
-    if (event.type === "message" && event.message.type === "location") {
-      console.log(sessionData.bot_session);
-      console.log(req.session);
-
-      getlocationByWebhook({
-        intent: sessionData.bot_session,
-        latitude: event.message.latitude,
-        longitude: event.message.longitude,
-        userId: event.source.userId,
-      });
-      return;
-      // postToDialogflow(req);
-    } else if (event.type === "message" && event.message.type === "text") {
+    if (event.type === "message" && event.message.type === "text") {
       postToDialogflow(req);
 
       const responses = await sessionClient.detectIntent(request111);
@@ -114,13 +111,25 @@ app.post(
       console.log(`Query: ${result.queryText}`);
       console.log(`Response: ${result.fulfillmentText}`);
 
-      return;
+      // return;
+    } else if (event.type === "message" && event.message.type === "location") {
+      console.log(sessionData.bot_session);
+      console.log(req.session);
+
+      getlocationByWebhook({
+        intent: sessionData.bot_session,
+        latitude: event.message.latitude,
+        longitude: event.message.longitude,
+        userId: event.source.userId,
+      });
+      // return;
+      // postToDialogflow(req);
     } else {
       reply(
         event.source.userId,
         `Sorry, this chatbot did not support message type ${event.message.type}`
       );
-      return;
+      // return;
     }
   }
 );
