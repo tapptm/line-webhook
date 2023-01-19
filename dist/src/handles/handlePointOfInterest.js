@@ -9,14 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getlocation = void 0;
+exports.getlocationByWebhook = exports.getlocation = void 0;
 const dialogflow_fulfillment_1 = require("dialogflow-fulfillment");
 const poiCalculateDistance_1 = require("../utils/poiCalculateDistance");
 const carouselPayload_1 = require("../payloads/carouselPayload");
+const linesdk_1 = require("../configs/linesdk");
 function getlocation(agent) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(agent);
-        console.log(agent.parameters.location);
         /** calculate distance from your current location **/
         const distanceData = yield (0, poiCalculateDistance_1.calculateDistance)(agent.intent, // set your intent name here.
         14.9881753, // set your locations here.
@@ -38,3 +38,30 @@ function getlocation(agent) {
     });
 }
 exports.getlocation = getlocation;
+function getlocationByWebhook(agent) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(agent);
+        /** calculate distance from your current location **/
+        const distanceData = yield (0, poiCalculateDistance_1.calculateDistance)(agent.intent, // set your intent name here.
+        agent.latitude, // set your locations here.
+        agent.longitude // set your locations here.
+        );
+        /** condition to check if radius in 50 km
+         * it will return text. if not it will
+         * return custom payload. **/
+        if (distanceData.length > 0) {
+            /** format custom payload for line bot **/
+            const payload = (0, carouselPayload_1.carouselPayloads)(distanceData);
+            console.log(JSON.stringify(payload));
+            return linesdk_1.client.pushMessage(agent.userId, {
+                type: "text",
+                text: "good",
+            });
+        }
+        return linesdk_1.client.pushMessage(agent.userId, {
+            type: "text",
+            text: "ไม่พบข้อมูล" + agent.intent + "ในระยะ (100km)",
+        });
+    });
+}
+exports.getlocationByWebhook = getlocationByWebhook;

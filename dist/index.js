@@ -16,29 +16,21 @@ const express_1 = __importDefault(require("express"));
 const dialogflow_fulfillment_1 = require("dialogflow-fulfillment");
 const handleGreeting_1 = require("./src/handles/handleGreeting");
 const handlePointOfInterest_1 = require("./src/handles/handlePointOfInterest");
+const dialogflow_1 = require("./src/configs/dialogflow");
+const linesdk_1 = require("./src/configs/linesdk");
 const dotenv_1 = __importDefault(require("dotenv"));
 const request_promise_1 = __importDefault(require("request-promise"));
-const bot_sdk_1 = require("@line/bot-sdk");
-const dialogflow_1 = __importDefault(require("@google-cloud/dialogflow"));
-const googlekey_1 = require("./src/configs/googlekey");
-const projectId = googlekey_1.ggconv.project_id;
-const credts = {
-    credentials: {
-        client_email: googlekey_1.ggconv.client_email,
-        private_key: googlekey_1.ggconv.private_key,
-    },
-};
-const config = {
-    channelAccessToken: "F1HHZ+Abw8hkb/WKRBUOsMfpV1A8euZV22XldoIFwCfcPbgSy9gmmqm9IgeNrfveI3YYXEJ6di1CPaZy1CC3+R9Xbek78YqjB0l5P2QWta+iN6lY3dqNRFf+OR6ORPWU3MYmq6S5KxZ16+gH2QstRQdB04t89/1O/w1cDnyilFU=",
-    channelSecret: "36069836ad565377eaf962b38fa856d7",
-};
-const client = new bot_sdk_1.Client(config);
+const express_session_1 = __importDefault(require("express-session"));
 // Create an app instance
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.NODE_PORT || 4050;
-const TOKEN = process.env.LINE_ACCESS_TOKEN;
 app.use(express_1.default.json());
+app.use((0, express_session_1.default)({
+    secret: "mysecret",
+    resave: false,
+    saveUninitialized: true,
+}));
 app.get("/", (req, res) => {
     res.send("Server Is Working......");
 });
@@ -64,13 +56,11 @@ app.post("/webhook", (req, res) => {
 app.post("/webhooks", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(req.body.events);
-        const sessionId = googlekey_1.ggconv.session_id;
-        const sessionClient = new dialogflow_1.default.SessionsClient(credts);
-        const sessionPath = sessionClient.projectAgentSessionPath(projectId, sessionId);
+        const sessionData = req.session;
         res.send("HTTP POST request sent to the webhook URL!");
-        let event = req.body.events[0];
+        let event = req.body.evients[0];
         const request111 = {
-            session: sessionPath,
+            session: dialogflow_1.sessionPath,
             queryInput: {
                 text: {
                     // The query to send to the dialogflow agent
@@ -81,21 +71,26 @@ app.post("/webhooks", function (req, res) {
             },
         };
         if (event.type === "message" && event.message.type === "location") {
+            console.log(sessionData.bot_session);
+            (0, handlePointOfInterest_1.getlocationByWebhook)({
+                intent: sessionData.bot_session.intent,
+                latitude: event.message.latitude,
+                longitude: event.message.longitude,
+                userId: event.source.userId,
+            });
             postToDialogflow(req);
         }
         else if (event.type === "message" && event.message.type === "text") {
             postToDialogflow(req);
-            const responses = yield sessionClient.detectIntent(request111);
+            const responses = yield dialogflow_1.sessionClient.detectIntent(request111);
             console.log("Detected intent");
             const result = responses[0].queryResult;
             console.log(result);
+            if (result.intent.displayName === "food") {
+                sessionData.bot_session = { intent: result.intent.displayName };
+            }
             console.log(`Query: ${result.queryText}`);
             console.log(`Response: ${result.fulfillmentText}`);
-            // postToDialogflow(req);
-            // client.pushMessage(event.source.userId, {
-            //   type: "text",
-            //   text: result.fulfillmentText,
-            // });
         }
         else {
             reply(req);
@@ -113,7 +108,7 @@ const postToDialogflow = (req) => __awaiter(void 0, void 0, void 0, function* ()
 });
 const reply = (req) => {
     const event = req.body.events[0];
-    client.pushMessage(event.source.userId, {
+    linesdk_1.client.pushMessage(event.source.userId, {
         type: "text",
         text: "Sorry, this chatbot did not support message type " +
             req.body.events[0].message.type,

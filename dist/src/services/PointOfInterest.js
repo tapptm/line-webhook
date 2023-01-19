@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPoiByGroup = void 0;
-const connectiondb_1 = __importDefault(require("../configs/connectiondb"));
+const database_1 = __importDefault(require("../configs/database"));
 function getPoiByGroup(intent1, intent2, intent3) {
     return __awaiter(this, void 0, void 0, function* () {
-        const client = yield connectiondb_1.default.connect();
+        const client = yield database_1.default.connect();
         const sql = `SELECT   community_id, 
                         poi_id as poiid, 
                         poi_name as name, 

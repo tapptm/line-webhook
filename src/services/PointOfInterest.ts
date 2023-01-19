@@ -1,4 +1,4 @@
-import pool from "../configs/connectiondb";
+import pool from "../configs/database";
 
 async function getPoiByGroup(
   intent1: String,
