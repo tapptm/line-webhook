@@ -13,12 +13,16 @@ import expressSession from "express-session";
 import { reply } from "./src/services/linesdk/linesdk.service";
 import { postToDialogflow } from "./src/services/dialogflows/dialogflow.service";
 import connectRedis from 'connect-redis';
+import * as redis from 'redis';
+
+const redisClient = redis.createClient({
+  url: 'redis://localhost:6379'
+});
 
 const RedisStore = connectRedis(expressSession);
 const sessionOptions: expressSession.SessionOptions = {
   store: new RedisStore({
-    host: '172.16.128.16',
-    port: 6379
+    client: redisClient
   }),
   secret: 'secret',
   resave: false,
