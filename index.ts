@@ -10,6 +10,10 @@ import dotenv from "dotenv";
 import expressSession from "express-session";
 import { reply } from "./src/services/linesdk/linesdk.service";
 import { postToDialogflow } from "./src/services/dialogflows/dialogflow.service";
+import fs from 'fs';
+import * as path from 'path'
+import pvi from "./src/assets/previous_intent.json"
+
 
 // Create an app instance
 dotenv.config();
@@ -101,17 +105,19 @@ app.post(
         // sessionData.bot_session = { intent: result.intent.displayName };
         sessionData.bot_session = result.intent.displayName;
         console.log(sessionData.bot_session);
+        fs.writeFileSync(
+          path.join(__dirname, 'src/assets/previous_intent.json'), 
+          JSON.stringify({intent: result.intent.displayName})
+        );
       }
       console.log(`Query: ${result.queryText}`);
       console.log(`Response: ${result.fulfillmentText}`);
 
       // return;
     } else if (event.type === "message" && event.message.type === "location") {
-      console.log(sessionData.bot_session);
-      console.log(req.session);
-
+      console.log(pvi.intent);
       getlocationByWebhook({
-        intent: sessionData.bot_session,
+        intent: pvi.intent,
         latitude: event.message.latitude,
         longitude: event.message.longitude,
         userId: event.source.userId,

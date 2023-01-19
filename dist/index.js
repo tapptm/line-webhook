@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -21,6 +44,9 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const express_session_1 = __importDefault(require("express-session"));
 const linesdk_service_1 = require("./src/services/linesdk/linesdk.service");
 const dialogflow_service_1 = require("./src/services/dialogflows/dialogflow.service");
+const fs_1 = __importDefault(require("fs"));
+const path = __importStar(require("path"));
+const previous_intent_json_1 = __importDefault(require("./src/assets/previous_intent.json"));
 // Create an app instance
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -91,16 +117,16 @@ app.post("/webhooks", function (req, res, next) {
                 // sessionData.bot_session = { intent: result.intent.displayName };
                 sessionData.bot_session = result.intent.displayName;
                 console.log(sessionData.bot_session);
+                fs_1.default.writeFileSync(path.join(__dirname, 'src/assets/previous_intent.json'), JSON.stringify({ intent: result.intent.displayName }));
             }
             console.log(`Query: ${result.queryText}`);
             console.log(`Response: ${result.fulfillmentText}`);
             // return;
         }
         else if (event.type === "message" && event.message.type === "location") {
-            console.log(sessionData.bot_session);
-            console.log(req.session);
+            console.log(previous_intent_json_1.default.intent);
             (0, handlePointOfInterest_1.getlocationByWebhook)({
-                intent: sessionData.bot_session,
+                intent: previous_intent_json_1.default.intent,
                 latitude: event.message.latitude,
                 longitude: event.message.longitude,
                 userId: event.source.userId,
