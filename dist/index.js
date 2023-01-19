@@ -19,8 +19,8 @@ const handlePointOfInterest_1 = require("./src/handles/handlePointOfInterest");
 const dotenv_1 = __importDefault(require("dotenv"));
 const request_promise_1 = __importDefault(require("request-promise"));
 const bot_sdk_1 = require("@line/bot-sdk");
-const uuid = require("uuid");
-const dialogflow = require("dialogflow");
+const uuid_1 = __importDefault(require("uuid"));
+const dialogflow_1 = __importDefault(require("@google-cloud/dialogflow"));
 const config = {
     channelAccessToken: "F1HHZ+Abw8hkb/WKRBUOsMfpV1A8euZV22XldoIFwCfcPbgSy9gmmqm9IgeNrfveI3YYXEJ6di1CPaZy1CC3+R9Xbek78YqjB0l5P2QWta+iN6lY3dqNRFf+OR6ORPWU3MYmq6S5KxZ16+gH2QstRQdB04t89/1O/w1cDnyilFU=",
     channelSecret: "36069836ad565377eaf962b38fa856d7",
@@ -57,9 +57,9 @@ app.post("/webhook", (req, res) => {
 app.post("/webhooks", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(req.body.events);
-        const sessionId = uuid.v4();
-        const sessionClient = new dialogflow.SessionsClient();
-        const sessionPath = sessionClient.sessionPath("dev-xgjv", sessionId);
+        const sessionId = uuid_1.default.v4();
+        const sessionClient = new dialogflow_1.default.SessionsClient();
+        const sessionPath = sessionClient.projectAgentSessionPath("dev-xgjv", sessionId);
         res.send("HTTP POST request sent to the webhook URL!");
         let event = req.body.events[0];
         const request111 = {

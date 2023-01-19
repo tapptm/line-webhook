@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/dialogflow": "^5.4.0",
     "@line/bot-sdk": "^7.5.2",
     "@types/pg": "^8.6.6",
     "actions-on-google": "^3.0.0",

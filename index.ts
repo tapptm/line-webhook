@@ -6,8 +6,8 @@ import dotenv from "dotenv";
 import request from "request-promise";
 import { Client } from "@line/bot-sdk";
 
-const uuid = require ("uuid");
-const dialogflow = require("dialogflow");
+import uuid from "uuid";
+import dialogflow from '@google-cloud/dialogflow';
 
 const config = {
   channelAccessToken:
@@ -52,7 +52,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
   console.log(req.body.events);
   const sessionId = uuid.v4();
   const sessionClient = new dialogflow.SessionsClient();
-  const sessionPath = sessionClient.sessionPath("dev-xgjv", sessionId);
+  const sessionPath = sessionClient.projectAgentSessionPath("dev-xgjv", sessionId);
 
   res.send("HTTP POST request sent to the webhook URL!");
   let event = req.body.events[0];
@@ -74,7 +74,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
   } else if (event.type === "message" && event.message.type === "text") {
     const responses = await sessionClient.detectIntent(request111);
     console.log("Detected intent");
-    const result = responses[0].queryResult;
+    const result: any = responses[0].queryResult;
     console.log(`  Query: ${result.queryText}`);
     console.log(`  Response: ${result.fulfillmentText}`);
     // postToDialogflow(req);
