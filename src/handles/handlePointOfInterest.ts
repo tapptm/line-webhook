@@ -55,27 +55,7 @@ async function getlocationByWebhook(agent: {
     const payload = carouselPayloads(distanceData);
     console.log(JSON.stringify(payload));
 
-    return clientsdk.pushMessage(agent.userId, {
-      type: "flex",
-      altText: "this is a flex message",
-      contents: {
-        type: "bubble",
-        body: {
-          type: "box",
-          layout: "vertical",
-          contents: [
-            {
-              type: "text",
-              text: "hello",
-            },
-            {
-              type: "text",
-              text: "world",
-            },
-          ],
-        },
-      },
-    });
+    return clientsdk.pushMessage(agent.userId, payload);
   }
 
   return clientsdk.pushMessage(agent.userId, {

@@ -53,27 +53,7 @@ function getlocationByWebhook(agent) {
             /** format custom payload for line bot **/
             const payload = (0, carouselPayload_1.carouselPayloads)(distanceData);
             console.log(JSON.stringify(payload));
-            return linesdk_1.client.pushMessage(agent.userId, {
-                type: "flex",
-                altText: "this is a flex message",
-                contents: {
-                    type: "bubble",
-                    body: {
-                        type: "box",
-                        layout: "vertical",
-                        contents: [
-                            {
-                                type: "text",
-                                text: "hello",
-                            },
-                            {
-                                type: "text",
-                                text: "world",
-                            },
-                        ],
-                    },
-                },
-            });
+            return linesdk_1.client.pushMessage(agent.userId, payload);
         }
         return linesdk_1.client.pushMessage(agent.userId, {
             type: "text",
