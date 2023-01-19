@@ -74,7 +74,7 @@ app.post("/webhooks", function (req, res) {
             queryInput: {
                 text: {
                     // The query to send to the dialogflow agent
-                    text: "hello",
+                    text: event.message.text,
                     // The language used by the client (en-US)
                     languageCode: "en-US",
                 },

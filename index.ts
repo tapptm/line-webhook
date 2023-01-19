@@ -74,7 +74,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
     queryInput: {
       text: {
         // The query to send to the dialogflow agent
-        text: "hello",
+        text: event.message.text,
         // The language used by the client (en-US)
         languageCode: "en-US",
       },
@@ -84,6 +84,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
   if (event.type === "message" && event.message.type === "location") {
     postToDialogflow(req);
   } else if (event.type === "message" && event.message.type === "text") {
+    
     const responses = await sessionClient.detectIntent(request111);
     console.log("Detected intent");
     const result: any = responses[0].queryResult;
