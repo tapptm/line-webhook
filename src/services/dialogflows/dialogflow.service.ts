@@ -5,7 +5,7 @@ const postToDialogflow = (req: any) => {
   req.headers.host = "dialogflow.cloud.google.com";
 
   return request.post({
-    uri: "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/ec92fe83-908d-4727-9759-287df892b637",
+    uri: "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/db967922-963c-485d-9d00-c33519ed5177",
     headers: req.headers,
     body: body,
   });
