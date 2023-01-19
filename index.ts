@@ -28,7 +28,7 @@ app.use(
 
 app.get("/", (req: Request, res: Response) => {
   console.log(req.session);
-  
+
   res.send("Server Is Working......");
 });
 /**
@@ -52,17 +52,19 @@ app.post("/webhook", (req: Request, res: Response) => {
   agent.handleRequest(intentMap);
 });
 
-interface SessionData {
-  bot_session: {
-    intent: string;
-  };
+declare module "express-session" {
+  interface SessionData {
+    bot_session: {
+      intent: string;
+    };
+  }
 }
 
-app.post("/webhooks", async function (req: Request, res: Response) {
+app.post("/webhooks", async function (req: Request , res: Response) {
   let event = req.body.events[0];
   console.log(req.body.events);
 
-  const sessionData = req.session as unknown as SessionData;
+  const sessionData = req.session;
   const request111 = {
     session: sessionPath,
     queryInput: {
@@ -78,7 +80,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
     console.log(req.session);
 
     getlocationByWebhook({
-      intent: sessionData.bot_session.intent,
+      intent: sessionData.bot_session?.intent,
       latitude: event.message.latitude,
       longitude: event.message.longitude,
       userId: event.source.userId,

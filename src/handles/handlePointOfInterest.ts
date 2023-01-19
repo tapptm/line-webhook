@@ -34,7 +34,7 @@ async function getlocation(agent: Agent) {
 }
 
 async function getlocationByWebhook(agent: {
-  intent: string;
+  intent: any;
   latitude: number;
   longitude: number;
   userId: string;

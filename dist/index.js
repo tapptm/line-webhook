@@ -55,6 +55,7 @@ app.post("/webhook", (req, res) => {
     agent.handleRequest(intentMap);
 });
 app.post("/webhooks", function (req, res) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         let event = req.body.events[0];
         console.log(req.body.events);
@@ -72,7 +73,7 @@ app.post("/webhooks", function (req, res) {
             console.log(sessionData.bot_session);
             console.log(req.session);
             (0, handlePointOfInterest_1.getlocationByWebhook)({
-                intent: sessionData.bot_session.intent,
+                intent: (_a = sessionData.bot_session) === null || _a === void 0 ? void 0 : _a.intent,
                 latitude: event.message.latitude,
                 longitude: event.message.longitude,
                 userId: event.source.userId,
