@@ -83,24 +83,21 @@ app.post("/webhooks", async function (req: Request, res: Response) {
 
   if (event.type === "message" && event.message.type === "location") {
     postToDialogflow(req);
-
-
   } else if (event.type === "message" && event.message.type === "text") {
-    
+    postToDialogflow(req);
+
     const responses = await sessionClient.detectIntent(request111);
     console.log("Detected intent");
     const result: any = responses[0].queryResult;
     console.log(result);
-    
-    console.log("payload", result.fulfillmentMessages[0].payload);
-    
+
     console.log(`Query: ${result.queryText}`);
     console.log(`Response: ${result.fulfillmentText}`);
     // postToDialogflow(req);
-    client.pushMessage(event.source.userId, {
-      type: "text",
-      text: result.fulfillmentText,
-    });
+    // client.pushMessage(event.source.userId, {
+    //   type: "text",
+    //   text: result.fulfillmentText,
+    // });
   } else {
     reply(req);
   }
@@ -110,17 +107,11 @@ const postToDialogflow = async (req: any) => {
   const body = JSON.stringify(req.body);
   req.headers.host = "dialogflow.cloud.google.com";
 
-  const response = await request.post({
+  return request.post({
     uri: "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/ec92fe83-908d-4727-9759-287df892b637",
     headers: req.headers,
     body: body,
   });
-  console.log("res", response);
-
-  const intent = JSON.parse(response.body).queryResult.intent.displayName;
-  console.log("Intent : ", intent);
-
-  return response;
 };
 
 const reply = (req: any) => {
