@@ -23,37 +23,35 @@ app.post("/webhooks", async function (req: Request, res: Response) {
 
   if (event.type === "message" && event.message.type === "text") {
     try {
-      const dialogRes = await postToDialogflow(req);
-      if (dialogRes.status.code === 200) {
-        console.log('TEST OK');
-        
-        const requestIntent = {
-          session: sessionPath,
-          queryInput: {
-            text: {
-              text: event.message.text,
-              languageCode: "th-TH",
-            },
+      await postToDialogflow(req);
+      console.log("TEST OK");
+
+      const requestIntent = {
+        session: sessionPath,
+        queryInput: {
+          text: {
+            text: event.message.text,
+            languageCode: "th-TH",
           },
-        };
+        },
+      };
 
-        const responses = await sessionClient.detectIntent(requestIntent);
-        const result: any = responses[0].queryResult;
-        const intent = result.intent.displayName;
+      const responses = await sessionClient.detectIntent(requestIntent);
+      const result: any = responses[0].queryResult;
+      const intent = result.intent.displayName;
 
-        console.log(result);
+      console.log(result);
 
-        if (
-          intent === "โรงพยาบาล" ||
-          intent === "ร้านค้า" ||
-          intent === "ปั้มน้ำมัน" ||
-          intent === "ธนาคาร"
-        ) {
-          fs.writeFileSync(
-            "./src/assets/previous_intent.json",
-            JSON.stringify({ intent: result.intent.displayName })
-          );
-        }
+      if (
+        intent === "โรงพยาบาล" ||
+        intent === "ร้านค้า" ||
+        intent === "ปั้มน้ำมัน" ||
+        intent === "ธนาคาร"
+      ) {
+        fs.writeFileSync(
+          "./src/assets/previous_intent.json",
+          JSON.stringify({ intent: result.intent.displayName })
+        );
       }
     } catch (error: any) {
       res.send({ message: error.message });
