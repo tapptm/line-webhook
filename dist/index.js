@@ -32,6 +32,7 @@ app.use((0, express_session_1.default)({
     saveUninitialized: true,
 }));
 app.get("/", (req, res) => {
+    console.log(req.session);
     res.send("Server Is Working......");
 });
 /**

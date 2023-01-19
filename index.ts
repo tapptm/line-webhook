@@ -27,6 +27,8 @@ app.use(
 );
 
 app.get("/", (req: Request, res: Response) => {
+  console.log(req.session);
+  
   res.send("Server Is Working......");
 });
 /**
