@@ -83,6 +83,8 @@ app.post("/webhooks", async function (req: Request, res: Response) {
 
   if (event.type === "message" && event.message.type === "location") {
     postToDialogflow(req);
+
+
   } else if (event.type === "message" && event.message.type === "text") {
     
     const responses = await sessionClient.detectIntent(request111);
@@ -90,8 +92,10 @@ app.post("/webhooks", async function (req: Request, res: Response) {
     const result: any = responses[0].queryResult;
     console.log(result);
     
-    console.log(`  Query: ${result.queryText}`);
-    console.log(`  Response: ${result.fulfillmentText}`);
+    console.log("payload", result.fulfillmentMessages[0].payload);
+    
+    console.log(`Query: ${result.queryText}`);
+    console.log(`Response: ${result.fulfillmentText}`);
     // postToDialogflow(req);
     client.pushMessage(event.source.userId, {
       type: "text",

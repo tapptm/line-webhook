@@ -88,8 +88,9 @@ app.post("/webhooks", function (req, res) {
             console.log("Detected intent");
             const result = responses[0].queryResult;
             console.log(result);
-            console.log(`  Query: ${result.queryText}`);
-            console.log(`  Response: ${result.fulfillmentText}`);
+            console.log("payload", result.fulfillmentMessages[0].payload);
+            console.log(`Query: ${result.queryText}`);
+            console.log(`Response: ${result.fulfillmentText}`);
             // postToDialogflow(req);
             client.pushMessage(event.source.userId, {
                 type: "text",
