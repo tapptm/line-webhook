@@ -23,8 +23,10 @@ const dialogflow_1 = __importDefault(require("@google-cloud/dialogflow"));
 const googlekey_1 = require("./src/configs/googlekey");
 const projectId = googlekey_1.ggconv.project_id;
 const credts = {
-    client_email: googlekey_1.ggconv.client_email,
-    privateKey: googlekey_1.ggconv.private_key
+    credentials: {
+        client_email: googlekey_1.ggconv.client_email,
+        private_key: googlekey_1.ggconv.private_key,
+    },
 };
 const config = {
     channelAccessToken: "F1HHZ+Abw8hkb/WKRBUOsMfpV1A8euZV22XldoIFwCfcPbgSy9gmmqm9IgeNrfveI3YYXEJ6di1CPaZy1CC3+R9Xbek78YqjB0l5P2QWta+iN6lY3dqNRFf+OR6ORPWU3MYmq6S5KxZ16+gH2QstRQdB04t89/1O/w1cDnyilFU=",
@@ -63,8 +65,8 @@ app.post("/webhooks", function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(req.body.events);
         const sessionId = googlekey_1.ggconv.session_id;
-        const sessionClient = new dialogflow_1.default.SessionsClient({ projectId, credts });
-        const sessionPath = sessionClient.projectAgentSessionPath("dev-xgjv", sessionId);
+        const sessionClient = new dialogflow_1.default.SessionsClient(credts);
+        const sessionPath = sessionClient.projectAgentSessionPath(projectId, sessionId);
         res.send("HTTP POST request sent to the webhook URL!");
         let event = req.body.events[0];
         const request111 = {

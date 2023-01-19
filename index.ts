@@ -6,14 +6,16 @@ import dotenv from "dotenv";
 import request from "request-promise";
 import { Client } from "@line/bot-sdk";
 
-import dialogflow from '@google-cloud/dialogflow';
-import {ggconv} from "./src/configs/googlekey"
+import dialogflow from "@google-cloud/dialogflow";
+import { ggconv } from "./src/configs/googlekey";
 
-const projectId = ggconv.project_id
+const projectId = ggconv.project_id;
 const credts = {
-  client_email: ggconv.client_email,
-  privateKey: ggconv.private_key
-}
+  credentials: {
+    client_email: ggconv.client_email,
+    private_key: ggconv.private_key,
+  },
+};
 
 const config = {
   channelAccessToken:
@@ -56,10 +58,13 @@ app.post("/webhook", (req: Request, res: Response) => {
 
 app.post("/webhooks", async function (req: Request, res: Response) {
   console.log(req.body.events);
-  
-  const sessionId = ggconv.session_id
-  const sessionClient = new dialogflow.SessionsClient({projectId, credts});
-  const sessionPath = sessionClient.projectAgentSessionPath("dev-xgjv", sessionId);
+
+  const sessionId = ggconv.session_id;
+  const sessionClient = new dialogflow.SessionsClient(credts);
+  const sessionPath = sessionClient.projectAgentSessionPath(
+    projectId,
+    sessionId
+  );
 
   res.send("HTTP POST request sent to the webhook URL!");
   let event = req.body.events[0];
