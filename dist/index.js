@@ -91,6 +91,10 @@ app.post("/webhooks", function (req, res) {
             console.log(`  Query: ${result.queryText}`);
             console.log(`  Response: ${result.fulfillmentText}`);
             // postToDialogflow(req);
+            client.pushMessage(event.source.userId, {
+                type: "text",
+                text: result.fulfillmentText,
+            });
         }
         else {
             reply(req);
