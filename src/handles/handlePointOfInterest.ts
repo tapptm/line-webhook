@@ -1,6 +1,6 @@
 import { Payload, Platforms } from "dialogflow-fulfillment";
 import { Line, LineColumns } from "../dto/pointOfInterest.dto";
-import { calculateDistance } from "../utils/poiCalculateDistance";
+import { calculateDistance } from "../services/poiCalculateDistance";
 import { Agent } from "../dto/pointOfInterest.dto";
 import { carouselPayloads } from "../payloads/carouselPayload";
 import { client as clientsdk } from "../configs/linesdk";

@@ -1,4 +1,4 @@
-import { getPoiByGroup } from "../services/PointOfInterest";
+import { getPoiByGroup } from "../models/PointOfInterest";
 import { orderByDistance, getDistance } from "geolib";
 import { imageUrl } from "../configs/urlpath";
 import { PointOfInterest } from "../dto/pointOfInterest.dto";

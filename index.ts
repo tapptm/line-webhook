@@ -10,7 +10,8 @@ import { client as clientsdk } from "./src/configs/linesdk";
 import dotenv from "dotenv";
 import request from "request-promise";
 import expressSession from "express-session";
-
+import { reply } from "./src/services/linesdk/linesdk.service";
+import { postToDialogflow } from "./src/services/dialogflows/dialogflow.service";
 // Create an app instance
 dotenv.config();
 const app: Express = express();
@@ -56,20 +57,15 @@ interface SessionData {
 }
 
 app.post("/webhooks", async function (req: Request, res: Response) {
+  let event = req.body.events[0];
   console.log(req.body.events);
 
   const sessionData = req.session as unknown as SessionData;
-
-  res.send("HTTP POST request sent to the webhook URL!");
-  let event = req.body.events[0];
-
   const request111 = {
     session: sessionPath,
     queryInput: {
       text: {
-        // The query to send to the dialogflow agent
         text: event.message.text,
-        // The language used by the client (en-US)
         languageCode: "en-US",
       },
     },
@@ -85,8 +81,8 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       longitude: event.message.longitude,
       userId: event.source.userId,
     });
-
-    postToDialogflow(req);
+    return;
+    // postToDialogflow(req);
   } else if (event.type === "message" && event.message.type === "text") {
     postToDialogflow(req);
 
@@ -95,36 +91,24 @@ app.post("/webhooks", async function (req: Request, res: Response) {
     const result: any = responses[0].queryResult;
     console.log(result);
 
+    console.log(result.intent.displayName);
+
     if (result.intent.displayName === "food") {
+      console.log("food");
       sessionData.bot_session = { intent: result.intent.displayName };
     }
     console.log(`Query: ${result.queryText}`);
     console.log(`Response: ${result.fulfillmentText}`);
+
+    return;
   } else {
-    reply(req);
+    reply(
+      event.source.userId,
+      `Sorry, this chatbot did not support message type ${event.message.type}`
+    );
+    return;
   }
 });
-
-const postToDialogflow = async (req: any) => {
-  const body = JSON.stringify(req.body);
-  req.headers.host = "dialogflow.cloud.google.com";
-
-  return request.post({
-    uri: "https://dialogflow.cloud.google.com/v1/integrations/line/webhook/ec92fe83-908d-4727-9759-287df892b637",
-    headers: req.headers,
-    body: body,
-  });
-};
-
-const reply = (req: any) => {
-  const event = req.body.events[0];
-  clientsdk.pushMessage(event.source.userId, {
-    type: "text",
-    text:
-      "Sorry, this chatbot did not support message type " +
-      req.body.events[0].message.type,
-  });
-};
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);

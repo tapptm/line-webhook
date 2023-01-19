@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getlocationByWebhook = exports.getlocation = void 0;
 const dialogflow_fulfillment_1 = require("dialogflow-fulfillment");
-const poiCalculateDistance_1 = require("../utils/poiCalculateDistance");
+const poiCalculateDistance_1 = require("../services/poiCalculateDistance");
 const carouselPayload_1 = require("../payloads/carouselPayload");
 const linesdk_1 = require("../configs/linesdk");
 function getlocation(agent) {
