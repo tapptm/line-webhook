@@ -16,8 +16,21 @@ import connectRedis from 'connect-redis';
 import * as redis from 'redis';
 
 const redisClient = redis.createClient({
-  url: 'redis://localhost:6379'
+  url: 'redis://172.16.128.16:6379',
+  legacyMode: true
 });
+
+redisClient.on("error", function (err) {
+  console.log("Error " + err);
+});
+
+redisClient.on("ready", () => {
+  console.log('✅ 💃 redis have ready !')
+ })
+ 
+redisClient.on("connect", () => {
+  console.log('✅ 💃 connect redis success !')
+ })
 
 const RedisStore = connectRedis(expressSession);
 const sessionOptions: expressSession.SessionOptions = {
@@ -42,6 +55,14 @@ app.use(expressSession(sessionOptions));
 app.get("/", (req: Request, res: Response) => {
   console.log(req.session);
 
+  res.send("Server Is Working......");
+});
+
+app.get("/test", (req: Request, res: Response) => {
+  console.log(req.session);
+  req.session.bot_session = "haha"
+  console.log(req.session.bot_session );
+  
   res.send("Server Is Working......");
 });
 /**

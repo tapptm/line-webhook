@@ -47,7 +47,17 @@ const dialogflow_service_1 = require("./src/services/dialogflows/dialogflow.serv
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const redis = __importStar(require("redis"));
 const redisClient = redis.createClient({
-    url: 'redis://localhost:6379'
+    url: 'redis://172.16.128.16:6379',
+    legacyMode: true
+});
+redisClient.on("error", function (err) {
+    console.log("Error " + err);
+});
+redisClient.on("ready", () => {
+    console.log('✅ 💃 redis have ready !');
+});
+redisClient.on("connect", () => {
+    console.log('✅ 💃 connect redis success !');
 });
 const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
 const sessionOptions = {
@@ -67,6 +77,12 @@ app.use(express_1.default.json());
 app.use((0, express_session_1.default)(sessionOptions));
 app.get("/", (req, res) => {
     console.log(req.session);
+    res.send("Server Is Working......");
+});
+app.get("/test", (req, res) => {
+    console.log(req.session);
+    req.session.bot_session = "haha";
+    console.log(req.session.bot_session);
     res.send("Server Is Working......");
 });
 /**
