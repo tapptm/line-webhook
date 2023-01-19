@@ -40,9 +40,15 @@ app.post("/test", (req: Request, res: Response) => {
   if (req.body.key === "aa") {
     req.session.bot_session = "haha11";
     console.log(req.session);
+    fs.writeFileSync(
+      "./src/assets/previous_intent.json", 
+      JSON.stringify({intent: "te"})
+    );
+
     res.send(req.session.bot_session);
   } else if (req.body.key === "bb") {
     console.log(req.session);
+    
     res.send(req.session.bot_session);
   }
 });
