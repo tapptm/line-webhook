@@ -1,13 +1,13 @@
-import express, { Express, NextFunction, Request, Response } from "express";
+import express, { Express, Request, Response } from "express";
 import { WebhookClient } from "dialogflow-fulfillment";
 import { getGreeting } from "./src/handles/handleGreeting";
 import { getlocation } from "./src/handles/handlePointOfInterest";
 import dotenv from "dotenv";
-import { dialogflow, Permission, SimpleResponse } from "actions-on-google";
-import https from "https";
 import request from "request-promise";
-
 import { Client } from "@line/bot-sdk";
+import uuid from "uuid";
+
+const dialogflow = require("dialogflow");
 
 const config = {
   channelAccessToken:
@@ -16,9 +16,7 @@ const config = {
 };
 
 const client = new Client(config);
-
 // Create an app instance
-const dfl = dialogflow();
 dotenv.config();
 const app: Express = express();
 const port = process.env.NODE_PORT || 4050;
@@ -39,17 +37,6 @@ app.post("/webhook", (req: Request, res: Response) => {
   // create intentMap for handle intent
   let intentMap = new Map();
   // add intent map 2nd parameter pass function
-  intentMap.set("webhook", () => {
-    const conv = agent.conv();
-    conv.ask(
-      new Permission({
-        context: "To locate you",
-        permissions: "DEVICE_PRECISE_LOCATION",
-      })
-    );
-  });
-
-  // intent poi
   intentMap.set("ธนาคาร", getlocation);
   intentMap.set("โรงพยาบาล", getlocation);
   intentMap.set("ร้านค้า", getlocation);
@@ -61,16 +48,36 @@ app.post("/webhook", (req: Request, res: Response) => {
   agent.handleRequest(intentMap);
 });
 
-app.post("/webhooks", function (req: Request, res: Response) {
+app.post("/webhooks", async function (req: Request, res: Response) {
   console.log(req.body.events);
+  const sessionId = uuid.v4();
+  const sessionClient = new dialogflow.SessionsClient();
+  const sessionPath = sessionClient.sessionPath("dev-xgjv", sessionId);
 
   res.send("HTTP POST request sent to the webhook URL!");
   let event = req.body.events[0];
 
+  const request111 = {
+    session: sessionPath,
+    queryInput: {
+      text: {
+        // The query to send to the dialogflow agent
+        text: "hello",
+        // The language used by the client (en-US)
+        languageCode: "en-US",
+      },
+    },
+  };
+
   if (event.type === "message" && event.message.type === "location") {
     postToDialogflow(req);
   } else if (event.type === "message" && event.message.type === "text") {
-    postToDialogflow(req);
+    const responses = await sessionClient.detectIntent(request111);
+    console.log("Detected intent");
+    const result = responses[0].queryResult;
+    console.log(`  Query: ${result.queryText}`);
+    console.log(`  Response: ${result.fulfillmentText}`);
+    // postToDialogflow(req);
   } else {
     reply(req);
   }
