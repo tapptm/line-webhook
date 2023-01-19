@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import { WebhookClient } from "dialogflow-fulfillment";
 import { getGreeting } from "./src/handles/handleGreeting";
 import {
@@ -54,67 +54,76 @@ app.post("/webhook", (req: Request, res: Response) => {
 
 declare module "express-session" {
   interface SessionData {
-    bot_session: string
+    bot_session: string;
   }
 }
 
-app.post("/webhooks", async function (req: Request , res: Response) {
-  let event = req.body.events[0];
-  console.log(req.body.events);
+app.post(
+  "/webhooks",
+  async function (req: Request, res: Response, next: NextFunction) {
+    let event = req.body.events[0];
+    console.log(req.body.events);
 
-  const sessionData = req.session;
-  const request111 = {
-    session: sessionPath,
-    queryInput: {
-      text: {
-        text: event.message.text,
-        languageCode: "en-US",
+    const sessionData = req.session;
+    const request111 = {
+      session: sessionPath,
+      queryInput: {
+        text: {
+          text: event.message.text,
+          languageCode: "en-US",
+        },
       },
-    },
-  };
+    };
 
-  if (event.type === "message" && event.message.type === "location") {
-    console.log(sessionData.bot_session);
-    console.log(req.session);
-
-    getlocationByWebhook({
-      intent: sessionData.bot_session,
-      latitude: event.message.latitude,
-      longitude: event.message.longitude,
-      userId: event.source.userId,
-    });
-    return;
-    // postToDialogflow(req);
-  } else if (event.type === "message" && event.message.type === "text") {
-    postToDialogflow(req);
-
-    const responses = await sessionClient.detectIntent(request111);
-    console.log("Detected intent");
-    const result: any = responses[0].queryResult;
-    console.log(result);
-
-    console.log(result.intent.displayName);
-
-    if (result.intent.displayName === "food") {
-      console.log("food");
-      // sessionData.bot_session = { intent: result.intent.displayName };
-      sessionData.bot_session = result.intent.displayName
-
+    if (event.type === "message" && event.message.type === "location") {
       console.log(sessionData.bot_session);
-      
-    }
-    console.log(`Query: ${result.queryText}`);
-    console.log(`Response: ${result.fulfillmentText}`);
+      console.log(req.session);
 
-    return;
-  } else {
-    reply(
-      event.source.userId,
-      `Sorry, this chatbot did not support message type ${event.message.type}`
-    );
-    return;
+      getlocationByWebhook({
+        intent: sessionData.bot_session,
+        latitude: event.message.latitude,
+        longitude: event.message.longitude,
+        userId: event.source.userId,
+      });
+      return;
+      // postToDialogflow(req);
+    } else if (event.type === "message" && event.message.type === "text") {
+      postToDialogflow(req);
+
+      const responses = await sessionClient.detectIntent(request111);
+      console.log("Detected intent");
+      const result: any = responses[0].queryResult;
+      console.log(result);
+
+      console.log(result.intent.displayName);
+
+      if (result.intent.displayName === "food") {
+        console.log("food");
+        // sessionData.bot_session = { intent: result.intent.displayName };
+        sessionData.bot_session = result.intent.displayName;
+
+        console.log(sessionData.bot_session);
+        req.session.save((err) => {
+          if (err) {
+            return next(err);
+          }
+
+          console.log("OK");
+        });
+      }
+      console.log(`Query: ${result.queryText}`);
+      console.log(`Response: ${result.fulfillmentText}`);
+
+      return;
+    } else {
+      reply(
+        event.source.userId,
+        `Sorry, this chatbot did not support message type ${event.message.type}`
+      );
+      return;
+    }
   }
-});
+);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);

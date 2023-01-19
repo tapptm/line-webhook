@@ -54,7 +54,7 @@ app.post("/webhook", (req, res) => {
     // now agent is handle request and pass intent map
     agent.handleRequest(intentMap);
 });
-app.post("/webhooks", function (req, res) {
+app.post("/webhooks", function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         let event = req.body.events[0];
         console.log(req.body.events);
@@ -92,6 +92,12 @@ app.post("/webhooks", function (req, res) {
                 // sessionData.bot_session = { intent: result.intent.displayName };
                 sessionData.bot_session = result.intent.displayName;
                 console.log(sessionData.bot_session);
+                req.session.save((err) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    console.log("OK");
+                });
             }
             console.log(`Query: ${result.queryText}`);
             console.log(`Response: ${result.fulfillmentText}`);
