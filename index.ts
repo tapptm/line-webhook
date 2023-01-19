@@ -8,27 +8,13 @@ import { Client } from "@line/bot-sdk";
 
 import uuid from "uuid";
 import dialogflow from '@google-cloud/dialogflow';
-import { Storage } from '@google-cloud/storage';
+import {ggconv} from "./src/configs/googlekey"
 
-async function authenticateImplicitWithAdc() {
-  // This snippet demonstrates how to list buckets.
-  // NOTE: Replace the client created below with the client required for your application.
-  // Note that the credentials are not specified when constructing the client.
-  // The client library finds your credentials using ADC.
-  const storage = new Storage({
-    projectId: "dev-xgjv",
-  });
-  const [buckets] = await storage.getBuckets();
-  console.log('Buckets:');
-
-  for (const bucket of buckets) {
-    console.log(`- ${bucket.name}`);
-  }
-
-  console.log('Listed all storage buckets.');
+const projectId = ggconv.project_id
+const credts = {
+  client_email: ggconv.client_email,
+  privateKey: ggconv.private_key
 }
-
-authenticateImplicitWithAdc();
 
 const config = {
   channelAccessToken:
@@ -71,8 +57,9 @@ app.post("/webhook", (req: Request, res: Response) => {
 
 app.post("/webhooks", async function (req: Request, res: Response) {
   console.log(req.body.events);
+  
   const sessionId = uuid.v4();
-  const sessionClient = new dialogflow.SessionsClient();
+  const sessionClient = new dialogflow.SessionsClient({projectId, credts});
   const sessionPath = sessionClient.projectAgentSessionPath("dev-xgjv", sessionId);
 
   res.send("HTTP POST request sent to the webhook URL!");
