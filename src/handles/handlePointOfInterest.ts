@@ -17,6 +17,10 @@ async function getlocationPointOfInterest(agent: {
     agent.longitude // set your locations here.
   );
 
+  console.log("DISTANCE" ,distanceData);
+  
+
+
   /** condition to check if radius in 50 km
    * it will return text. if not it will
    * return custom payload. **/
