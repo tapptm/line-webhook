@@ -16,6 +16,8 @@ async function getlocationRestaurants(agent: {
     agent.longitude // set your locations here.
   );
 
+  console.log("FOOD DISTANCE", distanceData);
+
   /** condition to check if radius in 50 km
    * it will return text. if not it will
    * return custom payload. **/
