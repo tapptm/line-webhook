@@ -1,6 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import { getlocationPointOfInterest } from "./src/handles/handlePointOfInterest";
 import { getlocationRestaurants } from "./src/handles/handleRestaurant";
+import { getlocationActivitys } from "./src/handles/handleActivity";
+import { getlocationHotels } from "./src/handles/handleHotel";
 import { sessionClient, sessionPath } from "./src/configs/dialogflow";
 import { replyMessage } from "./src/services/linesdk/linesdk.service";
 import { postToDialogflow } from "./src/services/dialogflows/dialogflow.service";
@@ -72,14 +74,25 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       const chats = await getChats(event.source.userId);
       let lastChat = chats[chats.length - 1];
       console.log("LAST_CHAT", lastChat);
-
-
       console.log(lastChat.intent_name);
-      
 
-      if(lastChat.intent_name === "ร้านอาหาร"){
+      if (lastChat.intent_name === "ร้านอาหาร") {
         console.log("TEST");
-       return await getlocationRestaurants({
+        return await getlocationRestaurants({
+          intent: lastChat.intent_name,
+          latitude: event.message.latitude,
+          longitude: event.message.longitude,
+          userId: event.source.userId,
+        });
+      } else if (lastChat.intent_name === "ที่พัก") {
+        await getlocationHotels({
+          intent: lastChat.intent_name,
+          latitude: event.message.latitude,
+          longitude: event.message.longitude,
+          userId: event.source.userId,
+        });
+      } else if (lastChat.intent_name === "กิจกรรม") {
+        await getlocationActivitys({
           intent: lastChat.intent_name,
           latitude: event.message.latitude,
           longitude: event.message.longitude,
@@ -93,8 +106,6 @@ app.post("/webhooks", async function (req: Request, res: Response) {
           userId: event.source.userId,
         });
       }
-
-      
     } catch (error: any) {
       res.send({ message: error.message });
     }
