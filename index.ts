@@ -92,6 +92,8 @@ app.post("/webhooks", async function (req: Request, res: Response) {
         intent === "สถานีตำรวจ" ||
         intent === "สถานีรถไฟ"
       ) {
+        console.log('TEST ');
+        
         await getlocationPointOfInterest({
           intent: lastChat.intent_name,
           latitude: event.message.latitude,
