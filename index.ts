@@ -6,6 +6,7 @@ import { replyMessage } from "./src/services/linesdk/linesdk.service";
 import { postToDialogflow } from "./src/services/dialogflows/dialogflow.service";
 import fs from "fs";
 import pvi from "./src/assets/previous_intent.json";
+import { saveChats, getChats } from "./src/models/chatHistorys";
 
 dotenv.config();
 const app: Express = express();
@@ -49,8 +50,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
         intent === "ปั้มน้ำมัน" ||
         intent === "ธนาคาร"
       ) {
-        console.log("TEST OK NA I SAS");
-        
+        await saveChats(event.source.userId, result.intent.displayName);
         fs.writeFileSync(
           "./src/assets/previous_intent.json",
           JSON.stringify({ intent: result.intent.displayName })
@@ -60,10 +60,11 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       res.send({ message: error.message });
     }
   } else if (event.type === "message" && event.message.type === "location") {
-    console.log(pvi);
+    // console.log(pvi);
+    const chats = await getChats(event.source.userId);
     try {
       await getlocation({
-        intent: pvi.intent,
+        intent: chats[chats.length - 1],
         latitude: event.message.latitude,
         longitude: event.message.longitude,
         userId: event.source.userId,
