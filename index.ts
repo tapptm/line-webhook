@@ -1,12 +1,10 @@
 import express, { Express, Request, Response } from "express";
 import { getlocation } from "./src/handles/handlePointOfInterest";
 import { sessionClient, sessionPath } from "./src/configs/dialogflow";
-import dotenv from "dotenv";
 import { replyMessage } from "./src/services/linesdk/linesdk.service";
 import { postToDialogflow } from "./src/services/dialogflows/dialogflow.service";
-import fs from "fs";
-import pvi from "./src/assets/previous_intent.json";
 import { saveChats, getChats } from "./src/models/chatHistorys";
+import dotenv from "dotenv";
 
 dotenv.config();
 const app: Express = express();
@@ -41,20 +39,13 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       const result: any = responses[0].queryResult;
       const intent = result.intent.displayName;
 
-      console.log(result);
-      console.log(intent);
-
       if (
         intent === "โรงพยาบาล" ||
         intent === "ร้านค้า" ||
         intent === "ปั้มน้ำมัน" ||
         intent === "ธนาคาร"
       ) {
-        await saveChats(event.source.userId, result.intent.displayName);
-        // fs.writeFileSync(
-        //   "./src/assets/previous_intent.json",
-        //   JSON.stringify({ intent: result.intent.displayName })
-        // );
+        await saveChats(event.source.userId, result.intent.displayName, event.message.text);
       }
     } catch (error: any) {
       res.send({ message: error.message });
