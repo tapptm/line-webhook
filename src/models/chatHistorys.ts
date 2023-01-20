@@ -16,8 +16,8 @@ async function saveChats(userId: String, Intent: String) {
 
 async function getChats(userId: String) {
   const client = await pool.connect();
-  const sql = `SELECT * FROM baipho_chatbot WHERE user_id = $1;`;
-  const { rows } = await client.query(sql, [userId]);
+  const sql = `SELECT * FROM baipho_chatbot WHERE user_id = '${userId}';`;
+  const { rows } = await client.query(sql);
   client.release();
   return rows;
 }
