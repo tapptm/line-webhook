@@ -76,6 +76,9 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       const result: any = responses[0].queryResult;
       const intent = result.intent.displayName;
 
+      console.log( intent);
+      
+
       if(intent === "ร้านอาหาร"){
         console.log("TEST");
        return await getlocationRestaurants({
@@ -84,14 +87,16 @@ app.post("/webhooks", async function (req: Request, res: Response) {
           longitude: event.message.longitude,
           userId: event.source.userId,
         });
+      } else {
+        await getlocationPointOfInterest({
+          intent: lastChat.intent_name,
+          latitude: event.message.latitude,
+          longitude: event.message.longitude,
+          userId: event.source.userId,
+        });
       }
 
-      await getlocationPointOfInterest({
-        intent: lastChat.intent_name,
-        latitude: event.message.latitude,
-        longitude: event.message.longitude,
-        userId: event.source.userId,
-      });
+      
     } catch (error: any) {
       res.send({ message: error.message });
     }
