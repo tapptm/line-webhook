@@ -119,6 +119,8 @@ app.post("/webhooks", async function (req: Request, res: Response) {
           longitude: event.message.longitude,
           userId: event.source.userId,
         });
+      } else {
+        console.log("not found");
       }
     } catch (error: any) {
       res.send({ message: error.message });
