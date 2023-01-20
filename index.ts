@@ -77,6 +77,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       const intent = result.intent.displayName;
 
       if(intent === "ร้านอาหาร"){
+        console.log("TEST");
        return await getlocationRestaurants({
           intent: lastChat.intent_name,
           latitude: event.message.latitude,
