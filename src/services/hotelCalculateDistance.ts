@@ -1,13 +1,13 @@
 import { getHotels } from "../models/hotel";
 import { orderByDistance, getDistance } from "geolib";
 import { imageUrl } from "../configs/urlpath";
-import { Restaurant } from "../dto/restaurant.dto";
+import { Hotel } from "../dto/hotel.dto";
 
 async function calculateDistance(
   latitude: number,
   longitude: number
 ) {
-  let hotels: Restaurant[] = await getHotels()
+  let hotels: Hotel[] = await getHotels()
   const distanceActivity = hotels.map((item) => {
     item.latitude = parseFloat(item.latitude);
     item.longitude = parseFloat(item.longitude);

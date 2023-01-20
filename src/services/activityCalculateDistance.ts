@@ -1,13 +1,13 @@
 import { getActivity } from "../models/activity";
 import { orderByDistance, getDistance } from "geolib";
 import { imageUrl } from "../configs/urlpath";
-import { Restaurant } from "../dto/restaurant.dto";
+import { Activity } from "../dto/activity.dto";
 
 async function calculateDistance(
   latitude: number,
   longitude: number
 ) {
-  let activity: Restaurant[] = await getActivity()
+  let activity: Activity[] = await getActivity()
   const distanceActivity = activity.map((item) => {
     item.latitude = parseFloat(item.latitude);
     item.longitude = parseFloat(item.longitude);

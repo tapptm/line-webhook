@@ -1,5 +1,5 @@
 import { Line, LineColumns } from "../dto/pointOfInterest.dto";
-import { calculateDistance } from "../services/activityCalculateDistance";
+import { calculateDistance } from "../services/hotelCalculateDistance";
 import { carouselPayloads } from "../payloads/carouselPayload";
 import { client as clientsdk } from "../configs/linesdk";
 
@@ -15,6 +15,9 @@ async function getlocationHotels(agent: {
     agent.latitude, // set your locations here.
     agent.longitude // set your locations here.
   );
+
+  console.log("HOTEL DISTANCE", distanceData);
+  
 
   /** condition to check if radius in 50 km
    * it will return text. if not it will
