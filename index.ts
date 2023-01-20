@@ -77,28 +77,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       const result: any = responses[0].queryResult;
       const intent = result.intent.displayName;
 
-      if (intent === "ร้านอาหาร") {
-        await getlocationRestaurants({
-          intent: lastChat.intent_name,
-          latitude: event.message.latitude,
-          longitude: event.message.longitude,
-          userId: event.source.userId,
-        });
-      } else if (intent === "กิจกรรม") {
-        await getlocationRestaurants({
-          intent: lastChat.intent_name,
-          latitude: event.message.latitude,
-          longitude: event.message.longitude,
-          userId: event.source.userId,
-        });
-      } else if (intent === "ที่พัก") {
-        await getlocationRestaurants({
-          intent: lastChat.intent_name,
-          latitude: event.message.latitude,
-          longitude: event.message.longitude,
-          userId: event.source.userId,
-        });
-      } else if (
+      if (
         intent === "โรงพยาบาล" ||
         intent === "ร้านค้า" ||
         intent === "ปั้มน้ำมัน" ||
