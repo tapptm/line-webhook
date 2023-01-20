@@ -72,6 +72,19 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       const chats = await getChats(event.source.userId);
       let lastChat = chats[chats.length - 1];
       console.log("LAST_CHAT", lastChat);
+      const responses = await sessionClient.detectIntent(requestIntent);
+      const result: any = responses[0].queryResult;
+      const intent = result.intent.displayName;
+
+      if(intent === "ร้านอาหาร"){
+       return await getlocationRestaurants({
+          intent: lastChat.intent_name,
+          latitude: event.message.latitude,
+          longitude: event.message.longitude,
+          userId: event.source.userId,
+        });
+      }
+
       await getlocationPointOfInterest({
         intent: lastChat.intent_name,
         latitude: event.message.latitude,
