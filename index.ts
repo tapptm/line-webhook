@@ -51,10 +51,10 @@ app.post("/webhooks", async function (req: Request, res: Response) {
         intent === "ธนาคาร"
       ) {
         await saveChats(event.source.userId, result.intent.displayName);
-        fs.writeFileSync(
-          "./src/assets/previous_intent.json",
-          JSON.stringify({ intent: result.intent.displayName })
-        );
+        // fs.writeFileSync(
+        //   "./src/assets/previous_intent.json",
+        //   JSON.stringify({ intent: result.intent.displayName })
+        // );
       }
     } catch (error: any) {
       res.send({ message: error.message });
