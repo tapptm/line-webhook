@@ -77,22 +77,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       const result: any = responses[0].queryResult;
       const intent = result.intent.displayName;
 
-      if (
-        intent === "โรงพยาบาล" ||
-        intent === "ร้านค้า" ||
-        intent === "ปั้มน้ำมัน" ||
-        intent === "ธนาคาร" ||
-        intent === "ตลาด" ||
-        intent === "ร้านค้า" ||
-        intent === "ร้านกาแฟ" ||
-        intent === "ร้านซ่อมรถ" ||
-        intent === "ร้านถ่ายรูป" ||
-        intent === "วัด" ||
-        intent === "ศาลเจ้าพ่อ" ||
-        intent === "สถานีตำรวจ" ||
-        intent === "สถานีรถไฟ"
-      ) {
-        console.log('TEST ');
+
         
         await getlocationPointOfInterest({
           intent: lastChat.intent_name,
@@ -100,9 +85,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
           longitude: event.message.longitude,
           userId: event.source.userId,
         });
-      } else {
-        console.log("not found");
-      }
+ 
     } catch (error: any) {
       res.send({ message: error.message });
     }
