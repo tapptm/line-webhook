@@ -1,9 +1,9 @@
 import { Line, LineColumns } from "../dto/pointOfInterest.dto";
-import { calculateDistance } from "../services/poiCalculateDistance";
+import { calculateDistance } from "../services/restaurantCalculateDistance";
 import { carouselPayloads } from "../payloads/carouselPayload";
 import { client as clientsdk } from "../configs/linesdk";
 
-async function getlocationPointOfInterest(agent: {
+async function getlocationRestaurants(agent: {
   intent: any;
   latitude: number;
   longitude: number;
@@ -12,7 +12,6 @@ async function getlocationPointOfInterest(agent: {
   console.log(agent);
   /** calculate distance from your current location **/
   const distanceData = await calculateDistance(
-    agent.intent, // set your intent name here.
     agent.latitude, // set your locations here.
     agent.longitude // set your locations here.
   );
@@ -34,4 +33,4 @@ async function getlocationPointOfInterest(agent: {
   });
 }
 
-export { getlocationPointOfInterest };
+export { getlocationRestaurants };
