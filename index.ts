@@ -61,11 +61,12 @@ app.post("/webhooks", async function (req: Request, res: Response) {
     }
   } else if (event.type === "message" && event.message.type === "location") {
     // console.log(pvi);
-    const chats = await getChats(event.source.userId);
-    let lastChat = chats[chats.length - 1];
-    console.log('LAST_CHAT', lastChat);
-    
     try {
+      const chats = await getChats(event.source.userId);
+      console.log(chats);
+      
+      let lastChat = chats[chats.length - 1];
+      console.log('LAST_CHAT', lastChat);
       await getlocation({
         intent: lastChat.intent_name,
         latitude: event.message.latitude,
