@@ -1,4 +1,5 @@
 import pool from "../configs/database";
+import { imageUrl } from "../configs/urlpath";
 
 async function getHotels() {
   const client = await pool.connect();
@@ -11,6 +12,16 @@ async function getHotels() {
                FROM hotel;`;
   const { rows } = await client.query(sql);
   client.release();
+  rows.map((item) => {
+    item.latitude = parseFloat(item.latitude);
+    item.longitude = parseFloat(item.longitude);
+    item.image = item.image
+      ? `${imageUrl}/community/${parseInt(item.community_id)}/hotel/${
+          item.image
+        }`
+      : null;
+  });
+
   return rows;
 }
 

@@ -1,20 +1,11 @@
-import { getHotels } from "../models/hotel";
 import { orderByDistance, getDistance } from "geolib";
-import { imageUrl } from "../configs/urlpath";
-import { Hotel } from "../dto/hotel.dto";
 
 async function calculateDistance(
   latitude: number,
-  longitude: number
+  longitude: number,
+  dataset: Array<any>
 ) {
-  let hotels: Hotel[] = await getHotels()
-  const distanceActivity = hotels.map((item) => {
-    item.latitude = parseFloat(item.latitude);
-    item.longitude = parseFloat(item.longitude);
-    item.image = item.image
-      ? `${imageUrl}/community/${parseInt(item.community_id)}/hotel/${item.image}`
-      : null;
-
+  const distanceData = dataset.map((item) => {
     const distance = getDistance(
       { latitude: latitude, longitude: longitude },
       { latitude: item.latitude, longitude: item.longitude }
@@ -33,12 +24,12 @@ async function calculateDistance(
   /** order by and filter radius in 100 km **/
   const volunteers = orderByDistance(
     { latitude: latitude, longitude: longitude },
-    distanceActivity
+    distanceData
   )
     .filter(
       (item: any) => item.distance_meters <= 200000 // meters
     )
-    .slice(0, 3);
+    .slice(0, 4); // get fisrt 4 elements in array. 
 
   return volunteers;
 }

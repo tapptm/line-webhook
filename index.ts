@@ -4,8 +4,8 @@ import { getlocationRestaurants } from "./src/handles/handleRestaurant";
 import { getlocationActivitys } from "./src/handles/handleActivity";
 import { getlocationHotels } from "./src/handles/handleHotel";
 import { sessionClient, sessionPath } from "./src/configs/dialogflow";
-import { replyMessage } from "./src/services/linesdk/linesdk.service";
-import { postToDialogflow } from "./src/services/dialogflows/dialogflow.service";
+import { replyMessage } from "./src/services/linesdk/linesdkService";
+import { postToDialogflow } from "./src/services/dialogflows/dialogflowService";
 import { saveChats, getChats } from "./src/models/chatHistorys";
 import dotenv from "dotenv";
 
@@ -22,21 +22,20 @@ app.get("/", (req: Request, res: Response) => {
 app.post("/webhooks", async function (req: Request, res: Response) {
   const event = req.body.events[0];
   console.log(req.body.events);
-  const requestIntent = {
-    session: sessionPath,
-    queryInput: {
-      text: {
-        text: event.message.text,
-        languageCode: "th-TH",
-      },
-    },
-  };
 
   if (event.type === "message" && event.message.type === "text") {
     try {
       await postToDialogflow(req);
       console.log("TEST OK");
-
+      const requestIntent = {
+        session: sessionPath,
+        queryInput: {
+          text: {
+            text: event.message.text,
+            languageCode: "th-TH",
+          },
+        },
+      };
       const responses = await sessionClient.detectIntent(requestIntent);
       const result: any = responses[0].queryResult;
       const intent = result.intent.displayName;
@@ -47,7 +46,6 @@ app.post("/webhooks", async function (req: Request, res: Response) {
         intent === "ปั้มน้ำมัน" ||
         intent === "ธนาคาร" ||
         intent === "ตลาด" ||
-        intent === "ร้านค้า" ||
         intent === "ร้านกาแฟ" ||
         intent === "ร้านซ่อมรถ" ||
         intent === "ร้านถ่ายรูป" ||
@@ -69,15 +67,13 @@ app.post("/webhooks", async function (req: Request, res: Response) {
       res.send({ message: error.message });
     }
   } else if (event.type === "message" && event.message.type === "location") {
-    // console.log(pvi);
     try {
       const chats = await getChats(event.source.userId);
       let lastChat = chats[chats.length - 1];
       console.log("LAST_CHAT", lastChat);
-      console.log(lastChat.intent_name);
-
+      
       if (lastChat.intent_name === "ร้านอาหาร") {
-        console.log('FOOD ON');  
+        console.log("FOOD ON");
         return await getlocationRestaurants({
           intent: lastChat.intent_name,
           latitude: event.message.latitude,
@@ -85,7 +81,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
           userId: event.source.userId,
         });
       } else if (lastChat.intent_name === "ที่พัก") {
-        console.log('HOTEL ON');
+        console.log("HOTEL ON");
         await getlocationHotels({
           intent: lastChat.intent_name,
           latitude: event.message.latitude,
@@ -93,7 +89,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
           userId: event.source.userId,
         });
       } else if (lastChat.intent_name === "กิจกรรม") {
-        console.log('ACTIVITY ON');       
+        console.log("ACTIVITY ON");
         await getlocationActivitys({
           intent: lastChat.intent_name,
           latitude: event.message.latitude,
@@ -101,7 +97,7 @@ app.post("/webhooks", async function (req: Request, res: Response) {
           userId: event.source.userId,
         });
       } else {
-        console.log('POI ON');  
+        console.log("POI ON");
         await getlocationPointOfInterest({
           intent: lastChat.intent_name,
           latitude: event.message.latitude,

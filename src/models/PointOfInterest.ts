@@ -1,4 +1,5 @@
 import pool from "../configs/database";
+import { imageUrl } from "../configs/urlpath";
 
 async function getPoiByGroup(
   intent1: String,
@@ -22,6 +23,16 @@ async function getPoiByGroup(
                 OR poi_group.poi_group_name ='${intent3}';`;
   const { rows } = await client.query(sql);
   client.release();
+  rows.map((item) => {
+    item.latitude = parseFloat(item.latitude);
+    item.longitude = parseFloat(item.longitude);
+    item.image = item.image
+      ? `${imageUrl}/community/${parseInt(item.community_id)}/poi/${
+          item.image
+        }`
+      : null;
+  });
+
   return rows;
 }
 
