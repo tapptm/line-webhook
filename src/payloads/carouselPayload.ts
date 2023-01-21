@@ -67,7 +67,7 @@ function carouselPayloads(distanceDataArray: any) {
 
   const payload = {
     type: "flex",
-    altText: "Flex Message",
+    altText: "แนะนำที่นี่เลยจ้า",
     contents: {
       type: "carousel",
       contents: contents,
