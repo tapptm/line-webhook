@@ -60,6 +60,11 @@ async function webhooksController(req: Request, res: Response) {
       const chats = await getChats(event.source.userId);
       let lastChat = chats[chats.length - 1];
       console.log("LAST_CHAT", lastChat);
+      // if(lastChat.length === 0){
+      //   if(){
+
+      //   }
+      // }
 
       if (lastChat.intent_name === "ร้านอาหาร") {
         console.log("FOOD ON");
@@ -71,7 +76,7 @@ async function webhooksController(req: Request, res: Response) {
         });
       } else if (lastChat.intent_name === "ที่พัก") {
         console.log("HOTEL ON");
-        await getlocationHotels({
+        return await getlocationHotels({
           intent: lastChat.intent_name,
           latitude: event.message.latitude,
           longitude: event.message.longitude,
@@ -79,7 +84,7 @@ async function webhooksController(req: Request, res: Response) {
         });
       } else if (lastChat.intent_name === "กิจกรรม") {
         console.log("ACTIVITY ON");
-        await getlocationActivitys({
+        return await getlocationActivitys({
           intent: lastChat.intent_name,
           latitude: event.message.latitude,
           longitude: event.message.longitude,
@@ -87,7 +92,7 @@ async function webhooksController(req: Request, res: Response) {
         });
       } else {
         console.log("POI ON");
-        await getlocationPointOfInterest({
+        return await getlocationPointOfInterest({
           intent: lastChat.intent_name,
           latitude: event.message.latitude,
           longitude: event.message.longitude,

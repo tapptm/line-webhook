@@ -17,7 +17,11 @@ async function saveChats(userId: String, Intent: String, message: string) {
 
 async function getChats(userId: String) {
   const client = await pool.connect();
-  const sql = `SELECT * FROM baipho_chatbot WHERE user_id = '${userId}';`;
+  const sql = ` SELECT * 
+                FROM baipho_chatbot 
+                WHERE user_id = '${userId}' 
+                AND created_date AT TIME ZONE 'Asia/Bangkok' >= (NOW() - INTERVAL '5 minutes')::timestamp with time zone;
+              `;
   const { rows } = await client.query(sql);
   client.release();
   return rows;
