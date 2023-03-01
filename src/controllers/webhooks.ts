@@ -103,7 +103,7 @@ async function webhooksController(req: Request, res: Response) {
 
     replyMessage(
       event.source.userId,
-      `Sorry, this chatbot did not support message type ${event.message.keywords[0]}`
+      `zazza ${event.message.keywords[0]}`
     );
     // try {
     //   await postToDialogflow(req);
