@@ -11,7 +11,7 @@ import { saveChats, getChats } from "../models/chatHistorys";
 async function webhooksController(req: Request, res: Response) {
   const event = req.body.events[0];
   console.log("log events",req.body.events.message.type);
-  console.log("log keyword",req.body.events.message.type.keywords);
+  console.log("log keyword",req.body.events.message.keywords);
   if (event.type === "message" && event.message.type === "text") {
     try {
       await postToDialogflow(req);
