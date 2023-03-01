@@ -10,8 +10,10 @@ import { saveChats, getChats } from "../models/chatHistorys";
 
 async function webhooksController(req: Request, res: Response) {
   const event = req.body.events[0];
-  console.log("log events",req.body.events.message.type);
-  console.log("log keyword",req.body.events.message.keywords);
+  console.log("log events",req.body.events);
+  
+  console.log("log keyword",event.keywords);
+  // console.log("log keyword",req.body.events.message.keywords);
   if (event.type === "message" && event.message.type === "text") {
     try {
       await postToDialogflow(req);
@@ -97,8 +99,7 @@ async function webhooksController(req: Request, res: Response) {
     } catch (error: any) {
       res.send({ message: error.message });
     }
-  } 
-  if (event.type === "message" && event.message.type === "sticker") {
+  } else if (event.type === "message" && event.message.type === "sticker") {
     try {
       await postToDialogflow(req);
       console.log("TEST OK");
@@ -106,7 +107,7 @@ async function webhooksController(req: Request, res: Response) {
         session: sessionPath,
         queryInput: {
           text: {
-            text: event.message.text,
+            text: event.message.keywords[0],
             languageCode: "th-TH",
           },
         },
@@ -115,29 +116,12 @@ async function webhooksController(req: Request, res: Response) {
       const result: any = responses[0].queryResult;
       const intent = result.intent.displayName;
 
-      if (
-        intent === "โรงพยาบาล" ||
-        intent === "ร้านค้า" ||
-        intent === "ปั้มน้ำมัน" ||
-        intent === "ธนาคาร" ||
-        intent === "ตลาด" ||
-        intent === "ร้านกาแฟ" ||
-        intent === "ร้านซ่อมรถ" ||
-        intent === "ร้านถ่ายรูป" ||
-        intent === "วัด" ||
-        intent === "ร้านอาหาร" ||
-        intent === "ศาลเจ้าพ่อ" ||
-        intent === "สถานีตำรวจ" ||
-        intent === "สถานีรถไฟ" ||
-        intent === "ที่พัก" ||
-        intent === "กิจกรรม" 
-      ) {
         await saveChats(
           event.source.userId,
           result.intent.displayName,
           event.message.text
         );
-      }
+
     } catch (error: any) {
       res.send({ message: error.message });
     }
