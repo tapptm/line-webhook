@@ -131,12 +131,12 @@ async function webhooksController(req: Request, res: Response) {
     //   res.send({ message: error.message });
     // }
   } 
-  // else {
-  //   replyMessage(
-  //     event.source.userId,
-  //     `Sorry, this chatbot did not support message type ${event.message.type}`
-  //   );
-  // }
+  else {
+    replyMessage(
+      event.source.userId,
+      `Sorry, this chatbot did not support message type ${event.message.type}`
+    );
+  }
 }
 
 export { webhooksController };
