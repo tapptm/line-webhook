@@ -104,7 +104,7 @@ console.log("intent",result);
 
     replyMessage(
       event.source.userId,
-      `zazza ${event.message.keywords[0]}`
+      `zazza ${event.message.keywords}`
     );
     // try {
     //   await postToDialogflow(req);
