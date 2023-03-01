@@ -12,8 +12,8 @@ async function webhooksController(req: Request, res: Response) {
   const event = req.body.events[0];
   console.log("log events",req.body.events);
   
-  console.log("log keyword",event.keywords);
-  // console.log("log keyword",req.body.events.message.keywords);
+  // console.log("log keyword",event[0].keywords);
+  console.log("log keyword",req.body.events[0].message.keywords);
   if (event.type === "message" && event.message.type === "text") {
     try {
       await postToDialogflow(req);
