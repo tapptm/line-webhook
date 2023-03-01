@@ -100,31 +100,36 @@ async function webhooksController(req: Request, res: Response) {
       res.send({ message: error.message });
     }
   } else if (event.type === "message" && event.message.type === "sticker") {
-    try {
-      await postToDialogflow(req);
-      console.log("TEST OK");
-      const requestIntent = {
-        session: sessionPath,
-        queryInput: {
-          text: {
-            text: event.message.keywords[0],
-            languageCode: "th-TH",
-          },
-        },
-      };
-      const responses = await sessionClient.detectIntent(requestIntent);
-      const result: any = responses[0].queryResult;
-      const intent = result.intent.displayName;
 
-        await saveChats(
-          event.source.userId,
-          result.intent.displayName,
-          event.message.text
-        );
+    replyMessage(
+      event.source.userId,
+      `Sorry, this chatbot did not support message type ${event.message.keywords[0]}`
+    );
+    // try {
+    //   await postToDialogflow(req);
+    //   console.log("TEST OK");
+      // const requestIntent = {
+      //   session: sessionPath,
+      //   queryInput: {
+      //     text: {
+      //       text: event.message.keywords[0],
+      //       languageCode: "th-TH",
+      //     },
+      //   },
+      // };
+      // const responses = await sessionClient.detectIntent(requestIntent);
+      // const result: any = responses[0].queryResult;
+      // const intent = result.intent.displayName;
 
-    } catch (error: any) {
-      res.send({ message: error.message });
-    }
+      //   await saveChats(
+      //     event.source.userId,
+      //     result.intent.displayName,
+      //     event.message.text
+      //   );
+
+    // } catch (error: any) {
+    //   res.send({ message: error.message });
+    // }
   } else {
     replyMessage(
       event.source.userId,
