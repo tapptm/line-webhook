@@ -7,13 +7,18 @@ import { sessionClient, sessionPath } from "../configs/dialogflow";
 import { replyMessage } from "../services/linesdk/linesdkService";
 import { postToDialogflow } from "../services/dialogflows/dialogflowService";
 import { saveChats, getChats } from "../models/chatHistorys";
+import { client } from "../configs/linesdk";
 
 async function webhooksController(req: Request, res: Response) {
+
   const event = req.body.events[0];
   console.log("log events",req.body.events);
-  console.log("log events image",req.body);
-  // console.log("log keyword",event[0].keywords);
+
   console.log("log keyword",req.body.events[0].message.keywords);
+
+  const messageContent = await client.getMessageContent(event.message.id);
+  console.log("log events image",messageContent);
+
   if (event.type === "message" && event.message.type === "text") {
     try {
       await postToDialogflow(req);
