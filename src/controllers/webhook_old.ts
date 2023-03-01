@@ -11,7 +11,7 @@ import { saveChats, getChats } from "../models/chatHistorys";
 async function webhooksController(req: Request, res: Response) {
   const event = req.body.events[0];
   console.log("log events",req.body.events);
-  console.log("log events image",req.body.events[0].message.contentProvider);
+  
   // console.log("log keyword",event[0].keywords);
   console.log("log keyword",req.body.events[0].message.keywords);
   if (event.type === "message" && event.message.type === "text") {
@@ -32,12 +32,29 @@ async function webhooksController(req: Request, res: Response) {
       const intent = result.intent.displayName;
 console.log("intent",result);
 
+      if (
+        intent === "โรงพยาบาล" ||
+        intent === "ร้านค้า" ||
+        intent === "ปั้มน้ำมัน" ||
+        intent === "ธนาคาร" ||
+        intent === "ตลาด" ||
+        intent === "ร้านกาแฟ" ||
+        intent === "ร้านซ่อมรถ" ||
+        intent === "ร้านถ่ายรูป" ||
+        intent === "วัด" ||
+        intent === "ร้านอาหาร" ||
+        intent === "ศาลเจ้าพ่อ" ||
+        intent === "สถานีตำรวจ" ||
+        intent === "สถานีรถไฟ" ||
+        intent === "ที่พัก" ||
+        intent === "กิจกรรม" 
+      ) {
         await saveChats(
           event.source.userId,
           result.intent.displayName,
           event.message.text
         );
-
+      }
     } catch (error: any) {
       res.send({ message: error.message });
     }
