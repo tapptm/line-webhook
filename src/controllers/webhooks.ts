@@ -48,27 +48,25 @@ async function webhooksController(req: Request, res: Response) {
       // console.log("LAST_CHAT", lastChat);
 
       // if (lastChat.intent_name === "กิจกรรม") {
-        console.log("ACTIVITY ON");
-        await getlocationActivitys({
-          // intent: lastChat.intent_name,
-          latitude: event.message.latitude,
-          longitude: event.message.longitude,
-          userId: event.source.userId,
-        });
+      console.log("ACTIVITY ON");
+      await getlocationActivitys({
+        // intent: lastChat.intent_name,
+        latitude: event.message.latitude,
+        longitude: event.message.longitude,
+        userId: event.source.userId,
+      });
 
-        client.pushMessage(
-          event.source.userId,
-          JSON.parse(
-            JSON.stringify({
-              type: "audio",
-              duration: 27000,
-              originalContentUrl:
-                "http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
-            })
-          )
-        );
+      client.pushMessage(
+        event.source.userId,
+        {
+          type: "audio",
+          duration: 27000,
+          originalContentUrl:
+            "http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
+        }
+      );
 
-      // } 
+      // }
       // else {
       //   replyMessage(
       //     event.source.userId,
@@ -79,15 +77,13 @@ async function webhooksController(req: Request, res: Response) {
       res.send({ message: error.message });
     }
   } else if (event.type === "message" && event.message.type === "sticker") {
-  
     // for (let i = 0; i < event.message.keywords.length; i++) {
     //   console.log(event.message.keywords[i]);
 
-      // const keywords : any = event.message.keywords
-      event.message.keywords.forEach((keyword : any) => {
-        replyMessage(event.source.userId, keyword);
-      });
-
+    // const keywords : any = event.message.keywords
+    event.message.keywords.forEach((keyword: any) => {
+      replyMessage(event.source.userId, keyword);
+    });
 
     // replyMessage(event.source.userId, `${event.message.keywords[0]}`);
     // try {
