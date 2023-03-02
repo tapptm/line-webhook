@@ -3,13 +3,13 @@ import { imageUrl } from "../configs/urlpath";
 
 async function getActivity() {
   const client = await pool.connect();
-  const sql = `SELECT acitity_name as name, 
-                        acitity_detail as detail,
-                        acitity_latitude as latitude,
-                        acitity_longitude as longitude,
-                        acitity_image_cover as image,
-                        community_id
-               FROM activity;`;
+  const sql = `SELECT activity_name as name, 
+                      activity_detail as detail,
+                      activity_latitude as latitude,
+                      activity_longitude as longitude,
+                      activity_image_cover as image,
+                      community_id
+              FROM activity;`;
   const { rows } = await client.query(sql);
   client.release();
   rows.map((item) => {
