@@ -84,7 +84,7 @@ async function webhooksController(req: Request, res: Response) {
       res.send({ message: error.message });
     }
   } else if (event.type === "message" && event.message.type === "sticker") {
-    replyMessage(event.source.userId, `zazza ${event.message.keywords[0]}`);
+    replyMessage(event.source.userId, `${event.message.keywords[0]}`);
     // try {
     //   await postToDialogflow(req);
     //   console.log("TEST OK");
