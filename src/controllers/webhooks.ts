@@ -88,10 +88,10 @@ async function webhooksController(req: Request, res: Response) {
     // for (let i = 0; i < event.message.keywords.length; i++) {
     //   console.log(event.message.keywords[i]);
 
-      const keywords : any = event.message.keywords
+      // const keywords : any = event.message.keywords
 
-        keywords.forEach((keyword : any) => {
-          replyMessage(event.source.userId, `${keyword.message.keywords}`);
+      event.forEach((keyword : any) => {
+          replyMessage(keyword.source.userId, `${keyword.message.keywords}`);
         });
 
 
