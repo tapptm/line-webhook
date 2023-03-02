@@ -84,7 +84,18 @@ async function webhooksController(req: Request, res: Response) {
       res.send({ message: error.message });
     }
   } else if (event.type === "message" && event.message.type === "sticker") {
-    replyMessage(event.source.userId, `${event.message.keywords[0]}`);
+  
+    // for (let i = 0; i < event.message.keywords.length; i++) {
+    //   console.log(event.message.keywords[i]);
+
+      const keywords = event.message.keywords
+
+        keywords.forEach((keyword : any) => {
+          replyMessage(event.source.userId, `${keyword.message.keywords}`);
+        });
+
+
+    // replyMessage(event.source.userId, `${event.message.keywords[0]}`);
     // try {
     //   await postToDialogflow(req);
     //   console.log("TEST OK");
