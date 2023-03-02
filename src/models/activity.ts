@@ -22,6 +22,9 @@ async function getActivity() {
       : null;
   });
 
+  console.log("ACTIVITY_DATA", rows);
+  
+
   return rows;
 }
 
