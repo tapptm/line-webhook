@@ -83,7 +83,7 @@ console.log("intent",result);
       } else if (lastChat.intent_name === "กิจกรรม") {
         console.log("ACTIVITY ON");
         await getlocationActivitys({
-          intent: lastChat.intent_name,
+          // intent: lastChat.intent_name,
           latitude: event.message.latitude,
           longitude: event.message.longitude,
           userId: event.source.userId,
