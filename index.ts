@@ -1,5 +1,5 @@
 import express, { Express, Request, Response } from "express";
-import { webhooksController } from "./src/controllers/webhooks";
+import { webhooksController } from "./src/controllers/webhook_old";
 import { getAudioDurationInSeconds } from "get-audio-duration";
 import dotenv from "dotenv";
 dotenv.config();
