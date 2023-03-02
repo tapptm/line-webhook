@@ -30,7 +30,7 @@ async function webhooksController(req: Request, res: Response) {
       const responses = await sessionClient.detectIntent(requestIntent);
       const result: any = responses[0].queryResult;
       const intent = result.intent.displayName;
-console.log("intent",result);
+// console.log("intent",result);
 
       if (
         intent === "โรงพยาบาล" ||
