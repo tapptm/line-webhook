@@ -12,6 +12,8 @@ async function getActivity() {
               FROM activity;`;
   const { rows } = await client.query(sql);
   client.release();
+  console.log("ACTIVITY_DATA", rows);
+
   rows.map((item) => {
     item.latitude = parseFloat(item.latitude);
     item.longitude = parseFloat(item.longitude);
@@ -22,7 +24,7 @@ async function getActivity() {
       : null;
   });
 
-  console.log("ACTIVITY_DATA", rows);
+  
   
 
   return rows;
