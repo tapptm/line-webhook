@@ -35,11 +35,12 @@ async function getActivitysubTH() {
                         activity_sub.activity_sub_longitude as longitude, 
                         activity_sub.activity_sub_image as image,
                         activity.community_id
-              FROM public.activity_sub
+              FROM activity_sub
               LEFT JOIN activity on activity.activity_id = activity_sub.activity_id
               ;`;
   const { rows } = await client.query(sql);
   client.release();
+  console.log("ACTIVITY_DATA", rows);
   rows.map((item) => {
     item.latitude = parseFloat(item.latitude);
     item.longitude = parseFloat(item.longitude);
