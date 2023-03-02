@@ -27,12 +27,12 @@ async function getActivity() {
 
 async function getActivitysubTH() {
   const client = await pool.connect();
-  const sql = `SELECT   activity.community_id,
-                        activity_sub.activity_sub_name as name, 
+  const sql = `SELECT   activity_sub.activity_sub_name as name, 
                         activity_sub.activity_sub_detail as detail, 
                         activity_sub.activity_sub_latitude as latitude, 
                         activity_sub.activity_sub_longitude as longitude, 
-                        activity_sub.activity_sub_image as image
+                        activity_sub.activity_sub_image as image,
+                        activity.community_id
               FROM public.activity_sub
               LEFT JOIN activity on activity.activity_id = activity_sub.activity_id
               ;`;

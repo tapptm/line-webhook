@@ -12,6 +12,9 @@ async function getlocationActivitys(agent: {
 }) {
   console.log(agent);
   const activity: Activity[] = await getActivitysubTH();
+
+  console.log(activity);
+  
   /** calculate distance from your current location **/
   const distanceData = await calculateDistance(
     agent.latitude, // set your locations here.
@@ -37,5 +40,7 @@ async function getlocationActivitys(agent: {
     text: "น้องชบาไม่พบข้อมูลจุดท่องเที่ยวในระยะ (200km) ค่ะ",
   });
 }
+
+
 
 export { getlocationActivitys };
