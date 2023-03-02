@@ -27,13 +27,9 @@ async function getActivity() {
 
 async function getActivitysubTH() {
   const client = await pool.connect();
-  const sql = `SELECT   activity_sub.activity_id, 
-                        activity.community_id 
-                        activity_sub.activity_sub_id as id, 
+  const sql = `SELECT   activity.community_id,
                         activity_sub.activity_sub_name as name, 
-                        activity_sub.activity_sub_name_en as name_en, 
                         activity_sub.activity_sub_detail as detail, 
-                        activity_sub.activity_sub_detail_en as detail_en, 
                         activity_sub.activity_sub_latitude as latitude, 
                         activity_sub.activity_sub_longitude as longitude, 
                         activity_sub.activity_sub_image as image
@@ -58,16 +54,12 @@ async function getActivitysubTH() {
 
 async function getActivitysubEN() {
   const client = await pool.connect();
-  const sql = `SELECT   activity_sub.activity_id, 
-                        activity.community_id 
-                        activity_sub.activity_sub_id as id, 
-                        activity_sub.activity_sub_name as name, 
-                        activity_sub.activity_sub_name_en as name_en, 
-                        activity_sub.activity_sub_detail as detail, 
-                        activity_sub.activity_sub_detail_en as detail_en, 
-                        activity_sub.activity_sub_latitude as latitude, 
-                        activity_sub.activity_sub_longitude as longitude, 
-                        activity_sub.activity_sub_image as image
+  const sql = `SELECT activity.community_id,
+                      activity_sub.activity_sub_name_en as name, 
+                      activity_sub.activity_sub_detail_en as detail, 
+                      activity_sub.activity_sub_latitude as latitude, 
+                      activity_sub.activity_sub_longitude as longitude, 
+                      activity_sub.activity_sub_image as image
               FROM public.activity_sub
               LEFT JOIN activity on activity.activity_id = activity_sub.activity_id
               ;`;

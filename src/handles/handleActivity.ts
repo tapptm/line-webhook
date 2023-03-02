@@ -1,17 +1,17 @@
 import { calculateDistance } from "../services/geolib/geolibService";
 import { carouselPayloads } from "../payloads/carouselPayload";
 import { client as clientsdk } from "../configs/linesdk";
-import { getActivity } from "../models/activity";
+import { getActivitysubTH } from "../models/activity";
 import { Activity } from "../dto/activity.dto";
 
 async function getlocationActivitys(agent: {
-  intent: any;
+  // intent: any;
   latitude: number;
   longitude: number;
   userId: string;
 }) {
   console.log(agent);
-  const activity: Activity[] = await getActivity();
+  const activity: Activity[] = await getActivitysubTH();
   /** calculate distance from your current location **/
   const distanceData = await calculateDistance(
     agent.latitude, // set your locations here.
@@ -34,7 +34,7 @@ async function getlocationActivitys(agent: {
 
   return clientsdk.pushMessage(agent.userId, {
     type: "text",
-    text: "ไม่พบข้อมูล" + agent.intent + "ในระยะ (200km)",
+    text: "น้องชบาไม่พบข้อมูลจุดท่องเที่ยวในระยะ (200km) ค่ะ",
   });
 }
 

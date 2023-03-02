@@ -29,9 +29,43 @@ async function calculateDistance(
     .filter(
       (item: any) => item.distance_meters <= 200000 // meters
     )
-    .slice(0, 4); // get fisrt 4 elements in array. 
+    .slice(0, 4); // get fisrt 4 elements in array.
 
   return volunteers;
 }
 
-export { calculateDistance };
+async function calculateDistanceActivity(
+  latitude: number,
+  longitude: number,
+  dataset: Array<any>
+) {
+  const distanceData = dataset.map((item) => {
+    const distance = getDistance(
+      { latitude: latitude, longitude: longitude },
+      { latitude: item.latitude, longitude: item.longitude }
+    );
+
+    return {
+      ...item,
+      distance:
+        distance >= 1000
+          ? `(${(distance / 1000).toFixed(2)} กิโลเมตร)`
+          : `(${distance.toFixed(0)} เมตร)`,
+      distance_meters: distance,
+    };
+  });
+
+  /** order by and filter radius in 200 km **/
+  const volunteers = orderByDistance(
+    { latitude: latitude, longitude: longitude },
+    distanceData
+  )
+    .filter(
+      (item: any) => item.distance_meters <= 2000000 // meters
+    )
+    .slice(0, 1)[0]; // get fisrt 4 elements in array.
+
+  return volunteers;
+}
+
+export { calculateDistance, calculateDistanceActivity };

@@ -43,43 +43,25 @@ async function webhooksController(req: Request, res: Response) {
     }
   } else if (event.type === "message" && event.message.type === "location") {
     try {
-      const chats = await getChats(event.source.userId);
-      let lastChat = chats[chats.length - 1];
-      console.log("LAST_CHAT", lastChat);
+      // const chats = await getChats(event.source.userId);
+      // let lastChat = chats[chats.length - 1];
+      // console.log("LAST_CHAT", lastChat);
 
-      if (lastChat.intent_name === "ร้านอาหาร") {
-        console.log("FOOD ON");
-        return await getlocationRestaurants({
-          intent: lastChat.intent_name,
-          latitude: event.message.latitude,
-          longitude: event.message.longitude,
-          userId: event.source.userId,
-        });
-      } else if (lastChat.intent_name === "ที่พัก") {
-        console.log("HOTEL ON");
-        await getlocationHotels({
-          intent: lastChat.intent_name,
-          latitude: event.message.latitude,
-          longitude: event.message.longitude,
-          userId: event.source.userId,
-        });
-      } else if (lastChat.intent_name === "กิจกรรม") {
+      // if (lastChat.intent_name === "กิจกรรม") {
         console.log("ACTIVITY ON");
         await getlocationActivitys({
-          intent: lastChat.intent_name,
+          // intent: lastChat.intent_name,
           latitude: event.message.latitude,
           longitude: event.message.longitude,
           userId: event.source.userId,
         });
-      } else {
-        console.log("POI ON");
-        await getlocationPointOfInterest({
-          intent: lastChat.intent_name,
-          latitude: event.message.latitude,
-          longitude: event.message.longitude,
-          userId: event.source.userId,
-        });
-      }
+      // } 
+      // else {
+      //   replyMessage(
+      //     event.source.userId,
+      //     `ขอโทษค่ะ น้องชบาไม่พบจุดท่องเที่ยวบริเวณใกล้เคียงค่ะ`
+      //   );
+      // }
     } catch (error: any) {
       res.send({ message: error.message });
     }
