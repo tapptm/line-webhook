@@ -1,7 +1,7 @@
 import { calculateDistance } from "../services/geolib/geolibService";
 import { carouselPayloads } from "../payloads/carouselPayload";
 import { client as clientsdk } from "../configs/linesdk";
-import { getActivitysubTH } from "../models/activity";
+import { getActivity, getActivitysubTH } from "../models/activity";
 import { Activity } from "../dto/activity.dto";
 
 async function getlocationActivitys(agent: {
@@ -11,7 +11,7 @@ async function getlocationActivitys(agent: {
   userId: string;
 }) {
   console.log(agent);
-  const activity: Activity[] = await getActivitysubTH();
+  const activity: Activity[] = await getActivity();
 
   console.log(activity);
   

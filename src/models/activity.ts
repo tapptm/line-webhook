@@ -3,7 +3,7 @@ import { imageUrl } from "../configs/urlpath";
 
 async function getActivity() {
   const client = await pool.connect();
-  const sql = `SELECT   acitity_name as name, 
+  const sql = `SELECT acitity_name as name, 
                         acitity_detail as detail,
                         acitity_latitude as latitude,
                         acitity_longitude as longitude,
@@ -26,8 +26,9 @@ async function getActivity() {
 }
 
 async function getActivitysubTH() {
-  const client = await pool.connect();
-  const sql = `SELECT   activity_sub.activity_sub_name as name, 
+  try {
+    const client = await pool.connect();
+    const sql = `SELECT activity_sub.activity_sub_name as name, 
                         activity_sub.activity_sub_detail as detail, 
                         activity_sub.activity_sub_latitude as latitude, 
                         activity_sub.activity_sub_longitude as longitude, 
@@ -36,21 +37,23 @@ async function getActivitysubTH() {
               FROM public.activity_sub
               LEFT JOIN activity on activity.activity_id = activity_sub.activity_id
               ;`;
-  const { rows } = await client.query(sql);
-  client.release();
-  rows.map((item) => {
-    item.latitude = parseFloat(item.latitude);
-    item.longitude = parseFloat(item.longitude);
-    item.image = item.image
-      ? `${imageUrl}/community/${parseInt(item.community_id)}/activity/${
-          item.image
-        }`
-      : null;
-  });
+    const { rows } = await client.query(sql);
+    client.release();
+    rows.map((item) => {
+      item.latitude = parseFloat(item.latitude);
+      item.longitude = parseFloat(item.longitude);
+      item.image = item.image
+        ? `${imageUrl}/community/${parseInt(item.community_id)}/activity/${
+            item.image
+          }`
+        : null;
+    });
 
-  return rows;
+    return rows;
+  } catch (error) {
+    console.log(error);
+  }
 }
-
 
 async function getActivitysubEN() {
   const client = await pool.connect();
@@ -77,4 +80,4 @@ async function getActivitysubEN() {
 
   return rows;
 }
-export { getActivity ,getActivitysubTH , getActivitysubEN};
+export { getActivity, getActivitysubTH, getActivitysubEN };
