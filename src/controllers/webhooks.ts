@@ -57,8 +57,9 @@ async function webhooksController(req: Request, res: Response) {
       });
 
       client.pushMessage(event.source.userId, {
-        type: "text",
-        text: "Hello, world",
+        type: "image",
+        originalContentUrl: "https://example.com/original.jpg",
+        previewImageUrl: "https://example.com/preview.jpg",
       });
 
       // }
