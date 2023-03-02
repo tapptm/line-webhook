@@ -56,15 +56,10 @@ async function webhooksController(req: Request, res: Response) {
         userId: event.source.userId,
       });
 
-      client.pushMessage(
-        event.source.userId,
-        {
-          type: "audio",
-          duration: 27000,
-          originalContentUrl:
-            "http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
-        }
-      );
+      client.pushMessage(event.source.userId, {
+        type: "text",
+        text: "Hello, world",
+      });
 
       // }
       // else {
