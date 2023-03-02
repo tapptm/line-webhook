@@ -14,7 +14,7 @@ async function getlocationActivitys(agent: {
   const activity: Activity[] = await getActivitysubTH();
 
   console.log(activity);
-  
+
   /** calculate distance from your current location **/
   const distanceData = await calculateDistance(
     agent.latitude, // set your locations here.
@@ -32,7 +32,13 @@ async function getlocationActivitys(agent: {
     const payload = carouselPayloads(distanceData);
     console.log(JSON.stringify(payload));
 
-    return clientsdk.pushMessage(agent.userId, payload);
+    clientsdk.pushMessage(agent.userId, payload);
+    clientsdk.pushMessage(agent.userId, {
+      type: "audio",
+      duration: 27000,
+      originalContentUrl:
+        "https://nrru-motorbike.kims-rmuti.com/assets/musiccc.m4a",
+    });
   }
 
   return clientsdk.pushMessage(agent.userId, {
@@ -40,7 +46,5 @@ async function getlocationActivitys(agent: {
     text: "น้องชบาไม่พบข้อมูลจุดท่องเที่ยวในระยะ (200km) ค่ะ",
   });
 }
-
-
 
 export { getlocationActivitys };
