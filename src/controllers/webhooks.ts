@@ -10,14 +10,10 @@ import { saveChats, getChats } from "../models/chatHistorys";
 import { client } from "../configs/linesdk";
 
 async function webhooksController(req: Request, res: Response) {
-
   const event = req.body.events[0];
-  console.log("log events",req.body.events);
+  console.log("log events", req.body.events);
 
-  console.log("log keyword",req.body.events[0].message.keywords);
-
-  const messageContent = await client.getMessageContent(event.message.id);
-  console.log("log events image",messageContent);
+  console.log("log keyword", req.body.events[0].message.keywords);
 
   if (event.type === "message" && event.message.type === "text") {
     try {
@@ -35,14 +31,13 @@ async function webhooksController(req: Request, res: Response) {
       const responses = await sessionClient.detectIntent(requestIntent);
       const result: any = responses[0].queryResult;
       const intent = result.intent.displayName;
-console.log("intent",result);
+      console.log("intent", result);
 
-        await saveChats(
-          event.source.userId,
-          result.intent.displayName,
-          event.message.text
-        );
-
+      await saveChats(
+        event.source.userId,
+        result.intent.displayName,
+        event.message.text
+      );
     } catch (error: any) {
       res.send({ message: error.message });
     }
@@ -89,38 +84,62 @@ console.log("intent",result);
       res.send({ message: error.message });
     }
   } else if (event.type === "message" && event.message.type === "sticker") {
-
-    replyMessage(
-      event.source.userId,
-      `zazza ${event.message.keywords}`
-    );
+    replyMessage(event.source.userId, `zazza ${event.message.keywords[0]}`);
     // try {
     //   await postToDialogflow(req);
     //   console.log("TEST OK");
-      // const requestIntent = {
-      //   session: sessionPath,
-      //   queryInput: {
-      //     text: {
-      //       text: event.message.keywords[0],
-      //       languageCode: "th-TH",
-      //     },
-      //   },
-      // };
-      // const responses = await sessionClient.detectIntent(requestIntent);
-      // const result: any = responses[0].queryResult;
-      // const intent = result.intent.displayName;
+    // const requestIntent = {
+    //   session: sessionPath,
+    //   queryInput: {
+    //     text: {
+    //       text: event.message.keywords[0],
+    //       languageCode: "th-TH",
+    //     },
+    //   },
+    // };
+    // const responses = await sessionClient.detectIntent(requestIntent);
+    // const result: any = responses[0].queryResult;
+    // const intent = result.intent.displayName;
 
-      //   await saveChats(
-      //     event.source.userId,
-      //     result.intent.displayName,
-      //     event.message.text
-      //   );
+    //   await saveChats(
+    //     event.source.userId,
+    //     result.intent.displayName,
+    //     event.message.text
+    //   );
 
     // } catch (error: any) {
     //   res.send({ message: error.message });
     // }
-  } 
-  else {
+  } else if (event.type === "message" && event.message.type === "image") {
+    const messageContent = await client.getMessageContent(event.message.id);
+    console.log("log events image", messageContent);
+
+    // try {
+    //   await postToDialogflow(req);
+    //   console.log("TEST OK");
+    // const requestIntent = {
+    //   session: sessionPath,
+    //   queryInput: {
+    //     text: {
+    //       text: event.message.keywords[0],
+    //       languageCode: "th-TH",
+    //     },
+    //   },
+    // };
+    // const responses = await sessionClient.detectIntent(requestIntent);
+    // const result: any = responses[0].queryResult;
+    // const intent = result.intent.displayName;
+
+    //   await saveChats(
+    //     event.source.userId,
+    //     result.intent.displayName,
+    //     event.message.text
+    //   );
+
+    // } catch (error: any) {
+    //   res.send({ message: error.message });
+    // }
+  } else {
     replyMessage(
       event.source.userId,
       `ขอโทษค่ะ น้องชบาไม่สามารถตอบกลับข้อความประเภท " ${event.message.type}" ได้ค่ะ`
