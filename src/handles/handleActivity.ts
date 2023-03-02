@@ -32,7 +32,7 @@ async function getlocationActivitys(agent: {
     const payload = carouselPayloads(distanceData);
     console.log(JSON.stringify(payload));
 
-    clientsdk.pushMessage(agent.userId, payload);
+   return clientsdk.pushMessage(agent.userId, payload);
     // clientsdk.pushMessage(
     //   agent.userId,
     //   JSON.parse(
