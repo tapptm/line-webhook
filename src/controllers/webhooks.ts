@@ -58,8 +58,8 @@ async function webhooksController(req: Request, res: Response) {
 
       client.pushMessage(event.source.userId, {
         type: "image",
-        originalContentUrl: "https://example.com/original.jpg",
-        previewImageUrl: "https://example.com/preview.jpg",
+        originalContentUrl: "https://admin.trinitytrip.com/uploads/community/27/activity/activity_66166cbe192b16457c3aba5a5a5a7162_20221027041908000000.jpg",
+        previewImageUrl: "https://admin.trinitytrip.com/uploads/community/27/activity/activity_66166cbe192b16457c3aba5a5a5a7162_20221027041908000000.jpg",
       });
 
       // }
