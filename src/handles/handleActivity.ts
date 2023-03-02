@@ -11,7 +11,7 @@ async function getlocationActivitys(agent: {
   userId: string;
 }) {
   console.log(agent);
-  const activity: Activity[] = await getActivitysubTH();
+  const activity: Activity[] = await getActivity();
 
   console.log(activity);
   
