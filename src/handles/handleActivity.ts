@@ -33,12 +33,17 @@ async function getlocationActivitys(agent: {
     console.log(JSON.stringify(payload));
 
     clientsdk.pushMessage(agent.userId, payload);
-    clientsdk.pushMessage(agent.userId, {
-      type: "audio",
-      duration: 27000,
-      originalContentUrl:
-        "https://nrru-motorbike.kims-rmuti.com/assets/musiccc.m4a",
-    });
+    clientsdk.pushMessage(
+      agent.userId,
+      JSON.parse(
+        JSON.stringify({
+          type: "audio",
+          duration: 27000,
+          originalContentUrl:
+            "http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
+        })
+      )
+    );
   }
 
   return clientsdk.pushMessage(agent.userId, {
