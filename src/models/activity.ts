@@ -24,16 +24,12 @@ async function getActivity() {
       : null;
   });
 
-  
-  
-
   return rows;
 }
 
 async function getActivitysubTH() {
-  try {
-    const client = await pool.connect();
-    const sql = `SELECT activity_sub.activity_sub_name as name, 
+  const client = await pool.connect();
+  const sql = `SELECT activity_sub.activity_sub_name as name, 
                         activity_sub.activity_sub_detail as detail, 
                         activity_sub.activity_sub_latitude as latitude, 
                         activity_sub.activity_sub_longitude as longitude, 
@@ -42,22 +38,19 @@ async function getActivitysubTH() {
               FROM public.activity_sub
               LEFT JOIN activity on activity.activity_id = activity_sub.activity_id
               ;`;
-    const { rows } = await client.query(sql);
-    client.release();
-    rows.map((item) => {
-      item.latitude = parseFloat(item.latitude);
-      item.longitude = parseFloat(item.longitude);
-      item.image = item.image
-        ? `${imageUrl}/community/${parseInt(item.community_id)}/activity/${
-            item.image
-          }`
-        : null;
-    });
+  const { rows } = await client.query(sql);
+  client.release();
+  rows.map((item) => {
+    item.latitude = parseFloat(item.latitude);
+    item.longitude = parseFloat(item.longitude);
+    item.image = item.image
+      ? `${imageUrl}/community/${parseInt(item.community_id)}/activity/${
+          item.image
+        }`
+      : null;
+  });
 
-    return rows;
-  } catch (error) {
-    console.log(error);
-  }
+  return rows;
 }
 
 async function getActivitysubEN() {
