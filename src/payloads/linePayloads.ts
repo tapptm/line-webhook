@@ -132,7 +132,7 @@ function contentPayload(distanceDataArray: any) {
             text: distanceDataArray[0].distance,
             wrap: true,
             color: "#aaaaaa",
-            size: "xxs",
+            size: "sm",
           },
         ],
         spacing: "sm",
