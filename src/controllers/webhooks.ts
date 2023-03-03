@@ -56,7 +56,10 @@ async function webhooksController(req: Request, res: Response) {
         userId: event.source.userId,
       });
 
+      
       client.pushMessage(event.source.userId, {
+
+        
         type: "audio",
         originalContentUrl: "https://kims-rmuti.com/linebot/files/audios/audio_example.mp3",
         duration: 120000,
