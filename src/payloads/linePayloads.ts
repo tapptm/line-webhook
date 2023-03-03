@@ -99,7 +99,7 @@ function contentPayload(distanceDataArray: any) {
             size: "lg",
             wrap: true,
             type: "text",
-            text: distanceDataArray[0].title,
+            text: distanceDataArray[0].name,
             weight: "bold",
             contents: [],
           },
@@ -123,7 +123,7 @@ function contentPayload(distanceDataArray: any) {
       },
       type: "bubble",
       hero: {
-        url: distanceDataArray[0].imageUrl,
+        url: distanceDataArray[0].image,
         aspectMode: "cover",
         aspectRatio: "20:13",
         size: "full",
