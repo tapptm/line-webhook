@@ -140,7 +140,7 @@ function contentPayload(distanceDataArray: any) {
 function messagePayload(distanceDataArray: any) {
   const payload = {
     type: "text",
-    text: distanceDataArray[0].name,
+    text: `พี่ๆ สามารถฟังเสียงบรรยาย เกี่ยวกับ ${distanceDataArray[0].name}\n โดยพี่ๆ สามารถคลิกที่ข้อความเสียงได้เลยค่ะ`,
   };
   return JSON.parse(JSON.stringify(payload));
 }
