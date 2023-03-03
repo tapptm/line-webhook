@@ -41,13 +41,12 @@ async function pushMessageActivityTH(agent: {
     /** push payload image data */
     clientsdk.pushMessage(agent.userId, detailPayloadData);
 
-    clientsdk.pushMessage(agent.userId, {
-      type: "text",
-      text: "พี่ๆ สามารถฟังเสียงบรรยาย เกี่ยวกับ ...",
-    });
-
     /** push payload audio data */
     setTimeout(() => {
+      clientsdk.pushMessage(agent.userId, {
+        type: "text",
+        text: "พี่ๆ สามารถฟังเสียงบรรยาย เกี่ยวกับ ...",
+      });
       clientsdk.pushMessage(agent.userId, audioPayloadData);
     }, 2000);
 
