@@ -1,5 +1,9 @@
 import { calculateDistance } from "../services/geolib/geolibService";
-import { audioPayload, contentPayload } from "../payloads/linePayloads";
+import {
+  audioPayload,
+  contentPayload,
+  messagePayload,
+} from "../payloads/linePayloads";
 import { client as clientsdk } from "../configs/linesdk";
 import { getActivitysubTH } from "../models/activitySub";
 import { getAudioDurationInSeconds } from "get-audio-duration";
@@ -35,20 +39,18 @@ async function pushMessageActivityTH(agent: {
     // const carouselPayloadData = carouselPayload(distanceData);
     const detailPayloadData = contentPayload(distanceData);
     const audioPayloadData = audioPayload(distanceData);
+    const messagePayloadData = messagePayload(distanceData);
 
     console.log(JSON.stringify(detailPayloadData));
 
     /** push payload image data */
     clientsdk.pushMessage(agent.userId, detailPayloadData);
 
-    /** push payload audio data */
+    /** push payload audio data and message */
     setTimeout(() => {
-      clientsdk.pushMessage(agent.userId, {
-        type: "text",
-        text: "พี่ๆ สามารถฟังเสียงบรรยาย เกี่ยวกับ ...",
-      });
+      clientsdk.pushMessage(agent.userId, messagePayloadData);
       clientsdk.pushMessage(agent.userId, audioPayloadData);
-    }, 2000);
+    }, 1500);
 
     return;
   }

@@ -109,7 +109,7 @@ function contentPayload(distanceDataArray: any) {
             layout: "baseline",
             contents: [
               {
-                text: distanceDataArray[0].detail.replace(/(.{40})..+/, "$1…"),
+                text: distanceDataArray[0].detail,
                 contents: [],
                 weight: "regular",
                 type: "text",
@@ -137,4 +137,12 @@ function contentPayload(distanceDataArray: any) {
   return JSON.parse(JSON.stringify(payload));
 }
 
-export { carouselPayload, audioPayload, contentPayload };
+function messagePayload(distanceDataArray: any) {
+  const payload = {
+    type: "text",
+    text: distanceDataArray[0].name,
+  };
+  return JSON.parse(JSON.stringify(payload));
+}
+
+export { carouselPayload, audioPayload, contentPayload, messagePayload };
