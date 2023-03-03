@@ -1,10 +1,15 @@
 import { calculateDistance } from "../services/geolib/geolibService";
-import { carouselPayload, audioPayload } from "../payloads/linePayloads";
+import {
+  carouselPayload,
+  audioPayload,
+  contentPayload,
+} from "../payloads/linePayloads";
 import { client as clientsdk } from "../configs/linesdk";
 import { getActivitysubTH } from "../models/activitySub";
 import { getAudioDurationInSeconds } from "get-audio-duration";
 import { Activity } from "../dto/activity.dto";
 import { audioUrl } from "../configs/urlpath";
+
 async function pushMessageActivityTH(agent: {
   // intent: any;
   latitude: number;
@@ -32,16 +37,17 @@ async function pushMessageActivityTH(agent: {
     // );
 
     /** format custom payload for line bot **/
-    const carouselPayloadData = carouselPayload(distanceData);
+    // const carouselPayloadData = carouselPayload(distanceData);
+    const detailPayloadData = contentPayload(distanceData);
     const audioPayloadData = audioPayload(
       `${audioUrl}/audio_example.mp3`,
-      20000
+      200000
     );
 
     console.log(JSON.stringify(carouselPayload));
 
     /** push payload image data */
-    clientsdk.pushMessage(agent.userId, carouselPayloadData);
+    clientsdk.pushMessage(agent.userId, detailPayloadData);
 
     /** push payload audio data */
     clientsdk.pushMessage(agent.userId, audioPayloadData);

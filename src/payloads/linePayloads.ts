@@ -87,4 +87,52 @@ function audioPayload(imageUrl: string, duration: number) {
   return JSON.parse(JSON.stringify(payload));
 }
 
-export { carouselPayload, audioPayload };
+function contentPayload(distanceDataArray: any) {
+  const payload = {
+    altText: "Flex Message",
+    type: "flex",
+    contents: {
+      body: {
+        type: "box",
+        contents: [
+          {
+            size: "lg",
+            wrap: true,
+            type: "text",
+            text: distanceDataArray[0].title,
+            weight: "bold",
+            contents: [],
+          },
+          {
+            layout: "baseline",
+            contents: [
+              {
+                text: distanceDataArray[0].detail,
+                contents: [],
+                weight: "regular",
+                type: "text",
+                wrap: true,
+                size: "sm",
+              },
+            ],
+            type: "box",
+          },
+        ],
+        spacing: "sm",
+        layout: "vertical",
+      },
+      type: "bubble",
+      hero: {
+        url: distanceDataArray[0].imageUrl,
+        aspectMode: "cover",
+        aspectRatio: "20:13",
+        size: "full",
+        type: "image",
+      },
+    },
+  };
+
+  return JSON.parse(JSON.stringify(payload));
+}
+
+export { carouselPayload, audioPayload, contentPayload };

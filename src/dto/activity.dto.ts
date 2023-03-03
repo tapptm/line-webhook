@@ -4,6 +4,7 @@ interface Activity {
     latitude: any
     longitude: any,
     image: String | null,
+    soundname: String | null,
     community_id: string
 }
 
