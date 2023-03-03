@@ -94,6 +94,14 @@ function contentPayload(distanceDataArray: any) {
     altText: "Flex Message",
     type: "flex",
     contents: {
+      type: "bubble",
+      hero: {
+        url: distanceDataArray[0].image,
+        aspectMode: "cover",
+        aspectRatio: "20:13",
+        size: "full",
+        type: "image",
+      },
       body: {
         type: "box",
         contents: [
@@ -106,6 +114,7 @@ function contentPayload(distanceDataArray: any) {
             contents: [],
           },
           {
+            type: "box",
             layout: "baseline",
             contents: [
               {
@@ -117,19 +126,35 @@ function contentPayload(distanceDataArray: any) {
                 size: "sm",
               },
             ],
-            type: "box",
+          },
+          {
+            type: "text",
+            text: distanceDataArray[0].distance,
+            wrap: true,
+            color: "#aaaaaa",
+            size: "xxs",
           },
         ],
         spacing: "sm",
         layout: "vertical",
       },
-      type: "bubble",
-      hero: {
-        url: distanceDataArray[0].image,
-        aspectMode: "cover",
-        aspectRatio: "20:13",
-        size: "full",
-        type: "image",
+      footer: {
+        type: "box",
+        layout: "vertical",
+        spacing: "sm",
+        contents: [
+          {
+            type: "button",
+            style: "primary",
+            color: "#905c44",
+            margin: "xxl",
+            action: {
+              type: "uri",
+              label: "เปิดแผนที่",
+              uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distanceDataArray[0].latitude}+${distanceDataArray[0].longitude}`,
+            },
+          },
+        ],
       },
     },
   };
