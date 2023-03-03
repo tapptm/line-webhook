@@ -1,5 +1,6 @@
 import { audiosUrl } from "../configs/urlpath";
 import { getAudioDurationInSeconds } from "get-audio-duration";
+import path from "path";
 
 async function carouselPayload(distanceDataArray: any) {
   const contents = distanceDataArray.map((distance: any) => {
@@ -81,8 +82,13 @@ async function carouselPayload(distanceDataArray: any) {
 }
 
 async function audioPayload(distanceDataArray: any) {
+  console.log(
+    "PATH",
+    `${process.cwd()}/src/assets/audios/${distanceDataArray[0].soundname}`
+  );
+
   const duration = await getAudioDurationInSeconds(
-    `../assets/audios/${distanceDataArray[0].soundname}`
+    `${process.cwd()}/src/assets/audios/${distanceDataArray[0].soundname}`
   );
   const payload = {
     type: "audio",
