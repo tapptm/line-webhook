@@ -44,7 +44,7 @@ async function pushMessageActivityTH(agent: {
       200000
     );
 
-    console.log(JSON.stringify(carouselPayload));
+    console.log(JSON.stringify(detailPayloadData));
 
     /** push payload image data */
     clientsdk.pushMessage(agent.userId, detailPayloadData);

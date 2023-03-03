@@ -107,7 +107,7 @@ function contentPayload(distanceDataArray: any) {
             layout: "baseline",
             contents: [
               {
-                text: distanceDataArray[0].detail,
+                text: distanceDataArray[0].detail.replace(/(.{40})..+/, "$1…"),
                 contents: [],
                 weight: "regular",
                 type: "text",
