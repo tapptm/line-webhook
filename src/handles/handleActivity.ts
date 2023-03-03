@@ -4,13 +4,11 @@ import {
   contentPayload,
   messagePayload,
 } from "../payloads/linePayloads";
-import { client as clientsdk } from "../configs/linesdk";
+import { client } from "../configs/linesdk";
 import { getActivitysubTH } from "../models/activitySub";
-import { getAudioDurationInSeconds } from "get-audio-duration";
 import { Activity } from "../dto/activity.dto";
 
 async function pushMessageActivityTH(agent: {
-  // intent: any;
   latitude: number;
   longitude: number;
   userId: string;
@@ -27,35 +25,23 @@ async function pushMessageActivityTH(agent: {
 
   console.log("ACTIVITY_DISTANCE", distanceData);
 
-  /** condition to check if radius in 50 km
-   * it will return text. if not it will
-   * return custom payload. **/
+  /** condition to check if radius in 50 km it will return text. if not it will return custom payload. **/
   if (distanceData.length > 0) {
-    // const duration = await getAudioDurationInSeconds(
-    //   `../assets/audios/audio_example.mp3`
-    // );
-
     /** format custom payload for line bot **/
-    // const carouselPayloadData = carouselPayload(distanceData);
-    const detailPayloadData = contentPayload(distanceData);
-    const audioPayloadData = audioPayload(distanceData);
-    const messagePayloadData = messagePayload(distanceData);
-
-    console.log(JSON.stringify(detailPayloadData));
+    const detailPayloadData = await contentPayload(distanceData);
+    const audioPayloadData = await audioPayload(distanceData);
+    const messagePayloadData = await messagePayload(distanceData);
 
     /** push payload image data */
-    clientsdk.pushMessage(agent.userId, detailPayloadData);
+    await client.pushMessage(agent.userId, detailPayloadData);
 
     /** push payload audio data and message */
-    setTimeout(() => {
-      clientsdk.pushMessage(agent.userId, messagePayloadData);
-      clientsdk.pushMessage(agent.userId, audioPayloadData);
-    }, 1500);
-
+    await client.pushMessage(agent.userId, messagePayloadData);
+    await client.pushMessage(agent.userId, audioPayloadData);
     return;
   }
 
-  return clientsdk.pushMessage(agent.userId, {
+  return client.pushMessage(agent.userId, {
     type: "text",
     text: "น้องชบาไม่พบข้อมูลจุดท่องเที่ยวในระยะ (200km) ค่ะ",
   });

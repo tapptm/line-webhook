@@ -1,6 +1,7 @@
-import { audioUrl } from "../configs/urlpath";
+import { audiosUrl } from "../configs/urlpath";
+import { getAudioDurationInSeconds } from "get-audio-duration";
 
-function carouselPayload(distanceDataArray: any) {
+async function carouselPayload(distanceDataArray: any) {
   const contents = distanceDataArray.map((distance: any) => {
     return {
       type: "bubble",
@@ -79,17 +80,20 @@ function carouselPayload(distanceDataArray: any) {
   return JSON.parse(JSON.stringify(payload));
 }
 
-function audioPayload(distanceDataArray: any) {
+async function audioPayload(distanceDataArray: any) {
+  const duration = await getAudioDurationInSeconds(
+    `../assets/audios/${distanceDataArray[0].soundname}`
+  );
   const payload = {
     type: "audio",
-    originalContentUrl: `${audioUrl}/${distanceDataArray[0].soundname}`,
-    duration: 200000,
+    originalContentUrl: `${audiosUrl}/${distanceDataArray[0].soundname}`,
+    duration: duration * 1000,
   };
 
   return JSON.parse(JSON.stringify(payload));
 }
 
-function contentPayload(distanceDataArray: any) {
+async function contentPayload(distanceDataArray: any) {
   const payload = {
     altText: "Flex Message",
     type: "flex",
