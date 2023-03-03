@@ -1,3 +1,5 @@
+import { audioUrl } from "../configs/urlpath";
+
 function carouselPayload(distanceDataArray: any) {
   const contents = distanceDataArray.map((distance: any) => {
     return {
@@ -77,11 +79,11 @@ function carouselPayload(distanceDataArray: any) {
   return JSON.parse(JSON.stringify(payload));
 }
 
-function audioPayload(imageUrl: string, duration: number) {
+function audioPayload(distanceDataArray: any) {
   const payload = {
     type: "audio",
-    originalContentUrl: imageUrl,
-    duration: duration,
+    originalContentUrl: `${audioUrl}/${distanceDataArray[0].soundname}`,
+    duration: 200000,
   };
 
   return JSON.parse(JSON.stringify(payload));
