@@ -58,6 +58,7 @@ async function stickerController(
     event.message.keywords.forEach((keyword: any) => {
       replyMessage(event.source.userId, keyword);
     });
+    return;
   }
   next();
 }
@@ -73,6 +74,7 @@ async function imageController(
   if (event.type === "message" && event.message.type === "image") {
     const messageContent = await client.getMessageContent(event.message.id);
     console.log("log events image", messageContent);
+    return;
   }
   next();
 }
@@ -81,7 +83,7 @@ async function imageController(
 async function noTypeController(req: Request, res: Response) {
   const event = req.body.events[0];
   console.log("log events", req.body.events);
-  replyMessage(
+  return replyMessage(
     event.source.userId,
     `ขอโทษค่ะ น้องชบาไม่สามารถตอบกลับข้อความประเภท "${event.message.type}" ได้ค่ะ`
   );
