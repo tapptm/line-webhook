@@ -5,7 +5,6 @@ import { getActivitysubTH } from "../models/activitySub";
 import { getAudioDurationInSeconds } from "get-audio-duration";
 import { Activity } from "../dto/activity.dto";
 import { audioUrl } from "../configs/urlpath";
-
 async function pushMessageActivityTH(agent: {
   // intent: any;
   latitude: number;
@@ -28,15 +27,15 @@ async function pushMessageActivityTH(agent: {
    * it will return text. if not it will
    * return custom payload. **/
   if (distanceData.length > 0) {
-    const duration = await getAudioDurationInSeconds(
-      `../assets/audios/audio_example.mp3`
-    );
+    // const duration = await getAudioDurationInSeconds(
+    //   `../assets/audios/audio_example.mp3`
+    // );
 
     /** format custom payload for line bot **/
     const carouselPayloadData = carouselPayload(distanceData);
     const audioPayloadData = audioPayload(
       `${audioUrl}/audio_example.mp3`,
-      duration
+      20000
     );
 
     console.log(JSON.stringify(carouselPayload));
