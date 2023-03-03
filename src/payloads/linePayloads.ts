@@ -1,4 +1,4 @@
-function carouselPayloads(distanceDataArray: any) {
+function carouselPayload(distanceDataArray: any) {
   const contents = distanceDataArray.map((distance: any) => {
     return {
       type: "bubble",
@@ -77,4 +77,14 @@ function carouselPayloads(distanceDataArray: any) {
   return JSON.parse(JSON.stringify(payload));
 }
 
-export { carouselPayloads };
+function audioPayload(imageUrl: string, duration: number) {
+  const payload = {
+    type: "audio",
+    originalContentUrl: imageUrl,
+    duration: duration,
+  };
+
+  return JSON.parse(JSON.stringify(payload));
+}
+
+export { carouselPayload, audioPayload };

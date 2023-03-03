@@ -1,32 +1,6 @@
 import pool from "../configs/database";
 import { imageUrl } from "../configs/urlpath";
 
-async function getActivity() {
-  const client = await pool.connect();
-  const sql = `SELECT activity_name as name, 
-                      activity_detail as detail,
-                      activity_latitude as latitude,
-                      activity_longitude as longitude,
-                      activity_image_cover as image,
-                      community_id
-              FROM activity;`;
-  const { rows } = await client.query(sql);
-  client.release();
-  console.log("ACTIVITY_DATA", rows);
-
-  rows.map((item) => {
-    item.latitude = parseFloat(item.latitude);
-    item.longitude = parseFloat(item.longitude);
-    item.image = item.image
-      ? `${imageUrl}/community/${parseInt(item.community_id)}/activity/${
-          item.image
-        }`
-      : null;
-  });
-
-  return rows;
-}
-
 async function getActivitysubTH() {
   const client = await pool.connect();
   const sql = `SELECT activity_sub.activity_sub_name as name, 
@@ -40,14 +14,11 @@ async function getActivitysubTH() {
               ;`;
   const { rows } = await client.query(sql);
   client.release();
-  console.log("ACTIVITY_DATA", rows);
   rows.map((item) => {
     item.latitude = parseFloat(item.latitude);
     item.longitude = parseFloat(item.longitude);
     item.image = item.image
-      ? `${imageUrl}/community/27/activity/${
-          item.image
-        }`
+      ? `${imageUrl}/community/27/activity/${item.image}`
       : null;
   });
 
@@ -79,4 +50,4 @@ async function getActivitysubEN() {
 
   return rows;
 }
-export { getActivity, getActivitysubTH, getActivitysubEN };
+export { getActivitysubTH, getActivitysubEN };

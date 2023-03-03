@@ -1,10 +1,12 @@
 import { calculateDistance } from "../services/geolib/geolibService";
-import { carouselPayloads } from "../payloads/carouselPayload";
+import { carouselPayload, audioPayload } from "../payloads/linePayloads";
 import { client as clientsdk } from "../configs/linesdk";
-import { getActivity, getActivitysubTH } from "../models/activity";
+import { getActivitysubTH } from "../models/activitySub";
+import { getAudioDurationInSeconds } from "get-audio-duration";
 import { Activity } from "../dto/activity.dto";
+import { audioUrl } from "../configs/urlpath";
 
-async function getlocationActivitys(agent: {
+async function pushMessageActivityTH(agent: {
   // intent: any;
   latitude: number;
   longitude: number;
@@ -12,8 +14,6 @@ async function getlocationActivitys(agent: {
 }) {
   console.log(agent);
   const activity: Activity[] = await getActivitysubTH();
-
-  console.log(activity);
 
   /** calculate distance from your current location **/
   const distanceData = await calculateDistance(
@@ -28,12 +28,25 @@ async function getlocationActivitys(agent: {
    * it will return text. if not it will
    * return custom payload. **/
   if (distanceData.length > 0) {
-    /** format custom payload for line bot **/
-    const payload = carouselPayloads(distanceData);
-    console.log(JSON.stringify(payload));
+    const duration = await getAudioDurationInSeconds(
+      `${audioUrl}/audio_example.mp3`
+    );
 
-   return clientsdk.pushMessage(agent.userId, payload);
-   
+    /** format custom payload for line bot **/
+    const carouselPayloadData = carouselPayload(distanceData);
+    const audioPayloadData = audioPayload(
+      `${audioUrl}/audio_example.mp3`,
+      duration
+    );
+
+    console.log(JSON.stringify(carouselPayload));
+
+    /** push payload image data */
+    clientsdk.pushMessage(agent.userId, carouselPayloadData);
+
+    /** push payload audio data */
+    clientsdk.pushMessage(agent.userId, audioPayloadData);
+    return;
   }
 
   return clientsdk.pushMessage(agent.userId, {
@@ -42,4 +55,4 @@ async function getlocationActivitys(agent: {
   });
 }
 
-export { getlocationActivitys };
+export { pushMessageActivityTH };
