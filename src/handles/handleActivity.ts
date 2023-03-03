@@ -29,7 +29,7 @@ async function pushMessageActivityTH(agent: {
    * return custom payload. **/
   if (distanceData.length > 0) {
     const duration = await getAudioDurationInSeconds(
-      `${audioUrl}/audio_example.mp3`
+      `../assets/audios/audio_example.mp3`
     );
 
     /** format custom payload for line bot **/
