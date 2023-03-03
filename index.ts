@@ -4,7 +4,7 @@ import {
   locationController,
   stickerController,
   imageController,
-  webhooksController,
+  noTypeController,
 } from "./src/controllers/webhooks";
 import dotenv from "dotenv";
 dotenv.config();
@@ -24,7 +24,7 @@ app.post(
   locationController,
   stickerController,
   imageController,
-  webhooksController
+  noTypeController
 );
 
 app.listen(PORT, () => {

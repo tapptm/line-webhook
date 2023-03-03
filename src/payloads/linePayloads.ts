@@ -167,7 +167,7 @@ function messagePayload(distanceDataArray: any) {
     type: "text",
     text: `พี่ๆ สามารถฟังเสียงบรรยายเกี่ยวกับ "${distanceDataArray[0].name}" โดยพี่ๆ สามารถคลิกที่ข้อความเสียงได้เลยค่ะ`,
   };
-  
+
   return JSON.parse(JSON.stringify(payload));
 }
 
