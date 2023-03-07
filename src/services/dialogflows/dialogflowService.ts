@@ -1,4 +1,5 @@
 import request from "request-promise";
+import { sessionClient, sessionPath } from "../../configs/dialogflow";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -13,4 +14,19 @@ const postToDialogflow = async (req: any) => {
   });
 };
 
-export { postToDialogflow };
+const detectIntent = async (textMessage: string) => {
+  const requestIntent = {
+    session: sessionPath,
+    queryInput: {
+      text: {
+        text: textMessage,
+        languageCode: "th-TH",
+      },
+    },
+  };
+  const responses = await sessionClient.detectIntent(requestIntent);
+  const result: any = responses[0].queryResult;
+  return result;
+};
+
+export { detectIntent, postToDialogflow };
