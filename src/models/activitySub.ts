@@ -8,7 +8,7 @@ async function getActivitysubTH() {
                       activity_sub.activity_sub_latitude as latitude, 
                       activity_sub.activity_sub_longitude as longitude, 
                       activity_sub.activity_sub_image as image,
-                      sound_webhook.filename as soundname,
+                      sound_webhook.filename_th as soundname,
                       activity.community_id
               FROM activity_sub
               LEFT JOIN activity on activity.activity_id = activity_sub.activity_id
@@ -34,7 +34,7 @@ async function getActivitysubEN() {
                       activity_sub.activity_sub_latitude as latitude, 
                       activity_sub.activity_sub_longitude as longitude, 
                       activity_sub.activity_sub_image as image,
-                      sound_webhook.filename as soundname,
+                      sound_webhook.filename_th as soundname,
                       activity.community_id
               FROM public.activity_sub
               LEFT JOIN activity on activity.activity_id = activity_sub.activity_id
