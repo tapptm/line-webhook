@@ -20,7 +20,7 @@ async function getActivitysubTH() {
     item.latitude = parseFloat(item.latitude);
     item.longitude = parseFloat(item.longitude);
     item.image = item.image
-      ? `${imageUrl}/community/27/activity/${item.image}`
+      ? `${imageUrl}/community/135/activity/${item.image}`
       : null;
   });
 
