@@ -18,7 +18,7 @@ async function pushMessageActivity(agent: {
   console.log(agent);
   const lngDetector = new LanguageDetect();
   const lngList = lngDetector.detect(agent.message);
-  console.log(lngList);
+  console.log('LanguageList', lngList);
 
   const activity: Activity[] =
     lngList[0][0] === "english"
