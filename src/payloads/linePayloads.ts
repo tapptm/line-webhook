@@ -93,7 +93,7 @@ async function audioPayload(distanceDataArray: any) {
   return JSON.parse(JSON.stringify(payload));
 }
 
-async function contentPayload(distanceDataArray: any) {
+async function contentPayload(distanceDataArray: any, language: string) {
   const payload = {
     altText: "Flex Message",
     type: "flex",
@@ -154,7 +154,7 @@ async function contentPayload(distanceDataArray: any) {
             margin: "xxl",
             action: {
               type: "uri",
-              label: "เปิดแผนที่",
+              label: language === "english" ? "navigate" : "เปิดแผนที่",
               uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distanceDataArray[0].latitude}+${distanceDataArray[0].longitude}`,
             },
           },
@@ -166,10 +166,13 @@ async function contentPayload(distanceDataArray: any) {
   return JSON.parse(JSON.stringify(payload));
 }
 
-function messagePayload(distanceDataArray: any) {
+function messagePayload(distanceDataArray: any, language: string) {
   const payload = {
     type: "text",
-    text: `พี่ๆ สามารถฟังเสียงบรรยายเกี่ยวกับ "${distanceDataArray[0].name}" โดยพี่ๆ สามารถคลิกที่ข้อความเสียงได้เลยค่ะ`,
+    text:
+      language === "english"
+        ? `You can listen to audio about "${distanceDataArray[0].name}". by clicking on the audio message.`
+        : `พี่ๆ สามารถฟังเสียงบรรยายเกี่ยวกับ "${distanceDataArray[0].name}" โดยพี่ๆ สามารถคลิกที่ข้อความเสียงได้เลยค่ะ`,
   };
 
   return JSON.parse(JSON.stringify(payload));

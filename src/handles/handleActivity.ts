@@ -5,16 +5,25 @@ import {
   messagePayload,
 } from "../payloads/linePayloads";
 import { client } from "../configs/linesdk";
-import { getActivitysubTH } from "../models/activitySub";
+import { getActivitysubEN, getActivitysubTH } from "../models/activitySub";
 import { Activity } from "../dto/activity.dto";
+import LanguageDetect from "languagedetect";
 
-async function pushMessageActivityTH(agent: {
+async function pushMessageActivity(agent: {
   latitude: number;
   longitude: number;
   userId: string;
+  message: string;
 }) {
   console.log(agent);
-  const activity: Activity[] = await getActivitysubTH();
+  const lngDetector = new LanguageDetect();
+  const lngList = lngDetector.detect(agent.message);
+  console.log(lngList);
+
+  const activity: Activity[] =
+    lngList[0][0] === "english"
+      ? await getActivitysubEN()
+      : await getActivitysubTH();
 
   /** calculate distance from your current location **/
   const distanceData = await calculateDistance(
@@ -28,9 +37,9 @@ async function pushMessageActivityTH(agent: {
   /** condition to check if radius in 50 km it will return text. if not it will return custom payload. **/
   if (distanceData.length > 0) {
     /** format custom payload for line bot **/
-    const detailPayloadData = await contentPayload(distanceData);
-    const audioPayloadData = await audioPayload(distanceData);
-    const messagePayloadData = await messagePayload(distanceData);
+    const detailPayloadData = await contentPayload(distanceData, lngList[0][0]);
+    const audioPayloadData = await audioPayload(distanceData,);
+    const messagePayloadData = await messagePayload(distanceData, lngList[0][0]);
 
     /** push payload image data */
     await client.pushMessage(agent.userId, detailPayloadData);
@@ -47,4 +56,4 @@ async function pushMessageActivityTH(agent: {
   });
 }
 
-export { pushMessageActivityTH };
+export { pushMessageActivity };

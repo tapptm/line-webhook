@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { pushMessageActivityTH } from "../handles/handleActivity";
+import { pushMessageActivity } from "../handles/handleActivity";
 import { replyMessage } from "../services/linesdk/linesdkService";
 import {
   detectIntent,
@@ -36,10 +36,11 @@ async function locationController(
     const chats = await getChats(event.source.userId);
     let lastChat = chats[chats.length - 1];
 
-    return await pushMessageActivityTH({
+    return await pushMessageActivity({
       latitude: event.message.latitude,
       longitude: event.message.longitude,
       userId: event.source.userId,
+      message: lastChat
     });
   }
   next();

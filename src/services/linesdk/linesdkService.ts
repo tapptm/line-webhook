@@ -7,4 +7,8 @@ const replyMessage = (userId: string, message: string) => {
   });
 };
 
-export { replyMessage };
+const getProfile = (userId: string) => {
+  return clientsdk.getProfile(userId);
+};
+
+export { replyMessage, getProfile };
