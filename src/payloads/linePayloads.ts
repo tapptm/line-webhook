@@ -95,6 +95,12 @@ async function audioPayload(distanceDataArray: any) {
 
 async function contentPayload(distanceDataArray: any, language: string) {
   const payload = {
+    ...(language === "language_english" && {
+      sender: {
+        iconUrl: "https://kims-rmuti.com/linebot/files/images/Alex.gif",
+        name: "Alex",
+      },
+    }),
     altText: "Flex Message",
     type: "flex",
     contents: {
@@ -154,7 +160,7 @@ async function contentPayload(distanceDataArray: any, language: string) {
             margin: "xxl",
             action: {
               type: "uri",
-              label: language === "english" ? "navigate" : "เปิดแผนที่",
+              label: language === "language_english" ? "navigate" : "เปิดแผนที่",
               uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distanceDataArray[0].latitude}+${distanceDataArray[0].longitude}`,
             },
           },
@@ -168,9 +174,15 @@ async function contentPayload(distanceDataArray: any, language: string) {
 
 function messagePayload(distanceDataArray: any, language: string) {
   const payload = {
+    ...(language === "language_english" && {
+      sender: {
+        iconUrl: "https://kims-rmuti.com/linebot/files/images/Alex.gif",
+        name: "Alex",
+      },
+    }),
     type: "text",
     text:
-      language === "english"
+      language === "language_english"
         ? `You can listen to audio about "${distanceDataArray[0].name}". by clicking on the audio message.`
         : `พี่ๆ สามารถฟังเสียงบรรยายเกี่ยวกับ "${distanceDataArray[0].name}" โดยพี่ๆ สามารถคลิกที่ข้อความเสียงได้เลยค่ะ`,
   };

@@ -1,10 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { pushMessageActivity } from "../handles/handleActivity";
 import { replyMessage } from "../services/linesdk/linesdkService";
-import {
-  detectIntent,
-  postToDialogflow,
-} from "../services/dialogflows/dialogflowService";
+import { detectIntent, postToDialogflow } from "../services/dialogflows/dialogflowService";
 import { saveChats, getChats } from "../models/chatHistorys";
 import { client } from "../configs/linesdk";
 
@@ -15,43 +12,40 @@ async function textController(req: Request, res: Response, next: NextFunction) {
   if (event.type === "message" && event.message.type === "text") {
     await postToDialogflow(req);
     const result = await detectIntent(event.message.text);
-    return await saveChats(
-      event.source.userId,
-      result.intent.displayName,
-      event.message.text
-    );
+    return await saveChats(event.source.userId, result.intent.displayName, event.message.text);
   }
   next();
 }
 
 /** location controller */
-async function locationController(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+async function locationController(req: Request, res: Response, next: NextFunction) {
   const event = req.body.events[0];
   console.log("log location events", req.body.events);
   if (event.type === "message" && event.message.type === "location") {
     const chats = await getChats(event.source.userId);
-    let lastChat = chats[chats.length - 1];
+    let lastChat;
+    
+    switch (chats.length) {
+      case 0:
+        lastChat = { intent_name: "" };
+        break;
+      default:
+        lastChat = chats[chats.length - 1];
+        break;
+    } 
 
     return await pushMessageActivity({
-      latitude: event.message.latitude,
-      longitude: event.message.longitude,
+      latitude: event.message.latitude, // user location
+      longitude: event.message.longitude, // user location
       userId: event.source.userId,
-      message: lastChat
+      intent: lastChat.intent_name,
     });
   }
   next();
 }
 
 /** sticker controller */
-async function stickerController(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+async function stickerController(req: Request, res: Response, next: NextFunction) {
   const event = req.body.events[0];
   console.log("log sticker events", req.body.events);
   if (event.type === "message" && event.message.type === "sticker") {
@@ -65,11 +59,7 @@ async function stickerController(
 }
 
 /** image controller */
-async function imageController(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+async function imageController(req: Request, res: Response, next: NextFunction) {
   const event = req.body.events[0];
   console.log("log image events", req.body.events);
   if (event.type === "message" && event.message.type === "image") {
@@ -90,10 +80,4 @@ async function noTypeController(req: Request, res: Response) {
   );
 }
 
-export {
-  textController,
-  locationController,
-  stickerController,
-  imageController,
-  noTypeController,
-};
+export { textController, locationController, stickerController, imageController, noTypeController };
