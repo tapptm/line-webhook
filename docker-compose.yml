@@ -16,3 +16,11 @@ services:
     ports:
       - 19162:$NODE_PORT
     restart: on-failure
+  
+  bot-3:
+    container_name: linebot-webhook-bot3
+    build: .
+    env_file: .env
+    ports:
+      - 19163:$NODE_PORT
+    restart: on-failure
