@@ -4,6 +4,8 @@ services:
   bot-1:
     container_name: linebot-webhook-bot1
     build: .
+    environment:
+      - TZ=Asia/Bangkok
     env_file: .env
     ports:
       - 19161:$NODE_PORT
@@ -12,6 +14,8 @@ services:
   bot-2:
     container_name: linebot-webhook-bot2
     build: .
+    environment:
+      - TZ=Asia/Bangkok
     env_file: .env
     ports:
       - 19162:$NODE_PORT
@@ -20,6 +24,8 @@ services:
   bot-3:
     container_name: linebot-webhook-bot3
     build: .
+    environment:
+      - TZ=Asia/Bangkok
     env_file: .env
     ports:
       - 19163:$NODE_PORT
