@@ -1,4 +1,4 @@
-import { audiosUrl } from "../configs/urlpath";
+import { AUDIOS_URL } from "../configs/urlpath";
 import { getAudioDurationInSeconds } from "get-audio-duration";
 
 async function carouselPayload(distanceDataArray: any) {
@@ -92,7 +92,7 @@ async function audioPayload(distanceDataArray: any, language: string) {
       },
     }),
     type: "audio",
-    originalContentUrl: `${audiosUrl}/${distanceDataArray[0].soundname}`,
+    originalContentUrl: `${AUDIOS_URL}/${distanceDataArray[0].soundname}`,
     duration: duration * 1000,
   };
 

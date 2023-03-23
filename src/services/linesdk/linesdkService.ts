@@ -1,14 +1,14 @@
-import { client as clientsdk } from "../../configs/linesdk";
+import { client as line } from "../../configs/linesdk";
 
 const replyMessage = (userId: string, message: string) => {
-  clientsdk.pushMessage(userId, {
+  line.pushMessage(userId, {
     type: "text",
     text: message,
   });
 };
 
 const getProfile = (userId: string) => {
-  return clientsdk.getProfile(userId);
+  return line.getProfile(userId);
 };
 
 export { replyMessage, getProfile };

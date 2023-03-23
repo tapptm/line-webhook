@@ -24,6 +24,7 @@ async function getChats(userId: String) {
   const sql = ` SELECT * 
                 FROM baipho_chatbot 
                 WHERE user_id = '${userId}' 
+                AND (intent_name = 'language_english' OR intent_name = 'language_thai')
                 AND created_date AT TIME ZONE 'Asia/Bangkok' >= (NOW() - INTERVAL '5 minutes')::timestamp with time zone;
               `;
   const { rows } = await client.query(sql);

@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from "express";
+import helmet from "helmet";
 import {
   textController,
   locationController,
@@ -6,13 +7,12 @@ import {
   imageController,
   noTypeController,
 } from "./src/controllers/webhooks";
-import dotenv from "dotenv";
-dotenv.config();
 
 const app: Express = express();
 const PORT = process.env.NODE_PORT || 4050;
 
 app.use(express.json());
+app.use(helmet());
 
 app.get("/", async (req: Request, res: Response) => {
   res.send("Server Is Working......");

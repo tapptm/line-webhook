@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  bot-1:
+    container_name: linebot-webhook-bot1
+    build: .
+    env_file: .env
+    ports:
+      - 19161:$NODE_PORT
+    restart: on-failure
+
+  bot-2:
+    container_name: linebot-webhook-bot2
+    build: .
+    env_file: .env
+    ports:
+      - 19162:$NODE_PORT
+    restart: on-failure

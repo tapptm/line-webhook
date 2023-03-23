@@ -1,6 +1,9 @@
-const imageUrl = "https://admin.trinitytrip.com/uploads";
-const audiosUrl = "https://kims-rmuti.com/linebot/files/audios";
-const imagesUrl = "https://kims-rmuti.com/linebot/files/images";
-const videosUrl = "https://kims-rmuti.com/linebot/files/videos";
+import dotenv from "dotenv";
+dotenv.config();
 
-export { imageUrl, audiosUrl, imagesUrl, videosUrl };
+const IMAGE_URL = process.env.BACKEND_IMAGE_URL;
+const AUDIOS_URL = process.env.AUDIOS_URL;
+const IMAGES_URL = process.env.IMAGES_URL;
+const VIDEOS_URL = process.env.VIDEOS_URL;
+
+export { IMAGE_URL, AUDIOS_URL, IMAGES_URL, VIDEOS_URL };
