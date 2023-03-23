@@ -29,9 +29,10 @@ async function pushMessageActivity(agent: {
     const detailPayloadData = await contentPayload(distanceData, agent.intent);
     await client.pushMessage(agent.userId, detailPayloadData);
 
+    /* if soundname has not null then send audio and message */
     if (distanceData[0].soundname !== null) {
       /** format custom payload for line bot and push payload audio data **/
-      const audioPayloadData = await audioPayload(distanceData);
+      const audioPayloadData = await audioPayload(distanceData, agent.intent);
       await client.pushMessage(agent.userId, audioPayloadData);
 
       /** format custom payload for line bot and push payload message */

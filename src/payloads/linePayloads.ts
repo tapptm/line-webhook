@@ -80,11 +80,17 @@ async function carouselPayload(distanceDataArray: any) {
   return JSON.parse(JSON.stringify(payload));
 }
 
-async function audioPayload(distanceDataArray: any) {
+async function audioPayload(distanceDataArray: any, language: string) {
   const duration = await getAudioDurationInSeconds(
     `${process.cwd()}/src/assets/audios/${distanceDataArray[0].soundname}`
   );
   const payload = {
+    ...(language === "language_english" && {
+      sender: {
+        iconUrl: "https://kims-rmuti.com/linebot/files/images/Alex.gif",
+        name: "Alex",
+      },
+    }),
     type: "audio",
     originalContentUrl: `${audiosUrl}/${distanceDataArray[0].soundname}`,
     duration: duration * 1000,
