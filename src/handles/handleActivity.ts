@@ -65,8 +65,9 @@ async function pushMessagePoint(agent: {
   /** condition to check if radius in 50 km it will return text. if not it will return custom payload. **/
   if (activity.length > 0) {
     /** format custom payload for line bot and push payload image data **/
-    // const detailPayloadData = await contentPayload(activity, agent.intent);
-    // await client.pushMessage(agent.userId, detailPayloadData);
+    const detailPayloadData = await contentPayload(activity, agent.intent);
+    console.log("log__detailPayloadData",detailPayloadData);
+    await client.pushMessage(agent.userId, detailPayloadData);
 
     /* if soundname has not null then send audio and message */
     if (activity[0].soundname !== null) {
