@@ -59,6 +59,8 @@ async function pushMessagePoint(agent: {
   const activity: Activity[] =
     agent.intent === "language_english" ? await getActivitysubEN(agent.point_id) : await getActivitysubTH(agent.point_id);
 
+    console.log(activity);
+    
 
   /** condition to check if radius in 50 km it will return text. if not it will return custom payload. **/
   if (activity.length > 0) {

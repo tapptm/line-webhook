@@ -42,6 +42,7 @@ async function textController(req: Request, res: Response, next: NextFunction) {
     ) {
       const point = event.message.text.replace(/\D/g, "");
 
+
       const result = await detectIntent(event.message.text);
       await saveChats(
         event.source.userId,
@@ -63,7 +64,7 @@ async function textController(req: Request, res: Response, next: NextFunction) {
       return await pushMessagePoint({
         userId: event.source.userId,
         intent: lastChat.intent_name,
-        point_id: point,
+        point_id: Number (point),
       });
 
     } else {
