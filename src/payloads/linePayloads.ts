@@ -60,7 +60,7 @@ async function carouselPayload(distanceDataArray: any, language: string) {
             action: {
               type: "message",
               label: "รายละเอียด",
-              message: "จุดท่องเที่ยวที่ " + distance.point ,
+              text: "จุดท่องเที่ยวที่ " + distance.point ,
             },
           },
         ],
