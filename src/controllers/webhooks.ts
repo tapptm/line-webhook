@@ -8,7 +8,12 @@ import {
   detectIntent,
   postToDialogflow,
 } from "../services/dialogflows/dialogflowService";
-import { saveChats, getChats,saveLocation ,getLocation} from "../models/chatHistorys";
+import {
+  saveChats,
+  getChats,
+  saveLocation,
+  getLocation,
+} from "../models/chatHistorys";
 import { client } from "../configs/linesdk";
 
 /** text controller */
@@ -42,7 +47,6 @@ async function textController(req: Request, res: Response, next: NextFunction) {
     ) {
       const point = event.message.text.replace(/\D/g, "");
 
-
       const result = await detectIntent(event.message.text);
       await saveChats(
         event.source.userId,
@@ -50,17 +54,23 @@ async function textController(req: Request, res: Response, next: NextFunction) {
         event.message.text
       );
       const chats = await getLocation(event.source.userId);
-  if(chats.length > 0 ) {
-    return await pushMessagePoint({
-      latitude: chats[0].latitude, // user location
-      longitude: chats[0].longitude, // user location
-      userId: event.source.userId,
-      intent: chats[0].intent_name,
-      point_id: Number (point),
-    });
-  }
-     
-
+      if (chats.length > 0) {
+        return await pushMessagePoint({
+          latitude: chats[0].latitude, // user location
+          longitude: chats[0].longitude, // user location
+          userId: event.source.userId,
+          intent: chats[0].intent_name,
+          point_id: Number(point),
+        });
+      }else{
+        return await pushMessagePoint({
+          latitude: 0, // user location
+          longitude: 0, // user location
+          userId: event.source.userId,
+          intent: chats[0].intent_name,
+          point_id: Number(point),
+        });
+      }
     } else {
       await postToDialogflow(req);
       const result = await detectIntent(event.message.text);
@@ -83,11 +93,10 @@ async function locationController(
   const event = req.body.events[0];
   console.log("log location events", req.body.events);
   if (event.type === "message" && event.message.type === "location") {
-
     await saveLocation(
       event.source.userId,
       event.message.latitude,
-      event.message.longitude,
+      event.message.longitude
     );
 
     const chats = await getChats(event.source.userId);

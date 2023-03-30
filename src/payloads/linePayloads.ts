@@ -60,7 +60,7 @@ async function carouselPayload(distanceDataArray: any, language: string) {
             action: {
               type: "message",
               label: "รายละเอียด",
-              text: "จุดท่องเที่ยวที่ " + distance.point ,
+              text: "จุดท่องเที่ยวที่ " + distance.point,
             },
           },
         ],
@@ -105,7 +105,7 @@ async function audioPayload(distanceDataArray: any, language: string) {
   return JSON.parse(JSON.stringify(payload));
 }
 
-async function contentPayload(distanceDataArray: any, language: string) {
+async function contentPayload(distanceDataArray: any, language: string , latitude:number) {
   const payload = {
     ...(language === "language_english" && {
       sender: {
@@ -113,6 +113,7 @@ async function contentPayload(distanceDataArray: any, language: string) {
         name: "Alex",
       },
     }),
+
     altText: "Flex Message",
     type: "flex",
     contents: {
@@ -149,13 +150,18 @@ async function contentPayload(distanceDataArray: any, language: string) {
               },
             ],
           },
-          {
-            type: "text",
-            text: distanceDataArray[0].distance,
-            wrap: true,
-            color: "#aaaaaa",
-            size: "sm",
-          },
+
+          ...(latitude != 0
+            ? [
+                {
+                  type: "text",
+                  text: distanceDataArray[0].distance,
+                  wrap: true,
+                  color: "#aaaaaa",
+                  size: "sm",
+                },
+              ]
+            : []),
         ],
         spacing: "sm",
         layout: "vertical",
