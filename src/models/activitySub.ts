@@ -1,5 +1,5 @@
 import pool from "../configs/database";
-import { IMAGES_URL } from "../configs/urlpath";
+import { IMAGE_URL } from "../configs/urlpath";
 
 async function getActivitysubTH() {
   const client = await pool.connect();
@@ -21,7 +21,7 @@ async function getActivitysubTH() {
     item.latitude = parseFloat(item.latitude);
     item.longitude = parseFloat(item.longitude);
     item.image = item.image
-      ? `${IMAGES_URL}/community/${parseInt(item.community_id)}/activity/${item.image}`
+      ? `${IMAGE_URL}/community/${parseInt(item.community_id)}/activity/${item.image}`
       : null;
   });
 
@@ -48,7 +48,7 @@ async function getActivitysubEN() {
     item.latitude = parseFloat(item.latitude);
     item.longitude = parseFloat(item.longitude);
     item.image = item.image
-      ? `${IMAGES_URL}/community/${parseInt(item.community_id)}/activity/${
+      ? `${IMAGE_URL}/community/${parseInt(item.community_id)}/activity/${
           item.image
         }`
       : null;
