@@ -51,6 +51,8 @@ async function pushMessageActivity(agent: {
 
 
 async function pushMessagePoint(agent: {
+  latitude: number;
+  longitude: number;
   userId: string;
   intent: string;
   point_id: number;
@@ -60,23 +62,29 @@ async function pushMessagePoint(agent: {
     agent.intent === "language_english" ? await getActivitysubEN(agent.point_id) : await getActivitysubTH(agent.point_id);
 
     console.log(activity);
-    
+
+
+      /** calculate distance from your current location **/
+  const distanceData: any = await calculateDistance(
+    agent.latitude, // set your locations here.
+    agent.longitude, // set your locations here.
+    activity // dataset from database
+  );
 
   /** condition to check if radius in 50 km it will return text. if not it will return custom payload. **/
-  if (activity.length > 0) {
+  if (distanceData.length > 0) {
     /** format custom payload for line bot and push payload image data **/
-    const detailPayloadData = await contentPayload(activity, agent.intent);
-    console.log("log__detailPayloadData",detailPayloadData);
+    const detailPayloadData = await contentPayload(distanceData, agent.intent);
     await client.pushMessage(agent.userId, detailPayloadData);
 
     /* if soundname has not null then send audio and message */
-    if (activity[0].soundname !== null) {
+    if (distanceData[0].soundname !== null) {
       /** format custom payload for line bot and push payload audio data **/
-      const audioPayloadData = await audioPayload(activity, agent.intent);
+      const audioPayloadData = await audioPayload(distanceData, agent.intent);
       await client.pushMessage(agent.userId, audioPayloadData);
 
       /** format custom payload for line bot and push payload message */
-      const messagePayloadData = await messagePayload(activity, agent.intent);
+      const messagePayloadData = await messagePayload(distanceData, agent.intent);
       await client.pushMessage(agent.userId, messagePayloadData);
     }
 

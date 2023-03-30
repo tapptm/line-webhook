@@ -8,7 +8,7 @@ import {
   detectIntent,
   postToDialogflow,
 } from "../services/dialogflows/dialogflowService";
-import { saveChats, getChats } from "../models/chatHistorys";
+import { saveChats, getChats,saveLocation ,getLocation} from "../models/chatHistorys";
 import { client } from "../configs/linesdk";
 
 /** text controller */
@@ -49,23 +49,17 @@ async function textController(req: Request, res: Response, next: NextFunction) {
         result.intent.displayName,
         event.message.text
       );
-      const chats = await getChats(event.source.userId);
-      let lastChat;
-
-      switch (chats.length) {
-        case 0:
-          lastChat = { intent_name: "" };
-          break;
-        default:
-          lastChat = chats[chats.length - 1];
-          break;
-      }
-
-      return await pushMessagePoint({
-        userId: event.source.userId,
-        intent: lastChat.intent_name,
-        point_id: Number (point),
-      });
+      const chats = await getLocation(event.source.userId);
+  if(chats.length > 0 ) {
+    return await pushMessagePoint({
+      latitude: chats[0].latitude, // user location
+      longitude: chats[0].longitude, // user location
+      userId: event.source.userId,
+      intent: chats[0].intent_name,
+      point_id: Number (point),
+    });
+  }
+     
 
     } else {
       await postToDialogflow(req);
@@ -89,6 +83,13 @@ async function locationController(
   const event = req.body.events[0];
   console.log("log location events", req.body.events);
   if (event.type === "message" && event.message.type === "location") {
+
+    await saveLocation(
+      event.source.userId,
+      event.message.latitude,
+      event.message.longitude,
+    );
+
     const chats = await getChats(event.source.userId);
     let lastChat;
 
