@@ -22,28 +22,28 @@ async function textController(req: Request, res: Response, next: NextFunction) {
   console.log("log text events", req.body.events);
   if (event.type === "message" && event.message.type === "text") {
     if (
-      event.message.text === "จุดท่องเที่ยวที่ 1" ||
-      event.message.text === "จุดท่องเที่ยวที่ 2" ||
-      event.message.text === "จุดท่องเที่ยวที่ 3" ||
-      event.message.text === "จุดท่องเที่ยวที่ 4" ||
-      event.message.text === "จุดท่องเที่ยวที่ 5" ||
-      event.message.text === "จุดท่องเที่ยวที่ 6" ||
-      event.message.text === "จุดท่องเที่ยวที่ 7" ||
-      event.message.text === "จุดท่องเที่ยวที่ 8" ||
-      event.message.text === "จุดท่องเที่ยวที่ 9" ||
-      event.message.text === "จุดท่องเที่ยวที่ 10" ||
-      event.message.text === "จุดท่องเที่ยวที่ 11" ||
-      event.message.text === "จุดท่องเที่ยวที่ 12" ||
-      event.message.text === "จุดท่องเที่ยวที่ 13" ||
-      event.message.text === "จุดท่องเที่ยวที่ 14" ||
-      event.message.text === "จุดท่องเที่ยวที่ 15" ||
-      event.message.text === "จุดท่องเที่ยวที่ 16" ||
-      event.message.text === "จุดท่องเที่ยวที่ 17" ||
-      event.message.text === "จุดท่องเที่ยวที่ 18" ||
-      event.message.text === "จุดท่องเที่ยวที่ 19" ||
-      event.message.text === "จุดท่องเที่ยวที่ 20" ||
-      event.message.text === "จุดท่องเที่ยวที่ 21" ||
-      event.message.text === "จุดท่องเที่ยวที่ 22"
+      event.message.text === "รายละเอียดจุดที่ 1" ||
+      event.message.text === "รายละเอียดจุดที่ 2" ||
+      event.message.text === "รายละเอียดจุดที่ 3" ||
+      event.message.text === "รายละเอียดจุดที่ 4" ||
+      event.message.text === "รายละเอียดจุดที่ 5" ||
+      event.message.text === "รายละเอียดจุดที่ 6" ||
+      event.message.text === "รายละเอียดจุดที่ 7" ||
+      event.message.text === "รายละเอียดจุดที่ 8" ||
+      event.message.text === "รายละเอียดจุดที่ 9" ||
+      event.message.text === "รายละเอียดจุดที่ 10" ||
+      event.message.text === "รายละเอียดจุดที่ 11" ||
+      event.message.text === "รายละเอียดจุดที่ 12" ||
+      event.message.text === "รายละเอียดจุดที่ 13" ||
+      event.message.text === "รายละเอียดจุดที่ 14" ||
+      event.message.text === "รายละเอียดจุดที่ 15" ||
+      event.message.text === "รายละเอียดจุดที่ 16" ||
+      event.message.text === "รายละเอียดจุดที่ 17" ||
+      event.message.text === "รายละเอียดจุดที่ 18" ||
+      event.message.text === "รายละเอียดจุดที่ 19" ||
+      event.message.text === "รายละเอียดจุดที่ 20" ||
+      event.message.text === "รายละเอียดจุดที่ 21" ||
+      event.message.text === "รายละเอียดจุดที่ 22"
     ) {
       const point = event.message.text.replace(/\D/g, "");
 

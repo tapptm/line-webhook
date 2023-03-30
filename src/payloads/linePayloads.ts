@@ -60,7 +60,7 @@ async function carouselPayload(distanceDataArray: any, language: string) {
             action: {
               type: "message",
               label: "รายละเอียด",
-              text: "จุดท่องเที่ยวที่ " + distance.point,
+              text: "รายละเอียดจุดที่ " + distance.point,
             },
           },
         ],
@@ -76,7 +76,7 @@ async function carouselPayload(distanceDataArray: any, language: string) {
       },
     }),
     type: "flex",
-    altText: "แนะนำที่นี่เลยจ้า",
+    altText: "น้องใบโพธิ์ค้นหาสถานที่ใกล้เคียงมาให้แล้วค่ะ",
     contents: {
       type: "carousel",
       contents: contents,
