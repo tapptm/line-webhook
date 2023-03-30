@@ -68,16 +68,16 @@ async function pushMessagePoint(agent: {
     const detailPayloadData = await contentPayload(activity, agent.intent);
     await client.pushMessage(agent.userId, detailPayloadData);
 
-    /* if soundname has not null then send audio and message */
-    if (activity[0].soundname !== null) {
-      /** format custom payload for line bot and push payload audio data **/
-      const audioPayloadData = await audioPayload(activity, agent.intent);
-      await client.pushMessage(agent.userId, audioPayloadData);
+    // /* if soundname has not null then send audio and message */
+    // if (activity[0].soundname !== null) {
+    //   /** format custom payload for line bot and push payload audio data **/
+    //   const audioPayloadData = await audioPayload(activity, agent.intent);
+    //   await client.pushMessage(agent.userId, audioPayloadData);
 
-      /** format custom payload for line bot and push payload message */
-      const messagePayloadData = await messagePayload(activity, agent.intent);
-      await client.pushMessage(agent.userId, messagePayloadData);
-    }
+    //   /** format custom payload for line bot and push payload message */
+    //   const messagePayloadData = await messagePayload(activity, agent.intent);
+    //   await client.pushMessage(agent.userId, messagePayloadData);
+    // }
 
     return;
   }
