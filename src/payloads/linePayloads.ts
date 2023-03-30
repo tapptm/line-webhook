@@ -1,7 +1,7 @@
 import { AUDIOS_URL } from "../configs/urlpath";
 import { getAudioDurationInSeconds } from "get-audio-duration";
 
-async function carouselPayload(distanceDataArray: any ,language: string) {
+async function carouselPayload(distanceDataArray: any, language: string) {
   const contents = distanceDataArray.map((distance: any) => {
     return {
       type: "bubble",
@@ -58,9 +58,9 @@ async function carouselPayload(distanceDataArray: any ,language: string) {
           {
             type: "button",
             action: {
-              type: "uri",
-              label: "เปิดแผนที่",
-              uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distance.latitude}+${distance.longitude}`,
+              type: "message",
+              label: "รายละเอียด",
+              message: "จุดท่องเที่ยวที่ " + distance.point ,
             },
           },
         ],
@@ -172,7 +172,8 @@ async function contentPayload(distanceDataArray: any, language: string) {
             margin: "xxl",
             action: {
               type: "uri",
-              label: language === "language_english" ? "navigate" : "เปิดแผนที่",
+              label:
+                language === "language_english" ? "navigate" : "เปิดแผนที่",
               uri: `http://maps.google.com/maps?z=12&t=m&q=loc:${distanceDataArray[0].latitude}+${distanceDataArray[0].longitude}`,
             },
           },

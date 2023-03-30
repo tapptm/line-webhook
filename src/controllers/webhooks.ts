@@ -1,7 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { pushMessageActivity } from "../handles/handleActivity";
+import {
+  pushMessageActivity,
+  pushMessagePoint,
+} from "../handles/handleActivity";
 import { replyMessage } from "../services/linesdk/linesdkService";
-import { detectIntent, postToDialogflow } from "../services/dialogflows/dialogflowService";
+import {
+  detectIntent,
+  postToDialogflow,
+} from "../services/dialogflows/dialogflowService";
 import { saveChats, getChats } from "../models/chatHistorys";
 import { client } from "../configs/linesdk";
 
@@ -10,21 +16,81 @@ async function textController(req: Request, res: Response, next: NextFunction) {
   const event = req.body.events[0];
   console.log("log text events", req.body.events);
   if (event.type === "message" && event.message.type === "text") {
-    await postToDialogflow(req);
-    const result = await detectIntent(event.message.text);
-    return await saveChats(event.source.userId, result.intent.displayName, event.message.text);
+    if (
+      event.message.text === "จุดท่องเที่ยวที่ 1" ||
+      event.message.text === "จุดท่องเที่ยวที่ 2" ||
+      event.message.text === "จุดท่องเที่ยวที่ 3" ||
+      event.message.text === "จุดท่องเที่ยวที่ 4" ||
+      event.message.text === "จุดท่องเที่ยวที่ 5" ||
+      event.message.text === "จุดท่องเที่ยวที่ 6" ||
+      event.message.text === "จุดท่องเที่ยวที่ 7" ||
+      event.message.text === "จุดท่องเที่ยวที่ 8" ||
+      event.message.text === "จุดท่องเที่ยวที่ 9" ||
+      event.message.text === "จุดท่องเที่ยวที่ 10" ||
+      event.message.text === "จุดท่องเที่ยวที่ 11" ||
+      event.message.text === "จุดท่องเที่ยวที่ 12" ||
+      event.message.text === "จุดท่องเที่ยวที่ 13" ||
+      event.message.text === "จุดท่องเที่ยวที่ 14" ||
+      event.message.text === "จุดท่องเที่ยวที่ 15" ||
+      event.message.text === "จุดท่องเที่ยวที่ 16" ||
+      event.message.text === "จุดท่องเที่ยวที่ 17" ||
+      event.message.text === "จุดท่องเที่ยวที่ 18" ||
+      event.message.text === "จุดท่องเที่ยวที่ 19" ||
+      event.message.text === "จุดท่องเที่ยวที่ 20" ||
+      event.message.text === "จุดท่องเที่ยวที่ 21" ||
+      event.message.text === "จุดท่องเที่ยวที่ 22"
+    ) {
+      const point = event.message.text.replace(/\D/g, "");
+
+      const result = await detectIntent(event.message.text);
+      await saveChats(
+        event.source.userId,
+        result.intent.displayName,
+        event.message.text
+      );
+      const chats = await getChats(event.source.userId);
+      let lastChat;
+
+      switch (chats.length) {
+        case 0:
+          lastChat = { intent_name: "" };
+          break;
+        default:
+          lastChat = chats[chats.length - 1];
+          break;
+      }
+
+      return await pushMessagePoint({
+        userId: event.source.userId,
+        intent: lastChat.intent_name,
+        point_id: point,
+      });
+
+    } else {
+      await postToDialogflow(req);
+      const result = await detectIntent(event.message.text);
+      return await saveChats(
+        event.source.userId,
+        result.intent.displayName,
+        event.message.text
+      );
+    }
   }
   next();
 }
 
 /** location controller */
-async function locationController(req: Request, res: Response, next: NextFunction) {
+async function locationController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const event = req.body.events[0];
   console.log("log location events", req.body.events);
   if (event.type === "message" && event.message.type === "location") {
     const chats = await getChats(event.source.userId);
     let lastChat;
-    
+
     switch (chats.length) {
       case 0:
         lastChat = { intent_name: "" };
@@ -32,7 +98,7 @@ async function locationController(req: Request, res: Response, next: NextFunctio
       default:
         lastChat = chats[chats.length - 1];
         break;
-    } 
+    }
 
     return await pushMessageActivity({
       latitude: event.message.latitude, // user location
@@ -45,7 +111,11 @@ async function locationController(req: Request, res: Response, next: NextFunctio
 }
 
 /** sticker controller */
-async function stickerController(req: Request, res: Response, next: NextFunction) {
+async function stickerController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const event = req.body.events[0];
   console.log("log sticker events", req.body.events);
   if (event.type === "message" && event.message.type === "sticker") {
@@ -59,7 +129,11 @@ async function stickerController(req: Request, res: Response, next: NextFunction
 }
 
 /** image controller */
-async function imageController(req: Request, res: Response, next: NextFunction) {
+async function imageController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const event = req.body.events[0];
   console.log("log image events", req.body.events);
   if (event.type === "message" && event.message.type === "image") {
@@ -80,4 +154,10 @@ async function noTypeController(req: Request, res: Response) {
   );
 }
 
-export { textController, locationController, stickerController, imageController, noTypeController };
+export {
+  textController,
+  locationController,
+  stickerController,
+  imageController,
+  noTypeController,
+};
