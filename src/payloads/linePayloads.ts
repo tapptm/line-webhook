@@ -69,12 +69,12 @@ async function carouselPayload(distanceDataArray: any ,language: string) {
   });
 
   const payload = {
-    ...(language === "language_english" && {
-      sender: {
-        iconUrl: "https://kims-rmuti.com/linebot/files/images/Alex.gif",
-        name: "Alex",
-      },
-    }),
+    // ...(language === "language_english" && {
+    //   sender: {
+    //     iconUrl: "https://kims-rmuti.com/linebot/files/images/Alex.gif",
+    //     name: "Alex",
+    //   },
+    // }),
     type: "flex",
     altText: "แนะนำที่นี่เลยจ้า",
     contents: {
