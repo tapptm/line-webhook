@@ -16,11 +16,9 @@ async function getActivitysubTH(point_id: any) {
               LEFT JOIN activity on activity.activity_id = activity_sub.activity_id
               LEFT JOIN sound_webhook ON sound_webhook.activity_sub_id = activity_sub.activity_sub_id
               WHERE activity_sub.activity_id = 323
-              ${typeof point_id === "number" ? "AND sound_webhook.id = $1" : ""}
+              ${typeof point_id === "number" ? `AND sound_webhook.id = ${point_id}` : ""}
               `;
-  const { rows } = await client.query(sql, [
-    typeof point_id === "number" ? point_id : null,
-  ]);
+  const { rows } = await client.query(sql);
   client.release();
   rows.map((item) => {
     item.latitude = parseFloat(item.latitude);
@@ -49,11 +47,9 @@ async function getActivitysubEN(point_id:any) {
               LEFT JOIN activity on activity.activity_id = activity_sub.activity_id
               LEFT JOIN sound_webhook ON sound_webhook.activity_sub_id = activity_sub.activity_sub_id
               WHERE activity_sub.activity_id = 323
-              ${typeof point_id === "number" ? "AND sound_webhook.id = $1" : ""}
+              ${typeof point_id === "number" ? `AND sound_webhook.id = ${point_id}` : ""}
               `;
-  const { rows } = await client.query(sql, [
-    typeof point_id === "number" ? point_id : null,
-  ]);
+  const { rows } = await client.query(sql);
   client.release();
   rows.map((item) => {
     item.latitude = parseFloat(item.latitude);
