@@ -1,7 +1,7 @@
 import { AUDIOS_URL } from "../configs/urlpath";
 import { getAudioDurationInSeconds } from "get-audio-duration";
 
-async function carouselPayload(distanceDataArray: any) {
+async function carouselPayload(distanceDataArray: any ,language: string) {
   const contents = distanceDataArray.map((distance: any) => {
     return {
       type: "bubble",
@@ -69,6 +69,12 @@ async function carouselPayload(distanceDataArray: any) {
   });
 
   const payload = {
+    ...(language === "language_english" && {
+      sender: {
+        iconUrl: "https://kims-rmuti.com/linebot/files/images/Alex.gif",
+        name: "Alex",
+      },
+    }),
     type: "flex",
     altText: "แนะนำที่นี่เลยจ้า",
     contents: {

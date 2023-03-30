@@ -1,5 +1,5 @@
 import { calculateDistance } from "../services/geolib/geolibService";
-import { audioPayload, contentPayload, messagePayload } from "../payloads/linePayloads";
+import { audioPayload, contentPayload, messagePayload ,carouselPayload } from "../payloads/linePayloads";
 import { client } from "../configs/linesdk";
 import { getActivitysubEN, getActivitysubTH } from "../models/activitySub";
 import { Activity } from "../dto/activity.dto";
@@ -26,7 +26,7 @@ async function pushMessageActivity(agent: {
   /** condition to check if radius in 50 km it will return text. if not it will return custom payload. **/
   if (distanceData.length > 0) {
     /** format custom payload for line bot and push payload image data **/
-    const detailPayloadData = await contentPayload(distanceData, agent.intent);
+    const detailPayloadData = await carouselPayload(distanceData, agent.intent);
     await client.pushMessage(agent.userId, detailPayloadData);
 
     /* if soundname has not null then send audio and message */

@@ -29,7 +29,7 @@ async function calculateDistance(
     .filter(
       (item: any) => item.distance_meters <= 200000 // meters
     )
-    .slice(0, 1); // get fisrt 1 elements in array.
+    .slice(0, 5); // get fisrt 1 elements in array.
 
   return volunteers;
 }
