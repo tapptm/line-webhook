@@ -27,7 +27,7 @@ async function calculateDistance(
     distanceData
   )
     .filter(
-      (item: any) => item.distance_meters <= 200000 // meters
+      (item: any) => item.distance_meters <= 20000 // meters
     )
     .slice(0, 5); // get fisrt 1 elements in array.
 
