@@ -228,7 +228,7 @@ async function noTypeController(req: Request, res: Response) {
   
   const event = req.body.events[0];
   console.log("log events", req.body.events);
-  console.log("log events type", req.body.events.message.type);
+  console.log("log events type", event.message.type);
   
   if (event.type === "message" && event.message.type != "location" || event.message.type != "sticker" || event.message.type != "image"  || event.message.type != "text") {
   return replyMessage(
