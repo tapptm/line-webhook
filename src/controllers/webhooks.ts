@@ -184,7 +184,7 @@ async function locationController(
 }
 
 /** sticker controller */
-async function stickerController(
+async function stickerController( 
   req: Request,
   res: Response,
   next: NextFunction
