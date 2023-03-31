@@ -7,8 +7,20 @@ const replyMessage = (userId: string, message: string) => {
   });
 };
 
+const replyMessageSTK = (
+  userId: string,
+  packageId: string,
+  stickerId: string
+) => {
+  line.pushMessage(userId, {
+    type: "sticker",
+    packageId: packageId,
+    stickerId: stickerId,
+  });
+};
+
 const getProfile = (userId: string) => {
   return line.getProfile(userId);
 };
 
-export { replyMessage, getProfile };
+export { replyMessage, getProfile, replyMessageSTK };

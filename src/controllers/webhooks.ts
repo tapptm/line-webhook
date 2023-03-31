@@ -3,7 +3,7 @@ import {
   pushMessageActivity,
   pushMessagePoint,
 } from "../handles/handleActivity";
-import { replyMessage } from "../services/linesdk/linesdkService";
+import { replyMessage ,replyMessageSTK } from "../services/linesdk/linesdkService";
 import {
   detectIntent,
   postToDialogflow,
@@ -196,8 +196,11 @@ async function stickerController(
     // event.message.keywords.forEach((keyword: any) => {
     //   replyMessage(event.source.userId, keyword);
     // });
-const replystk = "น้องใบโพธิ์ยังไม่สามารถตอบกลับพี่ๆในรูปแบบสติ๊กเกอร์นะคะ";
+    const replystk = "น้องใบโพธิ์ยังไม่สามารถตอบกลับพี่ๆในรูปแบบสติ๊กเกอร์ได้นะคะ";
+    const packageId ="11537";
+    const stickerId ="52002739";
       replyMessage(event.source.userId, replystk);
+      replyMessageSTK(event.source.userId,packageId ,stickerId);
 
     return;
   }
