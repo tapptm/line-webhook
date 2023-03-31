@@ -199,7 +199,7 @@ async function stickerController(
     const replystk = "น้องใบโพธิ์ยังไม่สามารถตอบกลับพี่ๆในรูปแบบสติ๊กเกอร์ได้นะคะ";
     const packageId ="11537";
     const stickerId =["52002771", "52002734", "52002735", "52002738", "52002741", "52002746"];
-      replyMessage(event.source.userId, replystk);
+      // replyMessage(event.source.userId, replystk);
       replyMessageSTK(event.source.userId,packageId ,stickerId[Math.floor(Math.random()*stickerId.length)]);
 
     return;
@@ -225,12 +225,15 @@ async function imageController(
 
 /** no type controller */
 async function noTypeController(req: Request, res: Response) {
+  
   const event = req.body.events[0];
   console.log("log events", req.body.events);
+  if (event.type === "message" && event.message.type != "location" || event.message.type != "sticker" || event.message.type != "image"  || event.message.type != "text") {
   return replyMessage(
     event.source.userId,
     `ขอโทษค่ะ น้องชบาไม่สามารถตอบกลับข้อความประเภท "${event.message.type}" ได้ค่ะ`
   );
+}
 }
 
 export {
