@@ -54,12 +54,22 @@ async function textController(req: Request, res: Response, next: NextFunction) {
       const point = event.message.text.replace(/\D/g, "");
       const chats = await getLocation(event.source.userId);
       const lang = await getChats(event.source.userId);
+      let lastChat;
+
+      switch (lang.length) {
+        case 0:
+          lastChat = { intent_name: "" };
+          break;
+        default:
+          lastChat = lang[lang.length - 1];
+          break;
+      }
       if (chats.length > 0) {
         return await pushMessagePoint({
           latitude: chats[0].latitude, // user location
           longitude: chats[0].longitude, // user location
           userId: event.source.userId,
-          intent: lang[0].intent_name,
+          intent: lastChat.intent_name,
           point_id: Number(point),
         });
       } else {
@@ -100,12 +110,22 @@ console.log("pointlogpoint",point);
 
       const chats = await getLocation(event.source.userId);
        const lang = await getChats(event.source.userId);
+       let lastChat;
+
+       switch (lang.length) {
+         case 0:
+           lastChat = { intent_name: "" };
+           break;
+         default:
+           lastChat = lang[lang.length - 1];
+           break;
+       }
       if (chats.length > 0) {
         return await pushMessagePoint({
           latitude: chats[0].latitude, // user location
           longitude: chats[0].longitude, // user location
           userId: event.source.userId,
-          intent: lang[0].intent_name,
+          intent: lastChat.intent_name,
           point_id: Number(point),
         });
       } else {
