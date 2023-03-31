@@ -193,9 +193,12 @@ async function stickerController(
   console.log("log sticker events", req.body.events);
   if (event.type === "message" && event.message.type === "sticker") {
     // console.log("log keyword", req.body.events[0].message.keywords);
-    event.message.keywords.forEach((keyword: any) => {
-      replyMessage(event.source.userId, keyword);
-    });
+    // event.message.keywords.forEach((keyword: any) => {
+    //   replyMessage(event.source.userId, keyword);
+    // });
+const replystk = "น้องใบโพธิ์ยังไม่สามารถตอบกลับพี่ๆในรูปแบบสติ๊กเกอร์นะคะ";
+      replyMessage(event.source.userId, replystk);
+
     return;
   }
   next();
