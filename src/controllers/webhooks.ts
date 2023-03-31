@@ -77,7 +77,7 @@ async function textController(req: Request, res: Response, next: NextFunction) {
           latitude: 0, // user location
           longitude: 0, // user location
           userId: event.source.userId,
-          intent: lang[0].intent_name,
+          intent: lastChat.intent_name,
           point_id: Number(point),
         });
       }
@@ -133,7 +133,7 @@ console.log("pointlogpoint",point);
           latitude: 0, // user location
           longitude: 0, // user location
           userId: event.source.userId,
-          intent: lang[0].intent_name,
+          intent: lastChat.intent_name,
           point_id: Number(point),
         });
       }
