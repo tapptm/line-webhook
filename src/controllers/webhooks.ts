@@ -228,14 +228,10 @@ async function noTypeController(req: Request, res: Response) {
   
   const event = req.body.events[0];
   console.log("log events", req.body.events);
-  console.log("log events type", event.message.type);
-  
-  if (event.type === "message" && event.message.type != "location" || event.message.type != "sticker" || event.message.type != "image"  || event.message.type != "text") {
   return replyMessage(
     event.source.userId,
     `ขอโทษค่ะ น้องชบาไม่สามารถตอบกลับข้อความประเภท "${event.message.type}" ได้ค่ะ`
   );
-}
 }
 
 export {
