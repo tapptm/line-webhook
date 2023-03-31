@@ -21,6 +21,12 @@ async function textController(req: Request, res: Response, next: NextFunction) {
   const event = req.body.events[0];
   console.log("log text events", req.body.events);
   if (event.type === "message" && event.message.type === "text") {
+    const result = await detectIntent(event.message.text);
+    await saveChats(
+      event.source.userId,
+      result.intent.displayName,
+      event.message.text
+    );
     if (
       event.message.text === "รายละเอียดจุดที่ 1" ||
       event.message.text === "รายละเอียดจุดที่ 2" ||
@@ -46,13 +52,6 @@ async function textController(req: Request, res: Response, next: NextFunction) {
       event.message.text === "รายละเอียดจุดที่ 22"
     ) {
       const point = event.message.text.replace(/\D/g, "");
-
-      const result = await detectIntent(event.message.text);
-      await saveChats(
-        event.source.userId,
-        result.intent.displayName,
-        event.message.text
-      );
       const chats = await getLocation(event.source.userId);
       if (chats.length > 0) {
         return await pushMessagePoint({
@@ -62,7 +61,7 @@ async function textController(req: Request, res: Response, next: NextFunction) {
           intent: chats[0].intent_name,
           point_id: Number(point),
         });
-      }else{
+      } else {
         return await pushMessagePoint({
           latitude: 0, // user location
           longitude: 0, // user location
@@ -71,7 +70,54 @@ async function textController(req: Request, res: Response, next: NextFunction) {
           point_id: Number(point),
         });
       }
-    } else {
+    } else if ( 
+            result.intent.displayName === "จุดท่องเที่ยวที่01 : พิพิธพันธ์พื้นบ้านพระไม้มงคล" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่02 : วิหารหลวงพ่อหนุนดวง" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่03 : ศิลปะหน้าบันหลวงพ่อหนุนดวง" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่04 : หลวงพ่อหนุนดวง" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่05 : ธรรมาสน์หลวงล้านนาไม้สักทอง" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่06 : บานประตูพระปางเปิดโลก" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่07 : พระปางรำพึง" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่08 : พญาลิงก่อนทางขึ้นถ้ำ" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่09 : พระพุทธรัตนปัญจมหามุนี (พระหยกขาว)" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่10 : หอไตรและศาลาราย" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่11 : น้ำตกสายธาราน้ำบ่อแก้ว" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่12: มณฑปพระครูบาเจ้าศรีวิชัย" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่13 : ถ้ำน้ำบ่อแก้ว" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่14 : น้ำบ่อแก้ว" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่15 : ขรัวบุญ" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่16: จุดชมวิวอุทยานแห่งชาติแม่วะ" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่17: พระธาตุรัตนจังคุลี" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่18 : ต้นปอ" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่19 : ถ้ำครูบาต่อมคำ" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่20 : สำนักงานเจ้าคณะตำบลพระบาทวังตวง" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่21 : ห้องสุขา" ||
+            result.intent.displayName === "จุดท่องเที่ยวที่22 : ศาลาแต้มธรรม"){
+
+      const point = result.intent.displayName.replace(/\D/g, "");
+console.log("pointlogpoint",point);
+
+      const chats = await getLocation(event.source.userId);
+      if (chats.length > 0) {
+        return await pushMessagePoint({
+          latitude: chats[0].latitude, // user location
+          longitude: chats[0].longitude, // user location
+          userId: event.source.userId,
+          intent: chats[0].intent_name,
+          point_id: Number(point),
+        });
+      } else {
+        return await pushMessagePoint({
+          latitude: 0, // user location
+          longitude: 0, // user location
+          userId: event.source.userId,
+          intent: "",
+          point_id: Number(point),
+        });
+      }
+
+    } 
+    else {
       await postToDialogflow(req);
       const result = await detectIntent(event.message.text);
       return await saveChats(
