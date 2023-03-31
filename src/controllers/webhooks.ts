@@ -111,7 +111,7 @@ console.log("pointlogpoint",point);
           latitude: 0, // user location
           longitude: 0, // user location
           userId: event.source.userId,
-          intent: "",
+          intent: result.intent.displayName,
           point_id: Number(point),
         });
       }
