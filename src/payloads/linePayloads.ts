@@ -59,7 +59,7 @@ async function carouselPayload(distanceDataArray: any, language: string) {
             type: "button",
             action: {
               type: "message",
-              label: "รายละเอียด",
+              label: language === "language_english" ? "detail" :"รายละเอียด" ,
               text: "รายละเอียดจุดที่ " + distance.point,
             },
           },
