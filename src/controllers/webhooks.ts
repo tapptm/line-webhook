@@ -53,12 +53,13 @@ async function textController(req: Request, res: Response, next: NextFunction) {
     ) {
       const point = event.message.text.replace(/\D/g, "");
       const chats = await getLocation(event.source.userId);
+      const lang = await getChats(event.source.userId);
       if (chats.length > 0) {
         return await pushMessagePoint({
           latitude: chats[0].latitude, // user location
           longitude: chats[0].longitude, // user location
           userId: event.source.userId,
-          intent: chats[0].intent_name,
+          intent: lang[0].intent_name,
           point_id: Number(point),
         });
       } else {
@@ -66,7 +67,7 @@ async function textController(req: Request, res: Response, next: NextFunction) {
           latitude: 0, // user location
           longitude: 0, // user location
           userId: event.source.userId,
-          intent: result.intent.displayName,
+          intent: lang[0].intent_name,
           point_id: Number(point),
         });
       }
@@ -98,12 +99,13 @@ async function textController(req: Request, res: Response, next: NextFunction) {
 console.log("pointlogpoint",point);
 
       const chats = await getLocation(event.source.userId);
+       const lang = await getChats(event.source.userId);
       if (chats.length > 0) {
         return await pushMessagePoint({
           latitude: chats[0].latitude, // user location
           longitude: chats[0].longitude, // user location
           userId: event.source.userId,
-          intent: chats[0].intent_name,
+          intent: lang[0].intent_name,
           point_id: Number(point),
         });
       } else {
@@ -111,7 +113,7 @@ console.log("pointlogpoint",point);
           latitude: 0, // user location
           longitude: 0, // user location
           userId: event.source.userId,
-          intent: result.intent.displayName,
+          intent: lang[0].intent_name,
           point_id: Number(point),
         });
       }
@@ -119,12 +121,6 @@ console.log("pointlogpoint",point);
     } 
     else {
       await postToDialogflow(req);
-      const result = await detectIntent(event.message.text);
-      return await saveChats(
-        event.source.userId,
-        result.intent.displayName,
-        event.message.text
-      );
     }
   }
   next();
