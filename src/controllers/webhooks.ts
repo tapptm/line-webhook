@@ -198,9 +198,9 @@ async function stickerController(
     // });
     const replystk = "น้องใบโพธิ์ยังไม่สามารถตอบกลับพี่ๆในรูปแบบสติ๊กเกอร์ได้นะคะ";
     const packageId ="11537";
-    const stickerId ="52002739";
+    const stickerId =["52002771", "52002734", "52002735", "52002738", "52002741", "52002746"];
       replyMessage(event.source.userId, replystk);
-      replyMessageSTK(event.source.userId,packageId ,stickerId);
+      replyMessageSTK(event.source.userId,packageId ,stickerId[Math.floor(Math.random()*stickerId.length)]);
 
     return;
   }
