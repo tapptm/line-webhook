@@ -52,7 +52,7 @@ async function pushMessageActivity(agent: {
 
   return client.pushMessage(agent.userId, {
     type: "text",
-    text: "น้องชบาไม่พบข้อมูลจุดท่องเที่ยวในระยะ (200km) ค่ะ",
+    text: "น้องชบาไม่พบข้อมูลจุดท่องเที่ยวในระยะ (20km) ค่ะ",
   });
 }
 

@@ -141,6 +141,7 @@ console.log("pointlogpoint",point);
     } 
     else {
       await postToDialogflow(req);
+      return;
     }
   }
   next();
