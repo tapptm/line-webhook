@@ -13,6 +13,7 @@ import {
   getChats,
   saveLocation,
   getLocation,
+  getLastChats,
 } from "../models/chatHistorys";
 import { client } from "../configs/linesdk";
 
@@ -161,7 +162,8 @@ async function locationController(
       event.message.latitude,
       event.message.longitude
     );
-
+    
+    const lastChatMessage = await getLastChats(event.source.userId);
     const chats = await getChats(event.source.userId);
     let lastChat;
 
@@ -178,7 +180,7 @@ async function locationController(
       latitude: event.message.latitude, // user location
       longitude: event.message.longitude, // user location
       userId: event.source.userId,
-      intent: lastChat.intent_name,
+      intent: lastChatMessage[0].intent_name,
     });
   }
   next();

@@ -71,4 +71,19 @@ async function getChats(userId: String) {
   return rows;
 }
 
-export { saveChats, getChats, saveLocation ,getLocation};
+async function getLastChats(userId: String) {
+  const client = await pool.connect();
+  const sql = ` SELECT * 
+                FROM baipho_chatbot 
+                WHERE user_id = '${userId}' 
+                AND (intent_name = 'language_english' OR intent_name = 'language_thai')
+                AND created_date AT TIME ZONE 'Asia/Bangkok' >= (NOW() - INTERVAL '5 minutes')::timestamp with time zone
+                order by id DESC 
+                LIMIT 1;
+              `;
+  const { rows } = await client.query(sql);
+  client.release();
+  return rows;
+}
+
+export { saveChats, getChats, saveLocation, getLocation, getLastChats };
