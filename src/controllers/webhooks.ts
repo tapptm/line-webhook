@@ -175,7 +175,7 @@ async function locationController(
         lastChat = chats[chats.length - 1];
         break;
     }
-      console.log(lastChat);
+      console.log("test log last chat",lastChat);
       
     return await pushMessageActivity({
       latitude: event.message.latitude, // user location
