@@ -163,7 +163,7 @@ async function locationController(
       event.message.longitude
     );
     
-    const lastChatMessage = await getLastChats(event.source.userId);
+    // const lastChatMessage = await getLastChats(event.source.userId);
     const chats = await getChats(event.source.userId);
     let lastChat;
 
@@ -175,12 +175,13 @@ async function locationController(
         lastChat = chats[chats.length - 1];
         break;
     }
-
+      console.log(lastChat);
+      
     return await pushMessageActivity({
       latitude: event.message.latitude, // user location
       longitude: event.message.longitude, // user location
       userId: event.source.userId,
-      intent: lastChatMessage[0].intent_name,
+      intent: lastChat.intent_name,
     });
   }
   next();
